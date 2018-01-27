@@ -177,7 +177,7 @@ class Tlistarray implements Runnable {
 class RecursiveActionTest {
     public static void main(String[] args) {
         LocalTime t1 = LocalTime.now();
-        int[] data = new int[100_000_000];
+        int[] data = new int[1_000_000];
         ForkJoinPool fjPool = new ForkJoinPool();
         RandomInitRA action = new RecursiveActionTest().new RandomInitRA(data, 0, data.length);
         fjPool.invoke(action);
@@ -204,6 +204,9 @@ class RecursiveActionTest {
         protected void compute() {
             if (end - start <= THRESHOLD) {
                 for (int i = start; i < end; i++) {
+                    for (int j = 0; j < 1000; j++) {
+                        ThreadLocalRandom.current().nextInt(1, 10);
+                    }
                     data[i] = ThreadLocalRandom.current().nextInt(1, 100);
                 }
             } else {
