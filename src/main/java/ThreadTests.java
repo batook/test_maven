@@ -1,4 +1,8 @@
-public class ThreadTest {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+public class ThreadTests {
     public static void main(String[] args) {
         DeadlockRisk dl = new DeadlockRisk();
         Thread a = new Thread(new Runnable() {
@@ -19,10 +23,6 @@ public class ThreadTest {
 }
 
 class DeadlockRisk {
-    private static class Resource {
-        public int value;
-    }
-
     private Resource resourceA = new Resource();
     private Resource resourceB = new Resource();
 
@@ -56,18 +56,16 @@ class DeadlockRisk {
             }
         }
     }
+
+    private static class Resource {
+        public int value;
+    }
 }
 
 class ThreadA {
     public static void main(String[] args) {
         ThreadB b = new ThreadB();
         b.start();
-        try {
-            Thread.sleep(0);
-            //Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         synchronized (b) {
             System.out.println("ThreadA");
             try {
@@ -96,6 +94,77 @@ class ThreadB extends Thread {
             }
             System.out.println("Calc is done...");
             notify();
+        }
+    }
+}
+
+class Chess implements Runnable {
+    public static void main(String[] args) {
+        Chess ch = new Chess();
+        new Thread(ch).start();
+        new Thread(new Chess()).start();
+    }
+
+    @Override
+    public void run() {
+        move(Thread.currentThread().getId());
+    }
+
+    synchronized void move(long id) {
+        System.out.print(id + " ");
+        System.out.print(id + " ");
+    }
+}
+
+class Tjoin implements Runnable {
+    public static void main(String[] args) throws InterruptedException {
+        Runnable r = new Tjoin();
+        Thread t1 = new Thread(r);
+        Thread t2 = new Thread(r);
+        t1.start();
+        t1.join();
+        System.out.println("Main " + Thread.currentThread().getId());
+    }
+
+    @Override
+    public void run() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(Thread.currentThread().getId());
+    }
+}
+
+class Tlistarray implements Runnable {
+    List<Integer> list = new CopyOnWriteArrayList<>();
+
+    public Tlistarray() {
+        for (int i = 0; i < 10; i++) {
+            list.add(i);
+        }
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        Runnable ar = new Tlistarray();
+        Thread a = new Thread(ar);
+        Thread b = new Thread(ar);
+        a.start();
+        b.start();
+
+    }
+
+    @Override
+    public void run() {
+        String tName = Thread.currentThread().getName();
+        while (!list.isEmpty()) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println(tName + " remove " + list.remove(0));
         }
     }
 }
