@@ -1,6 +1,10 @@
-import java.util.ArrayList;
+import java.time.Duration;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.RecursiveAction;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class ThreadTests {
     public static void main(String[] args) {
@@ -147,6 +151,7 @@ class Tlistarray implements Runnable {
     }
 
     public static void main(String[] args) throws InterruptedException {
+        System.out.println(Runtime.getRuntime().availableProcessors());
         Runnable ar = new Tlistarray();
         Thread a = new Thread(ar);
         Thread b = new Thread(ar);
@@ -165,6 +170,50 @@ class Tlistarray implements Runnable {
                 e.printStackTrace();
             }
             System.out.println(tName + " remove " + list.remove(0));
+        }
+    }
+}
+
+class RecursiveActionTest {
+    public static void main(String[] args) {
+        LocalTime t1 = LocalTime.now();
+        int[] data = new int[100_000_000];
+        ForkJoinPool fjPool = new ForkJoinPool();
+        RandomInitRA action = new RecursiveActionTest().new RandomInitRA(data, 0, data.length);
+        fjPool.invoke(action);
+        LocalTime t2 = LocalTime.now();
+        System.out.println(Duration.between(t2, t1));
+//        for (int i : data) {
+//            System.out.println(i);
+//        }
+    }
+
+    class RandomInitRA extends RecursiveAction {
+        private static final int THRESHOLD = 10000;
+        private int[] data;
+        private int start;
+        private int end;
+
+        RandomInitRA(int[] data, int start, int end) {
+            this.data = data;
+            this.start = start;
+            this.end = end;
+        }
+
+        @Override
+        protected void compute() {
+            if (end - start <= THRESHOLD) {
+                for (int i = start; i < end; i++) {
+                    data[i] = ThreadLocalRandom.current().nextInt(1, 100);
+                }
+            } else {
+                int halfWay = ((end - start) / 2) + start;
+                RandomInitRA a1 = new RandomInitRA(data, start, halfWay);
+                a1.fork();
+                RandomInitRA a2 = new RandomInitRA(data, halfWay, end);
+                a2.compute();
+                a1.join();
+            }
         }
     }
 }
