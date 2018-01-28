@@ -21,6 +21,8 @@ import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+// http://java-course.ru/begin/xml/
+
 //DOM Reader
 class DomExample {
     public static void main(String[] args) {

@@ -1,10 +1,9 @@
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.RecursiveAction;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.*;
+
+import static org.junit.Assert.assertEquals;
 
 public class ThreadTests {
     public static void main(String[] args) {
@@ -183,9 +182,6 @@ class RecursiveActionTest {
         fjPool.invoke(action);
         LocalTime t2 = LocalTime.now();
         System.out.println(Duration.between(t2, t1));
-//        for (int i : data) {
-//            System.out.println(i);
-//        }
     }
 
     class RandomInitRA extends RecursiveAction {
@@ -219,4 +215,50 @@ class RecursiveActionTest {
             }
         }
     }
+}
+
+class RecursiveTaskTest {
+    static final int NUM_THREADS = 1;
+    static final int N = 1000_000_000;
+
+    public static void main(String[] args) {
+        long result;
+        ForkJoinPool fjPool = new ForkJoinPool(NUM_THREADS);
+        RecursiveTask<Long> task = new RecursiveTaskTest().new RTask(0, N);
+        result = fjPool.invoke(task);
+        System.out.println(result);
+        assert result == (long) N * (N + 1) / 2 : result;
+        assertEquals((long) N * (N + 1) / 2, result);
+    }
+
+    class RTask extends RecursiveTask<Long> {
+        private long from;
+        private long to;
+
+
+        public RTask(long from, long to) {
+            this.from = from;
+            this.to = to;
+        }
+
+        @Override
+        protected Long compute() {
+            long result = 0;
+            if (to - from <= N / NUM_THREADS) {
+                for (long i = from; i <= to; i++) {
+                    result += i;
+                }
+                return result;
+            } else {
+                long mid = (to + from) / 2;
+                RTask firstHalf = new RTask(from, mid);
+                firstHalf.fork();
+                RTask secondHalf = new RTask(mid + 1, to);
+                long secondResult = secondHalf.compute();
+                long firstResult = firstHalf.join();
+                return firstResult + secondResult;
+            }
+        }
+    }
+
 }
