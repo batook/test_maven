@@ -1,3 +1,6 @@
+import java.io.EOFException;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.function.ObjIntConsumer;
@@ -218,6 +221,15 @@ class WildTest {
         objs.add("five");
         assert objs.toString().equals("[0, 1, 2, 3, 4, five]");
 
+        //
+        List<? super IOException> ex = new ArrayList<Object>();
+        ex.add(new IOException());
+        ex.add(new FileNotFoundException());
+        ex.add(new EOFException());
+        //ex.add(new Exception());
+        //ex.add(new Throwable());
+        ex.add(new WildTest().new MyEx());
+
     }
 
     public static double sum(Collection<? extends Number> nums) {
@@ -230,4 +242,7 @@ class WildTest {
         for (int i = 0; i < n; i++) ints.add(i);
     }
 
+    class MyEx extends EOFException {
+
+    }
 }
