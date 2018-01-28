@@ -28,7 +28,7 @@ class DomExample {
             // Создается построитель документа
             DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             // Создается дерево DOM документа из файла
-            Document document = documentBuilder.parse("BookCatalog.xml");
+            Document document = documentBuilder.parse("BookCatalogue.xml");
 
             // Получаем корневой элемент
             Node root = document.getDocumentElement();
@@ -42,7 +42,7 @@ class DomExample {
                 // Если нода не текст, то это книга - заходим внутрь
                 if (book.getNodeType() != Node.TEXT_NODE) {
                     NodeList bookProps = book.getChildNodes();
-                    for(int j = 0; j < bookProps.getLength(); j++) {
+                    for (int j = 0; j < bookProps.getLength(); j++) {
                         Node bookProp = bookProps.item(j);
                         // Если нода не текст, то это один из параметров книги - печатаем
                         if (bookProp.getNodeType() != Node.TEXT_NODE) {
@@ -65,13 +65,12 @@ class DomExample {
 
 //DOM Writer
 class DomExample2 {
-
     public static void main(String[] args) {
         try {
             // Создается построитель документа
             DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             // Создается дерево DOM документа из файла
-            Document document = documentBuilder.parse("BookCatalog.xml");
+            Document document = documentBuilder.parse("BookCatalogue.xml");
 
             // Вызываем метод для добавления новой книги
             addNewBook(document);
@@ -407,6 +406,7 @@ class XslConverter {
         try {
             String result = c.xmlToString(xml, xsl);
             System.out.println(result);
+            c.xmlToFile(xml, xsl);
         } catch (Exception e) {
             e.printStackTrace(System.out);
         }
@@ -430,5 +430,20 @@ class XslConverter {
 
         // вернуть результат в виде строки
         return bos.toString();
+
+    }
+
+    public void xmlToFile(String xmlFile, String xslFile) throws Exception {
+        // Открыть файлы в виде потоков
+        InputStream xml = new FileInputStream(xmlFile);
+        InputStream xsl = new FileInputStream(xslFile);
+        // Сщоздать источник для транформации из потоков
+        StreamSource xmlSource = new StreamSource(xml);
+        StreamSource stylesource = new StreamSource(xsl);
+
+        FileOutputStream fos = new FileOutputStream("result2.xml");
+        StreamResult result = new StreamResult(fos);
+        Transformer transformer = TransformerFactory.newInstance().newTransformer(stylesource);
+        transformer.transform(xmlSource, result);
     }
 }
