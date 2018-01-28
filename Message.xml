@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<jc:message xmlns:jc="http://www.java-course.ru/xml/message"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://www.java-course.ru/xml/message Message.xsd">
+
+    <messagedate>2013-05-04T18:13:51+04:00</messagedate>
+    <surname>Петров</surname>
+    <firstname>Семен</firstname>
+    <patronymic>Васильевич</patronymic>
+    <postaladdress>Санкт-Петербург, ул.Зенитчиков, д.23, кв. 59</postaladdress>
+    <email>petrov@pisem.net</email>
+    <department>Департамент здравоохранения</department>
+    <text>Сообщение, по поводу которого мы должны согласовать наши позиции</text>
+    <filename>svid.txt</filename>
+    <filedata>0J/RgNC40LzQtdGA</filedata>
+
+</jc:message>
