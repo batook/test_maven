@@ -1,6 +1,5 @@
 import java.util.*;
 import java.util.function.BiPredicate;
-import java.util.function.Consumer;
 import java.util.function.ObjIntConsumer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -28,10 +27,13 @@ public class Test {
             System.out.print(count);
             words.forEach(System.out::println);
         });
-        Map<Boolean,List<String>> bb=Arrays.stream("a1 bb1 ccc1".split(" ")).collect(Collectors.partitioningBy(s->s.length()>2));
-        System.out.println("length>1 "+bb.get(true));
+        Map<Boolean, List<String>> bb = Arrays.stream("a1 bb1 ccc1".split(" ")).collect(Collectors.partitioningBy(s -> s.length() > 2));
+        System.out.println("length>1 " + bb.get(true));
         bb.get(true).forEach(System.out::println);
-        bb.forEach((x,y)->{System.out.print(x); y.forEach(System.out::println);});
+        bb.forEach((x, y) -> {
+            System.out.print(x);
+            y.forEach(System.out::println);
+        });
 
         BiPredicate<List<Integer>, Integer> p1 = List::contains;
         BiPredicate<List<Integer>, Integer> p2 = (x, y) -> x.contains(y);
@@ -128,4 +130,104 @@ class B extends A {
     public int getCnt() {
         return cnt;
     }
+}
+
+class ColTest {
+    public static void main(String[] args) {
+        List<? super Integer> list1 = new ArrayList<Integer>();
+        List<? super Integer> list2 = new ArrayList<Number>();
+        List<? super Integer> list3 = new ArrayList<Object>();
+        List<? super String> list4 = new ArrayList<String>();
+        list4.add("1");
+        List<Object> lo = new ArrayList<Object>(list4);
+        List<? super String> list5 = new ArrayList<Object>(lo);
+        list3.add(1);
+    }
+
+}
+
+class CatTest {
+    public static void main(String[] args) {
+        List<Animal> animalList = new ArrayList<Animal>();
+        animalList.add(new Animal());
+        List<Cat> catList = new ArrayList<Cat>();
+        catList.add(new Cat());
+        List<MyCat> myCatList = new ArrayList<MyCat>();
+        myCatList.add(new MyCat());
+        List<Dog> dogList = new ArrayList<Dog>();
+        List<Object> objList = new ArrayList<Object>();
+        objList.add(new Object());
+
+        CatTest catTest = new CatTest();
+        catTest.addMethod(animalList);
+        catTest.addMethod(catList);
+        //catTest.addMethod(myCatList); // DOESN'T COMPILE
+        //catTest.addMethod(dogList); // DOESN'T COMPILE
+        catTest.addMethod(objList);
+
+    }
+
+    public void addMethod(List<? super Cat> catList) {
+        catList.add(new MyCat());
+        catList.add(new Cat());
+        catList.add(new NewCat());
+        System.out.println(catList);
+    }
+}
+
+class Animal {
+}
+
+class Cat extends Animal {
+}
+
+class MyCat extends Cat {
+}
+
+class NewCat extends Cat {
+}
+
+class Dog extends Animal {
+}
+
+class WildTest {
+    public static void main(String[] args) {
+
+/*      The Get and Put Principle: use an extends wildcard when you only get values out of a
+        structure, use a super wildcard when you only put values into a structure, and don’t use
+        a wildcard when you both get and put.
+*/
+        List<Integer> ints = Arrays.asList(1, 2, 3);
+        assert sum(ints) == 6.0;
+        List<Double> doubles = Arrays.asList(2.78, 3.14);
+        assert sum(doubles) == 5.92;
+        List<Number> nums = Arrays.<Number>asList(1, 2, 2.78, 3.14);
+        assert sum(nums) == 8.92;
+        ints = new ArrayList<Integer>();
+        //
+        count(ints, 5);
+        assert ints.toString().equals("[0, 1, 2, 3, 4]");
+
+        nums = new ArrayList<Number>();
+        count(nums, 5);
+        nums.add(5.0);
+        assert nums.toString().equals("[0, 1, 2, 3, 4, 5.0]");
+
+        List<Object> objs = new ArrayList<Object>();
+        count(objs, 5);
+        objs.add("five");
+        assert objs.toString().equals("[0, 1, 2, 3, 4, five]");
+
+    }
+
+    public static double sum(Collection<? extends Number> nums) {
+        double s = 0.0;
+        for (Number num : nums) s += num.doubleValue();
+        return s;
+    }
+
+    public static void count(Collection<? super Integer> ints, int n) {
+        for (int i = 0; i < n; i++) ints.add(i);
+    }
+
 }
