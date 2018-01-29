@@ -19,3 +19,11 @@ class TestHashSet {
 class TestTreeSet {
 
 }
+
+class TestHashMap {
+
+}
+
+class TestSortAndSearch {
+
+}
