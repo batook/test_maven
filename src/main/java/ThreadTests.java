@@ -25,6 +25,57 @@ public class ThreadTests {
     }
 }
 
+class CalcTest {
+    public static void main(String[] args) {
+        Calculator calculator = new Calculator();
+        new Reader(calculator).start();
+        new Reader(calculator).start();
+        new Reader(calculator).start();
+        new Thread(calculator).start();
+    }
+}
+
+class Reader extends Thread {
+    Calculator c;
+
+    public Reader(Calculator calc) {
+        c = calc;
+    }
+
+    public void run() {
+        synchronized (c) {
+            // wait until Calc result is available
+            if (c.isDone) {
+                System.out.println(Thread.currentThread().getName() + " No need to wait. Calc is done");
+            } else {
+                try {
+                    System.out.println(Thread.currentThread().getName() + " Waiting for calculation...");
+                    c.wait();
+                } catch (InterruptedException e) {
+                }
+            }
+            System.out.println(Thread.currentThread().getName() + " Total is: " + c.total);
+        }
+    }
+}
+
+class Calculator implements Runnable {
+    int total;
+    boolean isDone;
+
+    public void run() {
+        System.out.println(Thread.currentThread().getName() + " Start...");
+        synchronized (this) {
+            for (int i = 0; i < 100; i++) {
+                total += i;
+            }
+            notifyAll();
+            isDone = true;
+            System.out.println(Thread.currentThread().getName() + " Done...");
+        }
+    }
+}
+
 class DeadlockRisk {
     private Resource resourceA = new Resource();
     private Resource resourceB = new Resource();
