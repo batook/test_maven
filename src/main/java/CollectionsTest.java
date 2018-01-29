@@ -11,3 +11,11 @@ class TestArryList {
 class TestLinkedList {
 
 }
+
+class TestHashSet {
+
+}
+
+class TestTreeSet {
+
+}

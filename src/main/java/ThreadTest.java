@@ -5,7 +5,7 @@ import java.util.concurrent.*;
 
 import static org.junit.Assert.assertEquals;
 
-public class ThreadTests {
+public class ThreadTest {
     public static void main(String[] args) {
         DeadlockRisk dl = new DeadlockRisk();
         Thread a = new Thread(new Runnable() {
