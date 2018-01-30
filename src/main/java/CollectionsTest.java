@@ -11,18 +11,45 @@ public class CollectionsTest {
     }
 }
 
-enum Color {RED, GREEN, BLUE, YELLOW, WHITE, BLACK}
+enum Color {
+    RED(1), GREEN(2), BLUE(3), YELLOW(4), WHITE(5), BLACK(6);
+    private int index;
+
+    Color(int index) {
+        this.index = index;
+    }
+
+    int getIndex() {
+        return index;
+    }
+}
 
 class TestArryList {
     public static void main(String[] args) {
         List<String> ls = Arrays.asList("eni beni raba".split(" "));
-        ls.sort(new Comparator<String>() {
+        ls.sort(Comparator.reverseOrder());
+        System.out.println(ls);
+        List<Color> lc = new ArrayList<>();
+        lc.add(Color.RED);
+        lc.add(Color.GREEN);
+        lc.add(Color.BLUE);
+        lc.sort(new Comparator<Color>() {
             @Override
-            public int compare(String o1, String o2) {
-                return o2.compareTo(o1);
+            public int compare(Color o1, Color o2) {
+                return o1.toString().compareTo(o2.toString());
             }
         });
-        System.out.println(ls);
+        System.out.println(lc);
+        lc.sort(new Comparator<Color>() {
+            @Override
+            public int compare(Color o1, Color o2) {
+                return Integer.compare(o1.getIndex(), o2.getIndex());
+            }
+        });
+        System.out.println(lc);
+        lc.sort(Comparator.naturalOrder());
+        Collections.sort(lc, null);
+        System.out.println(lc);
     }
 }
 
@@ -73,7 +100,7 @@ class TestSortAndSearch {
             System.out.println(Arrays.asList(sa));
 
             String[] sa2 = Pattern.compile("").split("abcdef");
-            Arrays.sort(sa2, Collections.reverseOrder());
+            Arrays.sort(sa2, Comparator.reverseOrder());
             System.out.println(Arrays.asList(sa2));
         }
     }
@@ -102,7 +129,20 @@ class TestSortAndSearch {
         }
     }
 
+    static class SearchList {
+        public static void main(String[] args) {
+            List<Integer> li = Arrays.asList(9999, 10, 55, 28, 1);
+            Collections.sort(li, null);
+            System.out.println(li);
+            System.out.println(Collections.binarySearch(li, 55));
+            List<String> ls = Arrays.stream(Object.class.getMethods()).map(m -> m.getName()).distinct().collect(Collectors.toList());
+            ls.sort(Comparator.naturalOrder());
+            System.out.println(ls);
+            System.out.println(Collections.binarySearch(ls, "hashCode"));
+        }
+    }
 }
+
 
 class MyObject implements Comparable<MyObject> {
     double d;
