@@ -118,11 +118,12 @@ class TestHashMap {
         for (Map.Entry<String, List<MyObject>> entry : es)
             System.out.println("Entry " + entry.getKey() + ":" + entry.getValue());
     }
-
 }
 
-
 class TestTreeMap {
+    public static void main(String[] args) {
+
+    }
 
 }
 
