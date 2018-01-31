@@ -49,6 +49,10 @@ public class Test {
         Integer iOb2 = 100;
         System.out.println(iOb1 == iOb2);
 
+        iOb1 = Integer.valueOf(100);
+        iOb2 = Integer.valueOf(100);
+        System.out.println(iOb1 == iOb2);
+
         Integer iOb3 = new Integer(120);
         Integer iOb4 = new Integer(120);
         System.out.println(iOb3 == iOb4);

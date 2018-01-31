@@ -50,15 +50,37 @@ class TestArryList {
         lc.sort(Comparator.naturalOrder());
         Collections.sort(lc, null);
         System.out.println(lc);
+        Iterator<Color> iter = lc.iterator();
+        while (iter.hasNext()) {
+            Color next = iter.next();
+            System.out.println(next);
+        }
+        List<MyObject> mo = new ArrayList<>();
+        mo.add(new MyObject(1));
+        mo.add(new MyObject(2));
+        mo.add(new MyObject(3));
     }
 }
 
-class TestLinkedList {
-
-}
-
 class TestHashSet {
-
+    public static void main(String[] args) {
+        Set<MyObject> hs = new HashSet<>();
+        hs.add(new MyObject(1));
+        hs.add(new MyObject(2));
+        hs.add(new MyObject(3));
+        hs.add(new MyObject(4));
+        hs.add(new MyObject(1));
+        hs.add(null);
+        hs.add(null);
+        System.out.println(hs.size() + " " + hs);
+        System.out.println(hs.contains(new MyObject(2)));
+        System.out.println(hs.contains(new MyObject(5)));
+        Iterator<MyObject> it = hs.iterator();
+        while (it.hasNext()) {
+            MyObject o = it.next();
+            System.out.println(o);
+        }
+    }
 }
 
 class TestTreeSet {
@@ -71,17 +93,34 @@ class TestTreeSet {
             cs.add(c);
         }
         System.out.println(cs);
+        System.out.println(cs.contains('b'));
     }
 
 }
 
 class TestHashMap {
+    public static void main(String[] args) {
+        Map<String, List<MyObject>> hm = new HashMap<>();
+        hm.put("1-3", new ArrayList<MyObject>(Arrays.asList(new MyObject(1), new MyObject(2), new MyObject(3))));
+        hm.put("1-3", new ArrayList<MyObject>(Arrays.asList(new MyObject(1), new MyObject(3))));
+        hm.put("4", new ArrayList<MyObject>(Arrays.asList(new MyObject(4))));
+        hm.put("empty", null);
+        hm.put("empty_array", new ArrayList<MyObject>());
+        hm.put(null, null);
+        System.out.println(hm.size() + " " + hm);
+        System.out.println(hm.get("1-3"));
+        Collection<List<MyObject>> val = hm.values();
+        Set<String> ks = hm.keySet();
+        Set<Map.Entry<String, List<MyObject>>> es = hm.entrySet();
+        for (List<MyObject> o : val)
+            System.out.println("Value " + o);
+        for (String s : ks) System.out.println("Key " + s);
+        for (Map.Entry<String, List<MyObject>> entry : es)
+            System.out.println("Entry " + entry.getKey() + ":" + entry.getValue());
+    }
 
 }
 
-class TestLinkedHashMap {
-
-}
 
 class TestTreeMap {
 
@@ -146,9 +185,17 @@ class TestSortAndSearch {
 
 class MyObject implements Comparable<MyObject> {
     double d;
-    int i;
-    String s;
+    private int i;
+    private String s = "MyObject";
     char c;
+
+    public MyObject(int id) {
+        this.i = id;
+    }
+
+    public MyObject() {
+        i = 1;
+    }
 
     @Override
     public int compareTo(MyObject o) {
@@ -161,5 +208,24 @@ class MyObject implements Comparable<MyObject> {
         if (result != 0) return result;
         result = Character.compare(c, o.c);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return s + " ID:" + i;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MyObject myObject = (MyObject) o;
+        return i == myObject.i &&
+                Objects.equals(s, myObject.s);
+    }
+
+    @Override
+    public int hashCode() {
+        return (7 * i) ^ s.hashCode();
     }
 }
