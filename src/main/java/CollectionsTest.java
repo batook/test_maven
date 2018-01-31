@@ -128,6 +128,11 @@ class TestTreeMap {
 }
 
 class TestSortAndSearch {
+    public static void main(String[] args) {
+        new TestSortAndSearch.SortList();
+        new SortList();
+    }
+
     static class SortArrays {
         public static void main(String[] args) {
             int[] ia = {5, 4, 3, 2, 1};

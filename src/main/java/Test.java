@@ -224,8 +224,24 @@ class WildTest {
         count(objs, 5);
         objs.add("five");
         assert objs.toString().equals("[0, 1, 2, 3, 4, five]");
-
         //
+        nums = new ArrayList<Number>();
+        double sum = sumCount(nums, 5);
+        assert sum == 10;
+        //
+        ints = new ArrayList<Integer>();
+        ints.add(1);
+        ints.add(2);
+        List<? extends Number> nums2 = ints;
+        double dbl = sum(nums2); // ok
+        //nums2.add(3.14); // compile-time error
+        objs = new ArrayList<Object>();
+        objs.add(1);
+        objs.add("two");
+        List<? super Integer> ints2 = objs;
+        ints.add(3); // ok
+        //dbl = sum(ints2); // compile-time error
+
         List<? super IOException> ex = new ArrayList<Object>();
         ex.add(new IOException());
         ex.add(new FileNotFoundException());
@@ -244,6 +260,11 @@ class WildTest {
 
     public static void count(Collection<? super Integer> ints, int n) {
         for (int i = 0; i < n; i++) ints.add(i);
+    }
+
+    public static double sumCount(Collection<Number> nums, int n) {
+        count(nums, n);
+        return sum(nums);
     }
 
     class MyEx extends EOFException {
