@@ -131,7 +131,7 @@ class TestTreeMap {
         s1[1] = "2";
         s1[4] = "4";
         String[] s2 = {"1", "2", null, "4", ""};
-        Map<Integer, List<String>> tm = new TreeMap<>();
+        Map<Integer, List<String>> tm = new TreeMap<>(Comparator.naturalOrder());
         tm.put(1, new ArrayList<>(Arrays.asList("a d".split(" "))));
         tm.put(1, new ArrayList<>(Arrays.asList("a b c d".split(" "))));
         tm.put(2, new ArrayList<>());
@@ -146,7 +146,7 @@ class TestTreeMap {
         List<String> list = Arrays.stream(Object.class.getMethods()).map(Method::getName).distinct().collect(Collectors.toList());
         Map<Integer, String> m = list.stream().collect(Collectors.toMap(String::hashCode, Function.identity()));
         System.out.println(m);
-        TreeMap<Integer, Set<String>> tm2 = list.stream().collect(Collectors.groupingBy(String::length, TreeMap::new, Collectors.mapping(Function.identity(), Collectors.toSet())));
+        TreeMap<Integer, Set<String>> tm2 = list.stream().collect(Collectors.groupingBy(String::length, () -> new TreeMap<>(Comparator.reverseOrder()), Collectors.mapping(Function.identity(), Collectors.toSet())));
         System.out.println(tm2);
     }
 
