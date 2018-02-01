@@ -1,15 +1,11 @@
+import java.lang.reflect.Method;
 import java.util.*;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-// Ctrl+Q Quick Doc view
-// Ctrl+Shift+i Quick Defenition View
-
-public class CollectionsTest {
-    public static void main(String[] args) {
-
-    }
-}
+// Ctrl+Q Quick Doc view  ^+J
+// Ctrl+Shift+i Quick Defenition View option+space
 
 enum Color {
     RED(1), GREEN(2), BLUE(3), YELLOW(4), WHITE(5), BLACK(6);
@@ -21,6 +17,12 @@ enum Color {
 
     int getIndex() {
         return index;
+    }
+}
+
+public class CollectionsTest {
+    public static void main(String[] args) {
+
     }
 }
 
@@ -122,20 +124,61 @@ class TestHashMap {
 
 class TestTreeMap {
     public static void main(String[] args) {
+        new TestSortAndSearch().new Nested();
+        new TestSortAndSearch.SortList();
+        String[] s1 = new String[5];
+        s1[0] = "1";
+        s1[1] = "2";
+        s1[4] = "4";
+        String[] s2 = {"1", "2", null, "4", ""};
+        Map<Integer, List<String>> tm = new TreeMap<>();
+        tm.put(1, new ArrayList<>(Arrays.asList("a d".split(" "))));
+        tm.put(1, new ArrayList<>(Arrays.asList("a b c d".split(" "))));
+        tm.put(2, new ArrayList<>());
+        tm.put(0, null);
+        tm.put(3, new ArrayList<>(Arrays.asList(s1)));
+        System.out.println(tm);
+        tm.replace(3, new ArrayList<>(Arrays.asList(s2)));
+        for (Map.Entry entry : tm.entrySet())
+            System.out.println(entry);
+        System.out.println(tm.get(1).get(1).toUpperCase());
 
+        List<String> list = Arrays.stream(Object.class.getMethods()).map(Method::getName).distinct().collect(Collectors.toList());
+        Map<Integer, String> m = list.stream().collect(Collectors.toMap(String::hashCode, Function.identity()));
+        System.out.println(m);
+        TreeMap<Integer, Set<String>> tm2 = list.stream().collect(Collectors.groupingBy(String::length, TreeMap::new, Collectors.mapping(Function.identity(), Collectors.toSet())));
+        System.out.println(tm2);
     }
 
 }
 
 class TestSortAndSearch {
+    String id = "MainClass";
+
     public static void main(String[] args) {
+        TestSortAndSearch t = new TestSortAndSearch();
         new TestSortAndSearch.SortList();
-        new SortList();
+        System.out.println(new SortList().sl_id);
+        System.out.println(new TestSortAndSearch().new Nested().get_id());
+        System.out.println(t.getLocal().get_id());
+    }
+
+    public Nested getLocal() {
+        class Local extends Nested {
+            String local_id = "LocalClass";
+
+            @Override
+            String get_id() {
+                return local_id;
+            }
+        }
+        return new Local();
     }
 
     static class SortArrays {
         public static void main(String[] args) {
             int[] ia = {5, 4, 3, 2, 1};
+            String id = new TestSortAndSearch().id;
             Arrays.sort(ia);
             for (int i : ia) {
                 System.out.println(i);
@@ -151,6 +194,8 @@ class TestSortAndSearch {
     }
 
     static class SortList {
+        String sl_id = "StaticClass";
+
         public static void main(String[] args) {
             List<Integer> il = Arrays.asList(1, 2, 3, 4, 5, -6);
             Collections.reverse(il);
@@ -186,14 +231,22 @@ class TestSortAndSearch {
             System.out.println(Collections.binarySearch(ls, "hashCode"));
         }
     }
+
+    class Nested {
+        String nested_id = "NestedClass";
+
+        String get_id() {
+            return nested_id;
+        }
+    }
 }
 
 
 class MyObject implements Comparable<MyObject> {
     double d;
+    char c;
     private int i;
     private String s = "MyObject";
-    char c;
 
     public MyObject(int id) {
         this.i = id;
