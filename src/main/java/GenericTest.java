@@ -30,7 +30,7 @@ public class GenericTest {
         System.out.println("AddList");
         List<Object> rList = new ArrayList<>();
         rList.addAll(Arrays.asList(new Object(), new Rainbow(), new Colors(), new Red(), new DeepRed()));
-        List<? super Colors> result = test.addColor(rList);
+        List<Colors> result = test.addColor(rList);
         System.out.println(result);
     }
 
@@ -40,13 +40,13 @@ public class GenericTest {
         }
     }
 
-    public List<? super Colors> addColor(List<? super Colors> t) {
+    public List<Colors> addColor(List<? super Colors> t) {
         for (Object c : t) {
             System.out.println(c.getClass());
         }
         t.add(new DeepRed());
         t.add(new Red());
-        return t;
+        return (List<Colors>) t;
     }
 }
 
@@ -142,4 +142,20 @@ class DeepRed extends Red {
         return id;
     }
 
+    static class Test {
+        public static void main(String[] args) {
+            Test t = new Test();
+            List<Object> list = new ArrayList<>();
+            list.addAll(Arrays.asList(new Object(), new Character('a'), "WTF"));
+            List<Number> result = t.getList(list);
+            System.out.println(result);
+        }
+
+        List<Number> getList(List<? super Number> l) {
+            l.add(new Integer(1));
+            l.add(new Double(1));
+            return (List<Number>) l;
+        }
+
+    }
 }
