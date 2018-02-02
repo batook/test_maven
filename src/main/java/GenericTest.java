@@ -144,18 +144,13 @@ class DeepRed extends Red {
 
     static class Test {
         public static void main(String[] args) {
-            Test t = new Test();
             List<Object> list = new ArrayList<>();
             list.addAll(Arrays.asList(new Object(), new Character('a'), "WTF"));
-            List<Number> result = t.getList(list);
-            System.out.println(result);
+            List<? super Number> crap = list;
+            crap.add(new Integer(1));
+            crap.add(new Double(1));
+            List<Number> num = (List<Number>) crap;
+            System.out.println(num);
         }
-
-        List<Number> getList(List<? super Number> l) {
-            l.add(new Integer(1));
-            l.add(new Double(1));
-            return (List<Number>) l;
-        }
-
     }
 }

@@ -443,7 +443,7 @@ class XslConverter {
         StreamSource xmlSource = new StreamSource(xml);
         StreamSource stylesource = new StreamSource(xsl);
 
-        FileOutputStream fos = new FileOutputStream("result2.xml");
+        FileOutputStream fos = new FileOutputStream("result2.html");
         StreamResult result = new StreamResult(fos);
         Transformer transformer = TransformerFactory.newInstance().newTransformer(stylesource);
         transformer.transform(xmlSource, result);

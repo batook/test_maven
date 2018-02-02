@@ -119,6 +119,12 @@ class TestHashMap {
         for (String s : ks) System.out.println("Key " + s);
         for (Map.Entry<String, List<MyObject>> entry : es)
             System.out.println("Entry " + entry.getKey() + ":" + entry.getValue());
+
+        if (hm.containsKey("1-3")) {
+            List<MyObject> values = hm.get("1-3");
+            for (MyObject o : values)
+                System.out.println(o);
+        }
     }
 }
 
