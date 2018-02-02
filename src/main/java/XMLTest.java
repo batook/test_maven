@@ -6,10 +6,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.*;
 import javax.xml.stream.*;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.TransformerFactoryConfigurationError;
+import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
@@ -446,6 +443,9 @@ class XslConverter {
         FileOutputStream fos = new FileOutputStream("result2.html");
         StreamResult result = new StreamResult(fos);
         Transformer transformer = TransformerFactory.newInstance().newTransformer(stylesource);
+        transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+        transformer.setOutputProperty(OutputKeys.METHOD, "html");
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
         transformer.transform(xmlSource, result);
     }
 }
