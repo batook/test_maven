@@ -1,0 +1,507 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<REPORT MediaStation="1">
+    <ITEMS>
+        <ITEM ID="1211103090">
+            <BARCODES>
+                <BARCODE>3348542204355</BARCODE>
+            </BARCODES>
+            <TITLE>PS2 Crash Tag Team Racing Platinum</TITLE>
+            <COVER_PATH LENGTH="480054">ИГРА_ДЛЯ_КОНСОЛИ/Игры для Sony PlayStation 2/1103090/COVER.JPG</COVER_PATH>
+            <VIDEO_PATH></VIDEO_PATH>
+            <DESCRIPTION LENGTH="860">ИГРА_ДЛЯ_КОНСОЛИ/Игры для Sony PlayStation 2/1103090/description.txt</DESCRIPTION>
+            <TYPE>ИГРА</TYPE>
+            <GENRE>Игры для Sony PlayStation 2</GENRE>
+            <IS_HIT>0</IS_HIT>
+        </ITEM>
+        <ITEM ID="1211103091">
+            <BARCODES>
+                <BARCODE>5055060923665</BARCODE>
+            </BARCODES>
+            <TITLE>PS2 Devil May Cry 3: Special Edition</TITLE>
+            <COVER_PATH LENGTH="480054">ИГРА_ДЛЯ_КОНСОЛИ/Игры для Sony PlayStation 2/1103091/COVER.JPG</COVER_PATH>
+            <VIDEO_PATH></VIDEO_PATH>
+            <DESCRIPTION LENGTH="817">ИГРА_ДЛЯ_КОНСОЛИ/Игры для Sony PlayStation 2/1103091/description.txt</DESCRIPTION>
+            <TYPE>ИГРА</TYPE>
+            <GENRE>Игры для Sony PlayStation 2</GENRE>
+            <IS_HIT>0</IS_HIT>
+        </ITEM>
+        <ITEM ID="1571114837">
+            <BARCODES>
+                <BARCODE>4601365023831</BARCODE>
+            </BARCODES>
+            <TITLE>MP3 В Гостях у Сказки</TITLE>
+            <COVER_PATH LENGTH="433254">MP3-ДИСК/Детские/1114837/COVER.JPG</COVER_PATH>
+            <VIDEO_PATH></VIDEO_PATH>
+            <DESCRIPTION LENGTH="166">MP3-ДИСК/Детские/1114837/description.txt</DESCRIPTION>
+            <TYPE>МУЗЫКА</TYPE>
+            <GENRE>Детские</GENRE>
+            <IS_HIT>0</IS_HIT>
+        </ITEM>
+        <ITEM ID="1571114839">
+            <BARCODES>
+                <BARCODE>4607171301491</BARCODE>
+            </BARCODES>
+            <TITLE>MP3 Детские песни о главном (упаковка Digi Pack)</TITLE>
+            <COVER_PATH LENGTH="433254">MP3-ДИСК/Детские/1114839/COVER.JPG</COVER_PATH>
+            <VIDEO_PATH></VIDEO_PATH>
+            <DESCRIPTION LENGTH="656">MP3-ДИСК/Детские/1114839/description.txt</DESCRIPTION>
+            <TYPE>МУЗЫКА</TYPE>
+            <GENRE>Детские</GENRE>
+            <IS_HIT>0</IS_HIT>
+        </ITEM>
+        <ITEM ID="1571114848">
+            <BARCODES>
+                <BARCODE>4601365024685</BARCODE>
+            </BARCODES>
+            <TITLE>MP3 Детские сказки издательства "Весть-ТДА". "Сказки народов севера"</TITLE>
+            <COVER_PATH LENGTH="433254">MP3-ДИСК/Детские/1114848/COVER.JPG</COVER_PATH>
+            <VIDEO_PATH></VIDEO_PATH>
+            <DESCRIPTION LENGTH="55">MP3-ДИСК/Детские/1114848/description.txt</DESCRIPTION>
+            <TYPE>МУЗЫКА</TYPE>
+            <GENRE>Детские</GENRE>
+            <IS_HIT>0</IS_HIT>
+        </ITEM>
+        <ITEM ID="1211087969">
+            <BARCODES>
+                <BARCODE>8717418124267</BARCODE>
+            </BARCODES>
+            <TITLE>WII Pirates of the Caribbean 3 (WII) игра</TITLE>
+            <COVER_PATH LENGTH="480054">ИГРА_ДЛЯ_КОНСОЛИ/Игры для Nintendo WII/1087969/COVER.JPG</COVER_PATH>
+            <VIDEO_PATH></VIDEO_PATH>
+            <DESCRIPTION LENGTH="981">ИГРА_ДЛЯ_КОНСОЛИ/Игры для Nintendo WII/1087969/description.txt</DESCRIPTION>
+            <TYPE>ИГРА</TYPE>
+            <GENRE>Игры для Nintendo WII</GENRE>
+            <IS_HIT>0</IS_HIT>
+        </ITEM>
+        <ITEM ID="1211097652">
+            <BARCODES>
+                <BARCODE>4005209096553</BARCODE>
+            </BARCODES>
+            <TITLE>WII BratztheMovieРусдок</TITLE>
+            <COVER_PATH LENGTH="480054">ИГРА_ДЛЯ_КОНСОЛИ/Игры для Nintendo WII/1097652/COVER.JPG</COVER_PATH>
+            <VIDEO_PATH></VIDEO_PATH>
+            <DESCRIPTION LENGTH="471">ИГРА_ДЛЯ_КОНСОЛИ/Игры для Nintendo WII/1097652/description.txt</DESCRIPTION>
+            <TYPE>ИГРА</TYPE>
+            <GENRE>Игры для Nintendo WII</GENRE>
+            <IS_HIT>0</IS_HIT>
+        </ITEM>
+        <ITEM ID="1211097658">
+            <BARCODES>
+                <BARCODE>5037930150043</BARCODE>
+            </BARCODES>
+            <TITLE>WII HappyFeet</TITLE>
+            <COVER_PATH LENGTH="480054">ИГРА_ДЛЯ_КОНСОЛИ/Игры для Nintendo WII/1097658/COVER.JPG</COVER_PATH>
+            <VIDEO_PATH></VIDEO_PATH>
+            <DESCRIPTION LENGTH="789">ИГРА_ДЛЯ_КОНСОЛИ/Игры для Nintendo WII/1097658/description.txt</DESCRIPTION>
+            <TYPE>ИГРА</TYPE>
+            <GENRE>Игры для Nintendo WII</GENRE>
+            <IS_HIT>0</IS_HIT>
+        </ITEM>
+        <ITEM ID="1211097666">
+            <BARCODES>
+                <BARCODE>45496364458</BARCODE>
+            </BARCODES>
+            <TITLE>) Wiki: Quest for Barbaros Treasure Рус.док.</TITLE>
+            <COVER_PATH LENGTH="480054">ИГРА_ДЛЯ_КОНСОЛИ/Игры для Nintendo WII/1097666/COVER.JPG</COVER_PATH>
+            <VIDEO_PATH></VIDEO_PATH>
+            <DESCRIPTION LENGTH="1023">ИГРА_ДЛЯ_КОНСОЛИ/Игры для Nintendo WII/1097666/description.txt</DESCRIPTION>
+            <TYPE>ИГРА</TYPE>
+            <GENRE>Игры для Nintendo WII</GENRE>
+            <IS_HIT>0</IS_HIT>
+        </ITEM>
+        <ITEM ID="1211098590">
+            <BARCODES>
+                <BARCODE>4607170310449</BARCODE>
+            </BARCODES>
+            <TITLE>18 Стальных колёс: Король Шоссе</TITLE>
+            <COVER_PATH LENGTH="59968">PC-ИГРА/Симулятор гоночный/1098590/COVER.JPG</COVER_PATH>
+            <VIDEO_PATH></VIDEO_PATH>
+            <DESCRIPTION LENGTH="323">PC-ИГРА/Симулятор гоночный/1098590/description.txt</DESCRIPTION>
+            <TYPE>ИГРА</TYPE>
+            <GENRE>Симулятор гоночный</GENRE>
+            <IS_HIT>0</IS_HIT>
+            <DISK NUMBER="1">
+                <TRACK NUMBER="9" LENGTH="105503">
+                    <NAME>1098590_1.jpg</NAME>
+                    <PATH>PC-ИГРА/Симулятор гоночный/1098590/AUDIO/1098590_1.jpg</PATH>
+                </TRACK>
+                <TRACK NUMBER="9" LENGTH="144006">
+                    <NAME>1098590_2.jpg</NAME>
+                    <PATH>PC-ИГРА/Симулятор гоночный/1098590/AUDIO/1098590_2.jpg</PATH>
+                </TRACK>
+                <TRACK NUMBER="9" LENGTH="119251">
+                    <NAME>1098590_3.jpg</NAME>
+                    <PATH>PC-ИГРА/Симулятор гоночный/1098590/AUDIO/1098590_3.jpg</PATH>
+                </TRACK>
+                <TRACK NUMBER="9" LENGTH="116075">
+                    <NAME>1098590_4.jpg</NAME>
+                    <PATH>PC-ИГРА/Симулятор гоночный/1098590/AUDIO/1098590_4.jpg</PATH>
+                </TRACK>
+                <TRACK NUMBER="9" LENGTH="88688">
+                    <NAME>1098590_5.jpg</NAME>
+                    <PATH>PC-ИГРА/Симулятор гоночный/1098590/AUDIO/1098590_5.jpg</PATH>
+                </TRACK>
+            </DISK>
+        </ITEM>
+        <ITEM ID="1601119055">
+            <BARCODES>
+                <BARCODE>4660002064699</BARCODE>
+            </BARCODES>
+            <TITLE>DVD Скала (эконом)</TITLE>
+            <COVER_PATH LENGTH="27092">DVD-ВИДЕО/Боевик/1119055/COVER.JPG</COVER_PATH>
+            <VIDEO_PATH>DVD-ВИДЕО/Боевик/1119055/MPEG4</VIDEO_PATH>
+            <DESCRIPTION LENGTH="481">DVD-ВИДЕО/Боевик/1119055/description.txt</DESCRIPTION>
+            <TYPE>КИНО</TYPE>
+            <GENRE>Боевик</GENRE>
+            <IS_HIT>0</IS_HIT>
+            <DISK NUMBER="1">
+                <TRACK NUMBER="1" LENGTH="0">
+                    <NAME>Скала.mp4</NAME>
+                    <PATH>DVD-ВИДЕО/Боевик/1119055/AUDIO/Скала.mp4</PATH>
+                </TRACK>
+                <TRACK NUMBER="2" LENGTH="68326">
+                    <NAME>Скала_1.jpg</NAME>
+                    <PATH>DVD-ВИДЕО/Боевик/1119055/AUDIO/Скала_1.jpg</PATH>
+                </TRACK>
+                <TRACK NUMBER="3" LENGTH="99078">
+                    <NAME>Скала_2.jpg</NAME>
+                    <PATH>DVD-ВИДЕО/Боевик/1119055/AUDIO/Скала_2.jpg</PATH>
+                </TRACK>
+                <TRACK NUMBER="4" LENGTH="132145">
+                    <NAME>Скала_3.jpg</NAME>
+                    <PATH>DVD-ВИДЕО/Боевик/1119055/AUDIO/Скала_3.jpg</PATH>
+                </TRACK>
+            </DISK>
+        </ITEM>
+        <ITEM ID="1601119054">
+            <BARCODES>
+                <BARCODE>4630003769541</BARCODE>
+            </BARCODES>
+            <TITLE>DVD Элвин и Бурундуки 2</TITLE>
+            <COVER_PATH LENGTH="23179">DVD-ВИДЕО/Мультфильм/1119054/COVER.JPG</COVER_PATH>
+            <VIDEO_PATH>DVD-ВИДЕО/Мультфильм/1119054/MPEG4</VIDEO_PATH>
+            <DESCRIPTION LENGTH="323">DVD-ВИДЕО/Мультфильм/1119054/description.txt</DESCRIPTION>
+            <TYPE>КИНО</TYPE>
+            <GENRE>Мультфильм</GENRE>
+            <IS_HIT>0</IS_HIT>
+            <DISK NUMBER="1">
+                <TRACK NUMBER="1" LENGTH="0">
+                    <NAME>Элвин и Бурундуки 2.mp4</NAME>
+                    <PATH>DVD-ВИДЕО/Мультфильм/1119054/AUDIO/Элвин и Бурундуки 2.mp4</PATH>
+                </TRACK>
+                <TRACK NUMBER="2" LENGTH="81306">
+                    <NAME>Элвин-и-Бурундуки-2_1.jpg</NAME>
+                    <PATH>DVD-ВИДЕО/Мультфильм/1119054/AUDIO/Элвин-и-Бурундуки-2_1.jpg</PATH>
+                </TRACK>
+                <TRACK NUMBER="3" LENGTH="108692">
+                    <NAME>Элвин-и-Бурундуки-2_2.jpg</NAME>
+                    <PATH>DVD-ВИДЕО/Мультфильм/1119054/AUDIO/Элвин-и-Бурундуки-2_2.jpg</PATH>
+                </TRACK>
+                <TRACK NUMBER="4" LENGTH="90172">
+                    <NAME>Элвин-и-Бурундуки-2_3.jpg</NAME>
+                    <PATH>DVD-ВИДЕО/Мультфильм/1119054/AUDIO/Элвин-и-Бурундуки-2_3.jpg</PATH>
+                </TRACK>
+                <TRACK NUMBER="5" LENGTH="85626">
+                    <NAME>Элвин-и-Бурундуки-2_4.jpg</NAME>
+                    <PATH>DVD-ВИДЕО/Мультфильм/1119054/AUDIO/Элвин-и-Бурундуки-2_4.jpg</PATH>
+                </TRACK>
+            </DISK>
+        </ITEM>
+        <ITEM ID="1571118944">
+            <BARCODES>
+                <BARCODE>4601365013221</BARCODE>
+            </BARCODES>
+            <TITLE>MP3 Гендель Георг Фридрих д.6</TITLE>
+            <COVER_PATH LENGTH="30125">MP3-ДИСК/Классика/1118944/COVER.JPG</COVER_PATH>
+            <VIDEO_PATH></VIDEO_PATH>
+            <DESCRIPTION LENGTH="57">MP3-ДИСК/Классика/1118944/description.txt</DESCRIPTION>
+            <TYPE>МУЗЫКА</TYPE>
+            <GENRE>Классика</GENRE>
+            <IS_HIT>0</IS_HIT>
+        </ITEM>
+        <ITEM ID="1601119365">
+            <BARCODES>
+                <BARCODE>4630003237781</BARCODE>
+            </BARCODES>
+            <TITLE>DVD Пассажирка (эконом)</TITLE>
+            <COVER_PATH LENGTH="23889">DVD-ВИДЕО/Мелодрама/1119365/COVER.JPG</COVER_PATH>
+            <VIDEO_PATH>DVD-ВИДЕО/Мелодрама/1119365/MPEG4</VIDEO_PATH>
+            <DESCRIPTION LENGTH="571">DVD-ВИДЕО/Мелодрама/1119365/description.txt</DESCRIPTION>
+            <TYPE>КИНО</TYPE>
+            <GENRE>Мелодрама</GENRE>
+            <IS_HIT>0</IS_HIT>
+            <DISK NUMBER="1">
+                <TRACK NUMBER="1" LENGTH="0">
+                    <NAME>Пассажирка .mp4</NAME>
+                    <PATH>DVD-ВИДЕО/Мелодрама/1119365/AUDIO/Пассажирка .mp4</PATH>
+                </TRACK>
+                <TRACK NUMBER="2" LENGTH="72164">
+                    <NAME>Пассажирка_1.jpg</NAME>
+                    <PATH>DVD-ВИДЕО/Мелодрама/1119365/AUDIO/Пассажирка_1.jpg</PATH>
+                </TRACK>
+                <TRACK NUMBER="3" LENGTH="63718">
+                    <NAME>Пассажирка_2.jpg</NAME>
+                    <PATH>DVD-ВИДЕО/Мелодрама/1119365/AUDIO/Пассажирка_2.jpg</PATH>
+                </TRACK>
+                <TRACK NUMBER="4" LENGTH="95211">
+                    <NAME>Пассажирка_3.jpg</NAME>
+                    <PATH>DVD-ВИДЕО/Мелодрама/1119365/AUDIO/Пассажирка_3.jpg</PATH>
+                </TRACK>
+                <TRACK NUMBER="5" LENGTH="89631">
+                    <NAME>Пассажирка_4.jpg</NAME>
+                    <PATH>DVD-ВИДЕО/Мелодрама/1119365/AUDIO/Пассажирка_4.jpg</PATH>
+                </TRACK>
+            </DISK>
+        </ITEM>
+        <ITEM ID="1601117339">
+            <BARCODES>
+                <BARCODE>4630003768957</BARCODE>
+            </BARCODES>
+            <TITLE>DVD Гарфилд</TITLE>
+            <COVER_PATH LENGTH="56138">DVD-ВИДЕО/Детское кино/1117339/COVER.JPG</COVER_PATH>
+            <VIDEO_PATH></VIDEO_PATH>
+            <DESCRIPTION LENGTH="563">DVD-ВИДЕО/Детское кино/1117339/description.txt</DESCRIPTION>
+            <TYPE>КИНО</TYPE>
+            <GENRE>Детское кино</GENRE>
+            <IS_HIT>0</IS_HIT>
+        </ITEM>
+        <ITEM ID="1571097405">
+            <BARCODES>
+                <BARCODE>4607065654405</BARCODE>
+            </BARCODES>
+            <TITLE>CD Золотая коллекция ретро Герман Анна Романтика</TITLE>
+            <COVER_PATH LENGTH="270054">CD-ДИСК/Ретро/1097405/COVER.JPG</COVER_PATH>
+            <VIDEO_PATH></VIDEO_PATH>
+            <DESCRIPTION LENGTH="218">CD-ДИСК/Ретро/1097405/description.txt</DESCRIPTION>
+            <TYPE>МУЗЫКА</TYPE>
+            <GENRE>Ретро</GENRE>
+            <IS_HIT>0</IS_HIT>
+            <DISK NUMBER="10">
+                <TRACK NUMBER="1" LENGTH="0">
+                    <NAME>Track01</NAME>
+                    <PATH>CD-ДИСК/Ретро/1097405/AUDIO/10_1_Track01.mp3</PATH>
+                </TRACK>
+                <TRACK NUMBER="2" LENGTH="0">
+                    <NAME>Track02</NAME>
+                    <PATH>CD-ДИСК/Ретро/1097405/AUDIO/10_2_Track02.mp3</PATH>
+                </TRACK>
+                <TRACK NUMBER="3" LENGTH="0">
+                    <NAME>Track0</NAME>
+                    <PATH>CD-ДИСК/Ретро/1097405/AUDIO/10_3_Track03.mp3</PATH>
+                </TRACK>
+                <TRACK NUMBER="4" LENGTH="0">
+                    <NAME>Track04</NAME>
+                    <PATH>CD-ДИСК/Ретро/1097405/AUDIO/10_4_Track04.mp3</PATH>
+                </TRACK>
+                <TRACK NUMBER="5" LENGTH="0">
+                    <NAME>Track05</NAME>
+                    <PATH>CD-ДИСК/Ретро/1097405/AUDIO/10_5_Track05.mp3</PATH>
+                </TRACK>
+                <TRACK NUMBER="6" LENGTH="0">
+                    <NAME>Track06</NAME>
+                    <PATH>CD-ДИСК/Ретро/1097405/AUDIO/10_6_Track06.mp3</PATH>
+                </TRACK>
+                <TRACK NUMBER="7" LENGTH="0">
+                    <NAME>Track07</NAME>
+                    <PATH>CD-ДИСК/Ретро/1097405/AUDIO/10_7_Track07.mp3</PATH>
+                </TRACK>
+                <TRACK NUMBER="8" LENGTH="0">
+                    <NAME>Track08</NAME>
+                    <PATH>CD-ДИСК/Ретро/1097405/AUDIO/10_8_Track08.mp3</PATH>
+                </TRACK>
+                <TRACK NUMBER="9" LENGTH="0">
+                    <NAME>Track09</NAME>
+                    <PATH>CD-ДИСК/Ретро/1097405/AUDIO/10_9_Track09.mp3</PATH>
+                </TRACK>
+                <TRACK NUMBER="10" LENGTH="0">
+                    <NAME>Track10</NAME>
+                    <PATH>CD-ДИСК/Ретро/1097405/AUDIO/10_10_Track10.mp3</PATH>
+                </TRACK>
+                <TRACK NUMBER="11" LENGTH="0">
+                    <NAME>Track11</NAME>
+                    <PATH>CD-ДИСК/Ретро/1097405/AUDIO/10_11_Track11.mp3</PATH>
+                </TRACK>
+                <TRACK NUMBER="12" LENGTH="0">
+                    <NAME>Track12</NAME>
+                    <PATH>CD-ДИСК/Ретро/1097405/AUDIO/10_12_Track12.mp3</PATH>
+                </TRACK>
+                <TRACK NUMBER="13" LENGTH="0">
+                    <NAME>Track1</NAME>
+                    <PATH>CD-ДИСК/Ретро/1097405/AUDIO/10_13_Track13.mp3</PATH>
+                </TRACK>
+                <TRACK NUMBER="14" LENGTH="0">
+                    <NAME>Track14</NAME>
+                    <PATH>CD-ДИСК/Ретро/1097405/AUDIO/10_14_Track14.mp3</PATH>
+                </TRACK>
+                <TRACK NUMBER="15" LENGTH="0">
+                    <NAME>Track15</NAME>
+                    <PATH>CD-ДИСК/Ретро/1097405/AUDIO/10_15_Track15.mp3</PATH>
+                </TRACK>
+                <TRACK NUMBER="16" LENGTH="0">
+                    <NAME>Track16</NAME>
+                    <PATH>CD-ДИСК/Ретро/1097405/AUDIO/10_16_Track16.mp3</PATH>
+                </TRACK>
+                <TRACK NUMBER="17" LENGTH="0">
+                    <NAME>Track17</NAME>
+                    <PATH>CD-ДИСК/Ретро/1097405/AUDIO/10_17_Track17.mp3</PATH>
+                </TRACK>
+                <TRACK NUMBER="18" LENGTH="0">
+                    <NAME>Track18</NAME>
+                    <PATH>CD-ДИСК/Ретро/1097405/AUDIO/10_18_Track18.mp3</PATH>
+                </TRACK>
+            </DISK>
+        </ITEM>
+        <ITEM ID="1571034493">
+            <BARCODES>
+                <BARCODE>4601365013573</BARCODE>
+            </BARCODES>
+            <TITLE>MP3 Глюк Кристоф Виллибальд д.1</TITLE>
+            <COVER_PATH LENGTH="33197">MP3-ДИСК/Классика/1034493/COVER.JPG</COVER_PATH>
+            <VIDEO_PATH></VIDEO_PATH>
+            <DESCRIPTION LENGTH="108">MP3-ДИСК/Классика/1034493/description.txt</DESCRIPTION>
+            <TYPE>МУЗЫКА</TYPE>
+            <GENRE>Классика</GENRE>
+            <IS_HIT>0</IS_HIT>
+        </ITEM>
+        <ITEM ID="1571118857">
+            <BARCODES>
+                <BARCODE>4601365019827</BARCODE>
+            </BARCODES>
+            <TITLE>MP3 Рок-Острова д.1</TITLE>
+            <COVER_PATH LENGTH="32053">MP3-ДИСК/Rock/1118857/COVER.JPG</COVER_PATH>
+            <VIDEO_PATH></VIDEO_PATH>
+            <DESCRIPTION LENGTH="220">MP3-ДИСК/Rock/1118857/description.txt</DESCRIPTION>
+            <TYPE>МУЗЫКА</TYPE>
+            <GENRE>Rock</GENRE>
+            <IS_HIT>0</IS_HIT>
+        </ITEM>
+        <ITEM ID="1571118861">
+            <BARCODES>
+                <BARCODE>4607171304003</BARCODE>
+            </BARCODES>
+            <TITLE>MP3 Лучшее на MP3. Ноль (подарочная упаковка)</TITLE>
+            <COVER_PATH LENGTH="23076">MP3-ДИСК/Rock/1118861/COVER.JPG</COVER_PATH>
+            <VIDEO_PATH></VIDEO_PATH>
+            <DESCRIPTION LENGTH="213">MP3-ДИСК/Rock/1118861/description.txt</DESCRIPTION>
+            <TYPE>МУЗЫКА</TYPE>
+            <GENRE>Rock</GENRE>
+            <IS_HIT>0</IS_HIT>
+        </ITEM>
+        <ITEM ID="1571118862">
+            <BARCODES>
+                <BARCODE>4607171304201</BARCODE>
+            </BARCODES>
+            <TITLE>MP3 77 самых знаменитых классических произведений (упаковка Digi Pack)</TITLE>
+            <COVER_PATH LENGTH="37197">MP3-ДИСК/Классика/1118862/COVER.JPG</COVER_PATH>
+            <VIDEO_PATH></VIDEO_PATH>
+            <DESCRIPTION LENGTH="3051">MP3-ДИСК/Классика/1118862/description.txt</DESCRIPTION>
+            <TYPE>МУЗЫКА</TYPE>
+            <GENRE>Классика</GENRE>
+            <IS_HIT>0</IS_HIT>
+        </ITEM>
+        <ITEM ID="1571087139">
+            <BARCODES>
+                <BARCODE>4607065653262</BARCODE>
+            </BARCODES>
+            <TITLE>MP3 Магомаев Муслим. Избранное (подарочная упаковка)</TITLE>
+            <COVER_PATH LENGTH="24270">MP3-ДИСК/Ретро/1087139/COVER.JPG</COVER_PATH>
+            <VIDEO_PATH></VIDEO_PATH>
+            <DESCRIPTION LENGTH="459">MP3-ДИСК/Ретро/1087139/description.txt</DESCRIPTION>
+            <TYPE>МУЗЫКА</TYPE>
+            <GENRE>Ретро</GENRE>
+            <IS_HIT>0</IS_HIT>
+        </ITEM>
+        <ITEM ID="1571118893">
+            <BARCODES>
+                <BARCODE>4601365026474</BARCODE>
+            </BARCODES>
+            <TITLE>MP3 BONZAI - The Best of M.I.K.E. / Push</TITLE>
+            <COVER_PATH LENGTH="15208">MP3-ДИСК/Зарубежный Pop/1118893/COVER.JPG</COVER_PATH>
+            <VIDEO_PATH></VIDEO_PATH>
+            <DESCRIPTION LENGTH="918">MP3-ДИСК/Зарубежный Pop/1118893/description.txt</DESCRIPTION>
+            <TYPE>МУЗЫКА</TYPE>
+            <GENRE>Зарубежный Pop</GENRE>
+            <IS_HIT>0</IS_HIT>
+        </ITEM>
+        <ITEM ID="1571118911">
+            <BARCODES>
+                <BARCODE>4601365027860</BARCODE>
+            </BARCODES>
+            <TITLE>MP3 Electronic Collection Vol. 1</TITLE>
+            <COVER_PATH LENGTH="36198">MP3-ДИСК/Зарубежный Pop/1118911/COVER.JPG</COVER_PATH>
+            <VIDEO_PATH></VIDEO_PATH>
+            <DESCRIPTION LENGTH="152">MP3-ДИСК/Зарубежный Pop/1118911/description.txt</DESCRIPTION>
+            <TYPE>МУЗЫКА</TYPE>
+            <GENRE>Зарубежный Pop</GENRE>
+            <IS_HIT>0</IS_HIT>
+        </ITEM>
+        <ITEM ID="1601119868">
+            <BARCODES>
+                <BARCODE>4650055841255</BARCODE>
+            </BARCODES>
+            <TITLE>DVD Битва в пустыне</TITLE>
+            <COVER_PATH LENGTH="79388">DVD-ВИДЕО/Ужасы/1119868/COVER.JPG</COVER_PATH>
+            <VIDEO_PATH></VIDEO_PATH>
+            <DESCRIPTION LENGTH="384">DVD-ВИДЕО/Ужасы/1119868/description.txt</DESCRIPTION>
+            <TYPE>КИНО</TYPE>
+            <GENRE>Ужасы</GENRE>
+            <IS_HIT>0</IS_HIT>
+            <DISK NUMBER="1">
+                <TRACK NUMBER="1" LENGTH="280568">
+                    <NAME>Photo 1</NAME>
+                    <PATH>DVD-ВИДЕО/Ужасы/1119868/AUDIO/01_01_Photo 1.jpg</PATH>
+                </TRACK>
+                <TRACK NUMBER="2" LENGTH="308481">
+                    <NAME>Photo 2</NAME>
+                    <PATH>DVD-ВИДЕО/Ужасы/1119868/AUDIO/01_02_Photo 2.jpg</PATH>
+                </TRACK>
+                <TRACK NUMBER="3" LENGTH="300170">
+                    <NAME>Photo 3</NAME>
+                    <PATH>DVD-ВИДЕО/Ужасы/1119868/AUDIO/01_03_Photo 3.jpg</PATH>
+                </TRACK>
+                <TRACK NUMBER="4" LENGTH="290079">
+                    <NAME>Photo 4</NAME>
+                    <PATH>DVD-ВИДЕО/Ужасы/1119868/AUDIO/01_04_Photo 4.jpg</PATH>
+                </TRACK>
+                <TRACK NUMBER="5" LENGTH="249141">
+                    <NAME>Photo 5</NAME>
+                    <PATH>DVD-ВИДЕО/Ужасы/1119868/AUDIO/01_05_Photo 5.jpg</PATH>
+                </TRACK>
+            </DISK>
+        </ITEM>
+        <ITEM ID="1601119925">
+            <BARCODES>
+                <BARCODE>4680004720010</BARCODE>
+            </BARCODES>
+            <TITLE>DVD Тутанхамончик: Битва фараонов</TITLE>
+            <COVER_PATH LENGTH="117231">DVD-ВИДЕО/Мультфильм/1119925/COVER.JPG</COVER_PATH>
+            <VIDEO_PATH></VIDEO_PATH>
+            <DESCRIPTION LENGTH="425">DVD-ВИДЕО/Мультфильм/1119925/description.txt</DESCRIPTION>
+            <TYPE>КИНО</TYPE>
+            <GENRE>Мультфильм</GENRE>
+            <IS_HIT>0</IS_HIT>
+            <DISK NUMBER="1">
+                <TRACK NUMBER="1" LENGTH="392141">
+                    <NAME>Photo 1</NAME>
+                    <PATH>DVD-ВИДЕО/Мультфильм/1119925/AUDIO/01_01_Photo 1.jpg</PATH>
+                </TRACK>
+                <TRACK NUMBER="2" LENGTH="343223">
+                    <NAME>Photo 2</NAME>
+                    <PATH>DVD-ВИДЕО/Мультфильм/1119925/AUDIO/01_02_Photo 2.jpg</PATH>
+                </TRACK>
+                <TRACK NUMBER="3" LENGTH="318091">
+                    <NAME>Photo 3</NAME>
+                    <PATH>DVD-ВИДЕО/Мультфильм/1119925/AUDIO/01_03_Photo 3.jpg</PATH>
+                </TRACK>
+                <TRACK NUMBER="4" LENGTH="394170">
+                    <NAME>Photo 4</NAME>
+                    <PATH>DVD-ВИДЕО/Мультфильм/1119925/AUDIO/01_04_Photo 4.jpg</PATH>
+                </TRACK>
+                <TRACK NUMBER="5" LENGTH="289220">
+                    <NAME>Photo 5</NAME>
+                    <PATH>DVD-ВИДЕО/Мультфильм/1119925/AUDIO/01_05_Photo 5.jpg</PATH>
+                </TRACK>
+            </DISK>
+        </ITEM>
+    </ITEMS>
+</REPORT>
