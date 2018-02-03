@@ -1,11 +1,200 @@
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class MediaXML {
-    public static void main(String[] args) {
+    final static String fileName = "media.xml";
+    List<Item> items = new ArrayList<>();
 
+    public static void main(String[] args) {
+        MediaXML mediaXML = new MediaXML();
+        new MediaSAX(mediaXML).parse();
+    }
+}
+
+class MediaSAX {
+    MediaXML m;
+    Item item;
+    Barcode barcode;
+    List<Barcode> barcodes;
+    Disk disk;
+    Track track;
+    List<Track> tracks;
+    Tag tag = new Tag();
+
+    public MediaSAX(MediaXML m) {
+        this.m = m;
     }
 
+    void check() {
+        for (Item item : m.items) {
+            System.out.println(item);
+            System.out.println("\t" + item.getBarcodes());
+            System.out.println("\t" + item.getTitle());
+            System.out.println("\t" + item.getTitle());
+            System.out.println("\t" + item.getCoverPath());
+            System.out.println("\t" + item.getVideoPath());
+            System.out.println("\t" + item.getDescription());
+            System.out.println("\t" + item.getType());
+            System.out.println("\t" + item.getGenre());
+            System.out.println("\t" + item.getHit());
+            if (item.getDisk() != null) {
+                System.out.println("\t" + item.getDisk());
+                for (Track track : item.getDisk().getTracks()) {
+                    System.out.println("\t\t" + track);
+                    System.out.println("\t\t" + track.getName());
+                    System.out.println("\t\t" + track.getPath());
+                }
+            }
+        }
+    }
+
+    void parse() {
+        SAXParserFactory factory = SAXParserFactory.newInstance();
+        try {
+            SAXParser parser = factory.newSAXParser();
+            DefaultHandler handler = new DefaultHandler() {
+                @Override
+                public void startDocument() throws SAXException {
+                    System.out.println("Start document");
+                }
+
+                @Override
+                public void endDocument() throws SAXException {
+                    System.out.println("End document");
+                }
+
+                @Override
+                public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+                    System.out.print("<" + qName + ">");
+                    tag.set(qName, true);
+                    switch (qName) {
+                        case "ITEM":
+                            item = new Item();
+                            break;
+                        case "BARCODES":
+                            barcode = new Barcode();
+                            barcodes = new ArrayList<>();
+                            break;
+                        case "DISK":
+                            disk = new Disk();
+                            tracks = new ArrayList<>();
+                            break;
+                        case "TRACK":
+                            track = new Track();
+                            break;
+                    }
+                    for (int i = 0; i < attributes.getLength(); i++)
+                        switch (attributes.getLocalName(i)) {
+                            case "ID":
+                                System.out.print("ID=" + attributes.getValue(i));
+                                item.setId(attributes.getValue(i));
+                                break;
+                            case "NUMBER":
+                                if (tag.isSet("DISK")) {
+                                    System.out.print("NUMBER=" + attributes.getValue(i));
+                                    disk.setNumber(attributes.getValue(i));
+                                }
+                                if (tag.isSet("TRACK")) {
+                                    System.out.print("NUMBER=" + attributes.getValue(i));
+                                    track.setNumber(attributes.getValue(i));
+                                }
+                                break;
+                        }
+                }
+
+                @Override
+                public void endElement(String uri, String localName, String qName) throws SAXException {
+                    System.out.print("<" + qName + "/>");
+                    tag.set(qName, false);
+                    switch (qName) {
+                        case "ITEM":
+                            m.items.add(item);
+                            break;
+                        case "BARCODES":
+                            barcodes.add(barcode);
+                            item.setBarcodes(barcodes);
+                            break;
+                        case "DISK":
+                            disk.setTracks(tracks);
+                            item.setDisk(disk);
+                            break;
+                        case "TRACK":
+                            tracks.add(track);
+                            break;
+                        case "REPORT":
+                            System.out.println(" ");
+                            break;
+                    }
+                }
+
+                @Override
+                public void characters(char[] ch, int start, int length) throws SAXException {
+                    String val = new String(ch, start, length);
+                    if (tag.isSet("BARCODE")) {
+                        barcode.setBarcode(val);
+                    }
+                    if (tag.isSet("TITLE")) {
+                        item.setTitle(val);
+                    }
+                    if (tag.isSet("COVER_PATH")) {
+                        item.setCoverPath(val);
+                    }
+                    if (tag.isSet("VIDEO_PATH")) {
+                        item.setVideoPath(val);
+                    }
+                    if (tag.isSet("DESCRIPTION")) {
+                        item.setDescription(val);
+                    }
+                    if (tag.isSet("TYPE")) {
+                        item.setType(val);
+                    }
+                    if (tag.isSet("GENRE")) {
+                        item.setGenre(val);
+                    }
+                    if (tag.isSet("IS_HIT")) {
+                        item.setHit(val);
+                    }
+                    if (tag.isSet("NAME")) {
+                        track.setName(val);
+                    }
+                    if (tag.isSet("PATH")) {
+                        track.setPath(val);
+                    }
+                    System.out.print(new String(ch, start, length));
+                }
+
+                @Override
+                public void ignorableWhitespace(char[] ch, int start, int length) throws SAXException {
+                    characters(ch, start, length);
+                }
+            };
+            parser.parse(MediaXML.fileName, handler);
+            check();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+class Tag {
+    private boolean isSet;
+    private String name;
+
+    public void set(String name, boolean isSet) {
+        this.name = name;
+        this.isSet = isSet;
+    }
+
+    public boolean isSet(String name) {
+        return this.name.equals(name) && isSet;
+    }
 }
 
 class Item {
@@ -18,9 +207,13 @@ class Item {
     private String description;
     private String type;
     private String genre;
-    private boolean isHit;
+    private String isHit;
 
-    public Item(String id) {
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -106,21 +299,17 @@ class Item {
         this.genre = genre;
     }
 
-    public Boolean getHit() {
+    public String getHit() {
         return isHit;
     }
 
-    public void setHit(Boolean hit) {
+    public void setHit(String hit) {
         isHit = hit;
     }
 }
 
 class Barcode {
     private String barcode;
-
-    public Barcode(String barcode) {
-        this.barcode = barcode;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -151,24 +340,19 @@ class Barcode {
 
 class Disk {
     private List<Track> tracks;
-    private int number;
-
-    public Disk(int number, List<Track> tracks) {
-        this.tracks = tracks;
-        this.number = number;
-    }
+    private String number;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Disk that = (Disk) o;
-        return this.number == that.number;
+        return this.number.equals(that.number);
     }
 
     @Override
     public int hashCode() {
-        return number * 7;
+        return number.hashCode();
     }
 
     @Override
@@ -184,50 +368,45 @@ class Disk {
         this.tracks = tracks;
     }
 
-    public int getNumber() {
+    public String getNumber() {
         return number;
     }
 
-    public void setNumber(int number) {
+    public void setNumber(String number) {
         this.number = number;
     }
 }
 
 class Track {
-    private int number;
+    private String number;
     private String name;
     private String path;
-
-    public Track(int number, String name, String path) {
-        this.number = number;
-        this.name = name;
-        this.path = path;
-    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Track that = (Track) o;
-        return this.number == that.number &&
+        return Objects.equals(this.number, that.number) &&
                 Objects.equals(this.name, that.name);
     }
 
     @Override
     public int hashCode() {
-        return number * 7 ^ name.hashCode();
+        return number.hashCode() ^ name.hashCode();
     }
 
     @Override
     public String toString() {
         return "Track=" + number + "_" + name;
+
     }
 
-    public int getNumber() {
+    public String getNumber() {
         return number;
     }
 
-    public void setNumber(int number) {
+    public void setNumber(String number) {
         this.number = number;
     }
 
