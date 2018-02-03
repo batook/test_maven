@@ -2,8 +2,16 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import javax.xml.XMLConstants;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -14,7 +22,8 @@ public class MediaXML {
 
     public static void main(String[] args) {
         MediaXML mediaXML = new MediaXML();
-        new MediaSAX(mediaXML).parse();
+        boolean isValid = new MediaSAX(mediaXML).validateXMLSchema("media.xsd", fileName);
+        if (isValid) new MediaSAX(mediaXML).parse();
     }
 }
 
@@ -37,7 +46,6 @@ class MediaSAX {
             System.out.println(item);
             System.out.println("\t" + item.getBarcodes());
             System.out.println("\t" + item.getTitle());
-            System.out.println("\t" + item.getTitle());
             System.out.println("\t" + item.getCoverPath());
             System.out.println("\t" + item.getVideoPath());
             System.out.println("\t" + item.getDescription());
@@ -52,6 +60,19 @@ class MediaSAX {
                     System.out.println("\t\t" + track.getPath());
                 }
             }
+        }
+    }
+
+    boolean validateXMLSchema(String xsdPath, String xmlPath) {
+        try {
+            SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+            Schema schema = factory.newSchema(new File(xsdPath));
+            Validator validator = schema.newValidator();
+            validator.validate(new StreamSource(new File(xmlPath)));
+            return true;
+        } catch (IOException | SAXException e) {
+            System.out.println("Exception: " + e.getMessage());
+            return false;
         }
     }
 
@@ -177,7 +198,7 @@ class MediaSAX {
             };
             parser.parse(MediaXML.fileName, handler);
             check();
-        } catch (Exception e) {
+        } catch (SAXException | ParserConfigurationException | IOException e) {
             e.printStackTrace();
         }
     }
