@@ -32,6 +32,29 @@ public class MediaXML {
         System.out.println(new XSDValidator().validateXMLSchema("Phonebook.xsd", "Phonebook.xml"));
         boolean isValid = new XSDValidator().validateXMLSchema("media.xsd", fileName);
         if (isValid) new MediaSAX(mediaXML).parse();
+        //mediaXML.checkItems();
+    }
+
+    void checkItems() {
+        for (Item item : items) {
+            System.out.println(item);
+            System.out.println("\t" + item.getBarcodes());
+            System.out.println("\t" + item.getTitle());
+            System.out.println("\t" + item.getCoverPath());
+            System.out.println("\t" + item.getVideoPath());
+            System.out.println("\t" + item.getDescription());
+            System.out.println("\t" + item.getType());
+            System.out.println("\t" + item.getGenre());
+            System.out.println("\t" + item.getHit());
+            if (item.getDisk() != null) {
+                System.out.println("\t" + item.getDisk());
+                for (Track track : item.getDisk().getTracks()) {
+                    System.out.println("\t\t" + track);
+                    System.out.println("\t\t" + track.getName());
+                    System.out.println("\t\t" + track.getPath());
+                }
+            }
+        }
     }
 }
 
@@ -56,7 +79,6 @@ class XSLTransform {
             StreamSource xml = new StreamSource(new FileInputStream(xmlFile));
             StreamSource style = new StreamSource(new FileInputStream(xslFile));
             StreamResult result = new StreamResult(new FileOutputStream(xmlFile.replaceAll("\\.xml$", "\\.html")));
-
             Transformer transformer = TransformerFactory.newInstance().newTransformer(style);
             transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
             transformer.setOutputProperty(OutputKeys.METHOD, "html");
@@ -66,6 +88,10 @@ class XSLTransform {
             System.out.println("Exception: " + e.getMessage());
         }
     }
+}
+
+class MediaDOM {
+
 }
 
 class MediaSAX {
@@ -80,28 +106,6 @@ class MediaSAX {
 
     public MediaSAX(MediaXML m) {
         this.m = m;
-    }
-
-    void check() {
-        for (Item item : m.items) {
-            System.out.println(item);
-            System.out.println("\t" + item.getBarcodes());
-            System.out.println("\t" + item.getTitle());
-            System.out.println("\t" + item.getCoverPath());
-            System.out.println("\t" + item.getVideoPath());
-            System.out.println("\t" + item.getDescription());
-            System.out.println("\t" + item.getType());
-            System.out.println("\t" + item.getGenre());
-            System.out.println("\t" + item.getHit());
-            if (item.getDisk() != null) {
-                System.out.println("\t" + item.getDisk());
-                for (Track track : item.getDisk().getTracks()) {
-                    System.out.println("\t\t" + track);
-                    System.out.println("\t\t" + track.getName());
-                    System.out.println("\t\t" + track.getPath());
-                }
-            }
-        }
     }
 
     void parse() {
@@ -225,26 +229,26 @@ class MediaSAX {
                 }
             };
             parser.parse(MediaXML.fileName, handler);
-            check();
         } catch (SAXException | ParserConfigurationException | IOException e) {
             e.printStackTrace();
         }
     }
+
+    class Tag {
+        private boolean isSet;
+        private String name;
+
+        public void set(String name, boolean isSet) {
+            this.name = name;
+            this.isSet = isSet;
+        }
+
+        public boolean isSet(String name) {
+            return this.name.equals(name) && isSet;
+        }
+    }
 }
 
-class Tag {
-    private boolean isSet;
-    private String name;
-
-    public void set(String name, boolean isSet) {
-        this.name = name;
-        this.isSet = isSet;
-    }
-
-    public boolean isSet(String name) {
-        return this.name.equals(name) && isSet;
-    }
-}
 
 class Item {
     private String id;
