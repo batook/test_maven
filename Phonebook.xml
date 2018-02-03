@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PHONEBOOK>
-    <PERSON>
-        <NAME>Joe Wang</NAME>
+    <PERSON ID="1">
+        <NAME INITIALS="JW">Joe Wang</NAME>
         <EMAIL>joe@yourserver.com</EMAIL>
         <TELEPHONE>202-999-9999</TELEPHONE>
         <WEB>www.java2s.com</WEB>
     </PERSON>
-    <PERSON>
-        <NAME>Karol</NAME>
+    <PERSON ID="2">
+        <NAME INITIALS="K">Karol</NAME>
         <EMAIL>karol@yourserver.com</EMAIL>
         <TELEPHONE>306-999-9999</TELEPHONE>
         <WEB>www.java2s.com</WEB>
     </PERSON>
-    <PERSON>
-        <NAME>Green</NAME>
+    <PERSON ID="3">
+        <NAME INITIALS="G">Green</NAME>
         <EMAIL>green@yourserver.com</EMAIL>
         <TELEPHONE>202-414-9999</TELEPHONE>
         <WEB>www.java2s.com</WEB>

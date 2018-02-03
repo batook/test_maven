@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Refs>
+    <Countries>
+        <Country>
+            <Code>RUS</Code>
+            <Name>Россия</Name>
+            <Description>Российская федерация</Description>
+        </Country>
+        <Country>
+            <Code>USA</Code>
+            <Name>США</Name>
+            <Description>Соединенные Штаты Америки</Description>
+        </Country>
+    </Countries>
+    <Producers>
+        <Producer>
+            <Code>P01</Code>
+            <Name>Производитель</Name>
+            <Description>Дистрибьютор</Description>
+            <CountryCode>RUS</CountryCode>
+        </Producer>
+        <Producer>
+            <Code>P02</Code>
+            <Name>GB Production</Name>
+            <CountryCode>USA</CountryCode>
+        </Producer>
+    </Producers>
+</Refs>

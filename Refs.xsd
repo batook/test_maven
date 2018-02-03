@@ -1,0 +1,63 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+    <xsd:element name="Country">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="Code"/>
+                <xsd:element ref="Name"/>
+                <xsd:element ref="Description"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="Countries">
+        <xsd:complexType>
+            <xsd:sequence maxOccurs="unbounded">
+                <xsd:element ref="Country"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="Description" type="xsd:string">
+    </xsd:element>
+
+    <xsd:element name="Code" type="xsd:string">
+    </xsd:element>
+
+    <xsd:element name="Name" type="xsd:string">
+    </xsd:element>
+
+    <xsd:element name="CountryCode" type="xsd:string">
+    </xsd:element>
+
+    <xsd:element name="Producer">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="Code"/>
+                <xsd:element ref="Name"/>
+                <xsd:sequence minOccurs="0" maxOccurs="1">
+                    <xsd:element ref="Description"/>
+                </xsd:sequence>
+                <xsd:element ref="CountryCode"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="Producers">
+        <xsd:complexType>
+            <xsd:sequence maxOccurs="unbounded">
+                <xsd:element ref="Producer"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="Refs">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="Countries"/>
+                <xsd:element ref="Producers"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+</xsd:schema>
+

@@ -6,11 +6,18 @@ import javax.xml.XMLConstants;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +29,42 @@ public class MediaXML {
 
     public static void main(String[] args) {
         MediaXML mediaXML = new MediaXML();
-        boolean isValid = new MediaSAX(mediaXML).validateXMLSchema("media.xsd", fileName);
+        System.out.println(new XSDValidator().validateXMLSchema("Phonebook.xsd", "Phonebook.xml"));
+        boolean isValid = new XSDValidator().validateXMLSchema("media.xsd", fileName);
         if (isValid) new MediaSAX(mediaXML).parse();
+    }
+}
+
+class XSDValidator {
+    boolean validateXMLSchema(String xsdPath, String xmlPath) {
+        try {
+            SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+            Schema schema = factory.newSchema(new File(xsdPath));
+            Validator validator = schema.newValidator();
+            validator.validate(new StreamSource(new File(xmlPath)));
+            return true;
+        } catch (IOException | SAXException e) {
+            System.out.println("Exception: " + e.getMessage());
+            return false;
+        }
+    }
+}
+
+class XSLTransform {
+    public void xml2Html(String xmlFile, String xslFile) {
+        try {
+            StreamSource xml = new StreamSource(new FileInputStream(xmlFile));
+            StreamSource style = new StreamSource(new FileInputStream(xslFile));
+            StreamResult result = new StreamResult(new FileOutputStream(xmlFile.replaceAll("\\.xml$", "\\.html")));
+
+            Transformer transformer = TransformerFactory.newInstance().newTransformer(style);
+            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+            transformer.setOutputProperty(OutputKeys.METHOD, "html");
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.transform(xml, result);
+        } catch (IOException | TransformerException e) {
+            System.out.println("Exception: " + e.getMessage());
+        }
     }
 }
 
@@ -60,19 +101,6 @@ class MediaSAX {
                     System.out.println("\t\t" + track.getPath());
                 }
             }
-        }
-    }
-
-    boolean validateXMLSchema(String xsdPath, String xmlPath) {
-        try {
-            SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            Schema schema = factory.newSchema(new File(xsdPath));
-            Validator validator = schema.newValidator();
-            validator.validate(new StreamSource(new File(xmlPath)));
-            return true;
-        } catch (IOException | SAXException e) {
-            System.out.println("Exception: " + e.getMessage());
-            return false;
         }
     }
 
@@ -253,7 +281,7 @@ class Item {
 
     @Override
     public String toString() {
-        return "Item=" + id;
+        return "Item ID=" + id;
     }
 
     public List<Barcode> getBarcodes() {
@@ -409,7 +437,7 @@ class Track {
         if (o == null || getClass() != o.getClass()) return false;
         Track that = (Track) o;
         return Objects.equals(this.number, that.number) &&
-                Objects.equals(this.name, that.name);
+                this.name.equals(that.name);
     }
 
     @Override

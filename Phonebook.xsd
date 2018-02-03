@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="PHONEBOOK">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="PERSON" maxOccurs="unbounded" minOccurs="1"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="PERSON">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="NAME"/>
+                <xs:element name="EMAIL" type="xs:string"/>
+                <xs:element name="TELEPHONE" type="xs:string"/>
+                <xs:element name="WEB" type="xs:string"/>
+            </xs:sequence>
+            <xs:attribute name="ID" type="xs:integer"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="NAME">
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="xs:string">
+                    <xs:attribute name="INITIALS" type="xs:string"/>
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
