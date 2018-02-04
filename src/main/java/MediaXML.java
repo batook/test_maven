@@ -45,6 +45,7 @@ public class MediaXML {
             mediaXML.printTitles();
         }
         new XSLTransform().xml2html("test.xml", "media.xsl");
+        new XSLTransform().xml2html("Phonebook.xml", "Phonebook.xsl");
     }
 
     void printTitles() {
