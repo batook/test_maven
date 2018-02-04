@@ -1,42 +1,57 @@
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import javax.xml.XMLConstants;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
+import javax.xml.parsers.*;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
 public class MediaXML {
     final static String fileName = "media.xml";
-    List<Item> items = new ArrayList<>();
+    List<Item> itemList = new ArrayList<>();
 
     public static void main(String[] args) {
         MediaXML mediaXML = new MediaXML();
-        System.out.println(new XSDValidator().validateXMLSchema("Phonebook.xsd", "Phonebook.xml"));
         boolean isValid = new XSDValidator().validateXMLSchema("media.xsd", fileName);
-        if (isValid) new MediaSAX(mediaXML).parse();
-        //mediaXML.checkItems();
+        if (isValid) {
+            new MediaSAX(mediaXML).parse();
+            //mediaXML.checkItems();
+            new MediaDOM().createXML(mediaXML.itemList, "test.xml");
+            System.out.println(new XSDValidator().validateXMLSchema("media.xsd", "test.xml"));
+        }
     }
 
     void checkItems() {
-        for (Item item : items) {
+        itemList.sort(null);
+        itemList.sort(new Comparator<Item>() {
+            @Override
+            public int compare(Item o1, Item o2) {
+                int result;
+                result = o1.getType().compareTo(o2.getType());
+                if (result != 0) return result;
+                result = o1.getTitle().compareTo(o2.getTitle());
+                return result;
+            }
+        });
+        for (Item item : itemList) {
             System.out.println(item);
             System.out.println("\t" + item.getBarcodes());
             System.out.println("\t" + item.getTitle());
@@ -55,6 +70,7 @@ public class MediaXML {
                 }
             }
         }
+        System.out.println(itemList.size() + " itemList");
     }
 }
 
@@ -91,7 +107,92 @@ class XSLTransform {
 }
 
 class MediaDOM {
+    void createXML(List<Item> itemList, String xmlFile) {
+        Document doc = getDocument();
+        Element root = doc.createElement("REPORT");
+        root.setAttribute("MediaStation", LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        doc.appendChild(root);
+        Element items = doc.createElement("ITEMS");
+        root.appendChild(items);
+        for (Item i : itemList) {
+            Element item = doc.createElement("ITEM");
+            item.setAttribute("ID", i.getId());
+            items.appendChild(item);
+            Element barcodes = doc.createElement("BARCODES");
+            item.appendChild(barcodes);
+            for (Barcode b : i.getBarcodes()) {
+                Element barcode = doc.createElement("BARCODE");
+                barcode.setTextContent(b.getBarcode());
+                barcodes.appendChild(barcode);
+            }
+            Element title = doc.createElement("TITLE");
+            title.setTextContent(i.getTitle());
+            item.appendChild(title);
+            Element cover_path = doc.createElement("COVER_PATH");
+            cover_path.setTextContent(i.getCoverPath());
+            item.appendChild(cover_path);
+            Element video_path = doc.createElement("VIDEO_PATH");
+            video_path.setTextContent(i.getVideoPath());
+            item.appendChild(video_path);
+            Element description = doc.createElement("DESCRIPTION");
+            description.setTextContent(i.getDescription());
+            item.appendChild(description);
+            Element type = doc.createElement("TYPE");
+            type.setTextContent(i.getType());
+            item.appendChild(type);
+            Element genre = doc.createElement("GENRE");
+            genre.setTextContent(i.getGenre());
+            item.appendChild(genre);
+            Element hit = doc.createElement("IS_HIT");
+            hit.setTextContent(i.getHit());
+            item.appendChild(hit);
+            if (i.getDisk() != null) {
+                Element disk = doc.createElement("DISK");
+                disk.setAttribute("NUMBER", i.getDisk().getNumber());
+                item.appendChild(disk);
+                for (Track t : i.getDisk().getTracks()) {
+                    Element track = doc.createElement("TRACK");
+                    track.setAttribute("NUMBER", t.getNumber());
+                    disk.appendChild(track);
+                    Element name = doc.createElement("NAME");
+                    name.setTextContent(t.getName());
+                    track.appendChild(name);
+                    Element path = doc.createElement("PATH");
+                    path.setTextContent(t.getPath());
+                    track.appendChild(path);
+                }
+            }
+        }
+        writeDocument(doc, xmlFile);
+    }
 
+    Document getDocument() {
+        try {
+            DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            Document doc = documentBuilder.newDocument();
+            System.out.printf("Version = %s%n", doc.getXmlVersion());
+            System.out.printf("Encoding = %s%n", doc.getXmlEncoding());
+            System.out.printf("Standalone = %b%n%n", doc.getXmlStandalone());
+            return doc;
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    void writeDocument(Document doc, String xmlFile) {
+        try {
+            Transformer tr = TransformerFactory.newInstance().newTransformer();
+            tr.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+            tr.setOutputProperty(OutputKeys.METHOD, "xml");
+            tr.setOutputProperty(OutputKeys.INDENT, "yes");
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(new FileOutputStream(xmlFile));
+            tr.transform(source, result);
+        } catch (FileNotFoundException | TransformerException e) {
+            e.printStackTrace();
+        }
+    }
 }
 
 class MediaSAX {
@@ -121,6 +222,7 @@ class MediaSAX {
                 @Override
                 public void endDocument() throws SAXException {
                     System.out.println("End document");
+                    System.out.println("Processed " + m.itemList.size() + " itemList");
                 }
 
                 @Override
@@ -146,8 +248,10 @@ class MediaSAX {
                     for (int i = 0; i < attributes.getLength(); i++)
                         switch (attributes.getLocalName(i)) {
                             case "ID":
-                                System.out.print("ID=" + attributes.getValue(i));
-                                item.setId(attributes.getValue(i));
+                                if (tag.isSet("ITEM")) {
+                                    System.out.print("ID=" + attributes.getValue(i));
+                                    item.setId(attributes.getValue(i));
+                                }
                                 break;
                             case "NUMBER":
                                 if (tag.isSet("DISK")) {
@@ -168,7 +272,7 @@ class MediaSAX {
                     tag.set(qName, false);
                     switch (qName) {
                         case "ITEM":
-                            m.items.add(item);
+                            m.itemList.add(item);
                             break;
                         case "BARCODES":
                             barcodes.add(barcode);
@@ -250,7 +354,7 @@ class MediaSAX {
 }
 
 
-class Item {
+class Item implements Comparable<Item> {
     private String id;
     private List<Barcode> barcodes;
     private Disk disk;
@@ -358,6 +462,11 @@ class Item {
 
     public void setHit(String hit) {
         isHit = hit;
+    }
+
+    @Override
+    public int compareTo(Item o) {
+        return id.compareTo(o.getId());
     }
 }
 

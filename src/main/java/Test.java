@@ -15,6 +15,43 @@ public class Test {
     private int a;
 
     public static void main(String[] args) {
+        Object A = new Object();
+        Object B = new Object();
+        Thread t1 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (A) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    synchronized (B) {
+                        System.out.println("Lock AB");
+                    }
+                }
+
+            }
+        });
+        Thread t2 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (B) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    synchronized (A) {
+                        System.out.println("Lock BA");
+                    }
+                }
+
+            }
+        });
+        t1.start();
+        t2.start();
+
         new Test().maxTemp(Stream.of(1));
         System.out.println(Arrays.stream("abc de".split(" ")).min(String::compareTo).get());
         Comparator<String> lengthCompare = (s1, s2) -> s1.length() - s2.length();
