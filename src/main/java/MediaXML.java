@@ -1,5 +1,7 @@
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -16,6 +18,10 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathFactory;
 import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -35,7 +41,26 @@ public class MediaXML {
             new MediaSAX(mediaXML).parse();
             //mediaXML.checkItems();
             new MediaDOM().createXML(mediaXML.itemList, "test.xml");
-            System.out.println(new XSDValidator().validateXMLSchema("media.xsd", "test.xml"));
+            System.out.println(new XSDValidator().validateXMLSchema("media.xsd", "test.xml") ? "valid" : "not valid");
+            mediaXML.printTitles();
+        }
+        new XSLTransform().xml2Html("test.xml", "media.xsl");
+    }
+
+    void printTitles() {
+        try {
+            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            Document doc = builder.parse("media.xml");
+            XPathFactory pathFactory = XPathFactory.newInstance();
+            XPath xpath = pathFactory.newXPath();
+            XPathExpression expr = xpath.compile("//REPORT/ITEMS/ITEM/TITLE");
+            NodeList nodes = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
+            for (int i = 0; i < nodes.getLength(); i++) {
+                Node n = nodes.item(i);
+                System.out.println("TITLE: " + n.getTextContent());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -91,12 +116,14 @@ class XSDValidator {
 
 class XSLTransform {
     public void xml2Html(String xmlFile, String xslFile) {
+        String htmlFile = xmlFile.replaceAll("\\.xml$", "\\.html");
         try {
             StreamSource xml = new StreamSource(new FileInputStream(xmlFile));
             StreamSource style = new StreamSource(new FileInputStream(xslFile));
-            StreamResult result = new StreamResult(new FileOutputStream(xmlFile.replaceAll("\\.xml$", "\\.html")));
+            System.out.println("ResultHTML " + htmlFile);
+            StreamResult result = new StreamResult(new FileOutputStream(htmlFile));
             Transformer transformer = TransformerFactory.newInstance().newTransformer(style);
-            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+            //transformer.setOutputProperty(OutputKeys.ENCODING, "windows-1251");
             transformer.setOutputProperty(OutputKeys.METHOD, "html");
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             transformer.transform(xml, result);
