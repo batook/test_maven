@@ -44,7 +44,7 @@ public class MediaXML {
             System.out.println(new XSDValidator().validateXMLSchema("media.xsd", "test.xml") ? "valid" : "not valid");
             mediaXML.printTitles();
         }
-        new XSLTransform().xml2Html("test.xml", "media.xsl");
+        new XSLTransform().xml2html("test.xml", "media.xsl");
     }
 
     void printTitles() {
@@ -115,7 +115,7 @@ class XSDValidator {
 }
 
 class XSLTransform {
-    public void xml2Html(String xmlFile, String xslFile) {
+    public void xml2html(String xmlFile, String xslFile) {
         String htmlFile = xmlFile.replaceAll("\\.xml$", "\\.html");
         try {
             StreamSource xml = new StreamSource(new FileInputStream(xmlFile));

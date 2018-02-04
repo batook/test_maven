@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="REPORT" type="REPORTType"/>
+    <xs:complexType name="TRACKType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="NAME"/>
+            <xs:element type="xs:string" name="PATH"/>
+        </xs:sequence>
+        <xs:attribute type="xs:string" name="NUMBER" use="optional"/>
+        <xs:attribute type="xs:string" name="LENGTH" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="BARCODESType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="BARCODE"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="DISKType">
+        <xs:sequence>
+            <xs:element type="TRACKType" name="TRACK" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute type="xs:string" name="NUMBER" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="COVER_PATHType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="LENGTH" use="optional"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="ITEMType">
+        <xs:sequence>
+            <xs:element type="BARCODESType" name="BARCODES"/>
+            <xs:element type="xs:string" name="TITLE"/>
+            <xs:element type="COVER_PATHType" name="COVER_PATH"/>
+            <xs:element name="VIDEO_PATH">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element type="DESCRIPTIONType" name="DESCRIPTION"/>
+            <xs:element name="TYPE">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="ИГРА"/>
+                        <xs:enumeration value="МУЗЫКА"/>
+                        <xs:enumeration value="КИНО"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element type="xs:string" name="GENRE"/>
+            <xs:element type="xs:string" name="IS_HIT"/>
+            <xs:element type="DISKType" name="DISK" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute type="xs:string" name="ID" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="ITEMSType">
+        <xs:sequence>
+            <xs:element type="ITEMType" name="ITEM" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="REPORTType">
+        <xs:sequence>
+            <xs:element type="ITEMSType" name="ITEMS"/>
+        </xs:sequence>
+        <xs:attribute type="xs:string" name="MediaStation"/>
+    </xs:complexType>
+    <xs:complexType name="DESCRIPTIONType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="LENGTH" use="optional"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+</xs:schema>
