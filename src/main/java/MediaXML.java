@@ -36,12 +36,12 @@ public class MediaXML {
 
     public static void main(String[] args) {
         MediaXML mediaXML = new MediaXML();
-        boolean isValid = new XSDValidator().validateXMLSchema("media.xsd", fileName);
+        boolean isValid = new XSDValidate().validateXMLSchema("media.xsd", fileName);
         if (isValid) {
             new MediaSAX(mediaXML).parse();
             //mediaXML.checkItems();
             new MediaDOM().createXML(mediaXML.itemList, "test.xml");
-            System.out.println(new XSDValidator().validateXMLSchema("media.xsd", "test.xml") ? "valid" : "not valid");
+            System.out.println(new XSDValidate().validateXMLSchema("media.xsd", "test.xml") ? "valid" : "not valid");
             mediaXML.printTitles();
         }
         new XSLTransform().xml2html("test.xml", "media.xsl");
@@ -100,7 +100,7 @@ public class MediaXML {
     }
 }
 
-class XSDValidator {
+class XSDValidate {
     boolean validateXMLSchema(String xsdPath, String xmlPath) {
         try {
             SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
