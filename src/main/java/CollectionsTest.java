@@ -3,6 +3,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 // Ctrl+Q Quick Doc view  ^+J
 // Ctrl+Shift+i Quick Defenition View option+space
@@ -26,41 +27,173 @@ public class CollectionsTest {
     }
 }
 
+class TestArray {
+    public static void main(String[] args) {
+        int[] a = {1, 2, 3, 4, 5};
+        System.out.println(Arrays.toString(a));
+        System.out.println(Arrays.toString(a).contains("6"));
+        for (int i : a) {
+            if (i == 4) {
+                System.out.println("true");
+            }
+        }
+        // reverse
+        for (int i = 0; i < a.length / 2; i++) {
+            int temp = a[i];
+            a[i] = a[a.length - i - 1];
+            a[a.length - i - 1] = temp;
+        }
+        System.out.println(Arrays.toString(a));
+
+        int[] b = IntStream.range(0, a.length).map(i -> a[a.length - i - 1]).toArray();
+        System.out.println("b=" + Arrays.toString(b));
+
+        Integer[] ia = {1, 2, 3};
+        List<Integer> li = Arrays.asList(ia);
+        Collections.reverse(li);
+        System.out.println(li);
+
+
+    }
+}
+
 class TestArryList {
     public static void main(String[] args) {
-        List<String> ls = Arrays.asList("eni beni raba".split(" "));
-        ls.sort(Comparator.reverseOrder());
+        String[] sa = new String[5];
+        sa[1] = "1";
+        sa[2] = "2";
+        sa[3] = "3";
+        for (int i = 0; i < sa.length; i++)
+            System.out.println(sa[i]);
+        List<String> ls = new ArrayList<>();
+        ls.addAll(Arrays.asList(sa));
+        for (int i = 0; i < ls.size(); i++)
+            System.out.println(ls.get(i));
+
+        ls.remove(2);
         System.out.println(ls);
-        List<Color> lc = new ArrayList<>();
-        lc.add(Color.RED);
-        lc.add(Color.GREEN);
-        lc.add(Color.BLUE);
-        lc.sort(new Comparator<Color>() {
-            @Override
-            public int compare(Color o1, Color o2) {
-                return o1.toString().compareTo(o2.toString());
-            }
-        });
-        System.out.println(lc);
-        lc.sort(new Comparator<Color>() {
-            @Override
-            public int compare(Color o1, Color o2) {
-                return Integer.compare(o1.getIndex(), o2.getIndex());
-            }
-        });
-        System.out.println(lc);
-        lc.sort(Comparator.naturalOrder());
-        Collections.sort(lc, null);
-        System.out.println(lc);
-        Iterator<Color> iter = lc.iterator();
-        while (iter.hasNext()) {
-            Color next = iter.next();
-            System.out.println(next);
+        System.out.println(Arrays.asList(sa));
+        for (int i = 0; i < 1000; i++) {
+            ls.add("e" + i);
         }
-        List<MyObject> mo = new ArrayList<>();
-        mo.add(new MyObject(1));
-        mo.add(new MyObject(2));
-        mo.add(new MyObject(3));
+        System.out.println(ls.size());
+        Iterator<String> i = ls.iterator();
+        while (i.hasNext()) {
+            i.next();
+            i.remove();
+        }
+        System.out.println(ls.size());
+        i = ls.iterator();
+
+        while (i.hasNext()) {
+            String e = i.next();
+            System.out.println(e);
+        }
+
+        sa = new String[]{"a", "b", "c"};
+        Collections.addAll(ls, sa);
+        System.out.println(ls);
+        ls.remove(1);
+        System.out.println(ls);
+        ls = new ArrayList<>(Arrays.asList(sa));
+        System.out.println(ls);
+        List<String> ls2 = new ArrayList<>(ls);
+        ls2 = Collections.emptyList();
+        //ls2.add("a"); //UnsupportedOperationException
+        System.out.println(ls2);
+        // Remove duplicates
+        ls2 = new ArrayList<>(Arrays.asList("1,2,3,4,3,2,1".split(",")));
+        System.out.println(ls2);
+        Set<String> s = new HashSet<>(ls2);
+        ls2.clear();
+        ls2.addAll(s);
+        System.out.println(ls2);
+        // Filter
+        ls2 = new ArrayList<>(Arrays.asList("1,2,3,4,3,2,1".split(","))).stream().filter(e -> e.equals("2") || e.equals("1")).collect(Collectors.toList());
+        System.out.println(ls2);
+        //Split by spaces
+        ls2 = new ArrayList<>(Arrays.asList(Pattern.compile("\\s+").split("a    b c  de f")));
+        System.out.println(ls2);
+    }
+}
+
+class TestLinkedList {
+    public static void main(String[] args) {
+        LinkedList<String> ll = new LinkedList<>(Arrays.asList("a,b,c,d,e".split(",")));
+        Iterator<String> i = ll.iterator();
+        while (i.hasNext())
+            System.out.println(i.next());
+
+    }
+}
+
+class TestPerformance {
+    public static void main(String[] args) {
+        ArrayList<Integer> arrayList = new ArrayList<Integer>();
+        LinkedList<Integer> linkedList = new LinkedList<Integer>();
+
+// ArrayList add
+        long startTime = System.nanoTime();
+
+        for (int i = 0; i < 100000; i++) {
+            arrayList.add(i);
+        }
+        long endTime = System.nanoTime();
+        long duration = endTime - startTime;
+        System.out.println("ArrayList add:  " + duration);
+
+// LinkedList add
+        startTime = System.nanoTime();
+
+        for (int i = 0; i < 100000; i++) {
+            linkedList.add(i);
+        }
+        endTime = System.nanoTime();
+        duration = endTime - startTime;
+        System.out.println("LinkedList add: " + duration);
+
+// ArrayList get
+        startTime = System.nanoTime();
+
+        for (int i = 0; i < 10000; i++) {
+            arrayList.get(i);
+        }
+        endTime = System.nanoTime();
+        duration = endTime - startTime;
+        System.out.println("ArrayList get:  " + duration);
+
+// LinkedList get
+        startTime = System.nanoTime();
+
+        for (int i = 0; i < 10000; i++) {
+            linkedList.get(i);
+        }
+        endTime = System.nanoTime();
+        duration = endTime - startTime;
+        System.out.println("LinkedList get: " + duration);
+
+
+// ArrayList remove
+        startTime = System.nanoTime();
+
+        for (int i = 9999; i >= 0; i--) {
+            arrayList.remove(i);
+        }
+        endTime = System.nanoTime();
+        duration = endTime - startTime;
+        System.out.println("ArrayList remove:  " + duration);
+
+
+// LinkedList remove
+        startTime = System.nanoTime();
+
+        for (int i = 9999; i >= 0; i--) {
+            linkedList.remove(i);
+        }
+        endTime = System.nanoTime();
+        duration = endTime - startTime;
+        System.out.println("LinkedList remove: " + duration);
+
     }
 }
 
@@ -117,8 +250,15 @@ class TestHashMap {
         for (List<MyObject> o : val)
             System.out.println("Value " + o);
         for (String s : ks) System.out.println("Key " + s);
-        for (Map.Entry<String, List<MyObject>> entry : es)
+
+        for (Map.Entry<String, List<MyObject>> entry : hm.entrySet())
             System.out.println("Entry " + entry.getKey() + ":" + entry.getValue());
+
+        Iterator iterator = hm.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<String, List<MyObject>> entry = (Map.Entry<String, List<MyObject>>) iterator.next();
+            System.out.println(entry.getKey() + " " + entry.getValue());
+        }
 
         if (hm.containsKey("1-3")) {
             List<MyObject> values = hm.get("1-3");
