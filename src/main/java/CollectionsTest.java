@@ -23,7 +23,21 @@ enum Color {
 
 public class CollectionsTest {
     public static void main(String[] args) {
-
+        List<String> l = new ArrayList<>(Arrays.asList("the sky is blue".split("\\s+")));
+        Collections.reverse(l);
+        System.out.println(String.join(" ", l));
+        System.out.println(l.stream().collect(Collectors.joining(" ")));
+        List<String> ls2 = Arrays.asList("Ene, bene, raba!".split(""));
+        Collections.reverse(ls2);
+        System.out.println(String.join("", ls2));
+        System.out.println(new StringBuilder(String.join("", ls2)).reverse());
+        Arrays.asList(new int[]{1, 2, 3, 4});
+        Arrays.stream("a b c d".split("\\s+"));
+        Arrays.sort(new int[]{4, 3, 2, 1});
+        Arrays.binarySearch(new int[]{1, 2, 3}, 4);
+        Arrays.toString(new int[]{1, 2, 3});
+        Arrays.copyOf(new int[]{1, 2, 3}, 5);
+        Arrays.fill(new int[5], 1);
     }
 }
 
@@ -254,16 +268,18 @@ class TestHashMap {
         for (Map.Entry<String, List<MyObject>> entry : hm.entrySet())
             System.out.println("Entry " + entry.getKey() + ":" + entry.getValue());
 
-        Iterator iterator = hm.entrySet().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry<String, List<MyObject>> entry = (Map.Entry<String, List<MyObject>>) iterator.next();
-            System.out.println(entry.getKey() + " " + entry.getValue());
-        }
-
         if (hm.containsKey("1-3")) {
             List<MyObject> values = hm.get("1-3");
             for (MyObject o : values)
-                System.out.println(o);
+                System.out.println("found " + o);
+
+            Iterator iterator = hm.entrySet().iterator();
+            while (iterator.hasNext()) {
+                Map.Entry<String, List<MyObject>> entry = (Map.Entry<String, List<MyObject>>) iterator.next();
+                System.out.println(entry.getKey() + " " + entry.getValue());
+                iterator.remove();
+            }
+            System.out.println(hm.size() + " " + hm);
         }
     }
 }
