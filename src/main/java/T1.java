@@ -48,6 +48,9 @@ public class T1 {
             al.remove("b");
             al.add(3, "X");
             System.out.println(al);
+            for (Iterator<String> iterator = al.iterator(); iterator.hasNext(); ) {
+                System.out.println(iterator.next());
+            }
             Iterator<String> iterator = al.iterator();
             while (iterator.hasNext()) {
                 iterator.next();
@@ -124,6 +127,7 @@ public class T1 {
             System.out.println(ts);
             Set<String> lhs = new LinkedHashSet<>(t.list);
             System.out.println(lhs);
+            if (lhs.contains("ene")) System.out.println("Found ene");
 
         }
     }
@@ -168,6 +172,12 @@ public class T1 {
             hm.remove(null);
             Map<String, Integer> tm = new TreeMap<>(hm);
             System.out.println(tm);
+            for (Iterator<Map.Entry<String, Integer>> it = tm.entrySet().iterator(); it.hasNext(); ) {
+                Map.Entry<String, Integer> ks = it.next();
+                System.out.println(ks);
+            }
+            System.out.println(tm.values());
+            System.out.println(tm.keySet());
         }
     }
 }
