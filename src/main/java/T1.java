@@ -9,7 +9,7 @@ public class T1 {
     List<String> list;
 
     {
-        array = "ene bene raba ene bene raba".split("\\s+");
+        array = "ene bene raba bene raba".split("\\s+");
         list = Arrays.asList(array);
     }
 
@@ -149,8 +149,25 @@ public class T1 {
         public static void main(String[] args) {
             T1 t = new T1();
             Map<String, Integer> hm = new HashMap();
-            Map<String, Integer> lhm = new LinkedHashMap<>();
-            Map<String, Integer> tm = new TreeMap<>();
+            for (int i = 0; i <= t.list.size() - 1; i++)
+                hm.put(t.list.get(i), i);
+            hm.put(null, null);
+            System.out.println(hm);
+            hm.replace("ene", 1);
+            System.out.println(hm.get("ene"));
+            Iterator<Map.Entry<String, Integer>> iterator = hm.entrySet().iterator();
+            while (iterator.hasNext()) {
+                Map.Entry<String, Integer> ks = iterator.next();
+                System.out.println(ks.getKey() + ": " + ks.getValue());
+            }
+            for (Map.Entry<String, Integer> ks : hm.entrySet()) {
+                System.out.println(ks.getKey() + ": " + ks.getValue());
+            }
+            Map<String, Integer> lhm = new LinkedHashMap<>(hm);
+            System.out.println(lhm);
+            hm.remove(null);
+            Map<String, Integer> tm = new TreeMap<>(hm);
+            System.out.println(tm);
         }
     }
 }
@@ -173,16 +190,6 @@ class TestEnum {
         CIT("https://cit.domain.com:8080/"),
         DEV("https://dev.domain.com:21323/");
 
-        private String url;
-
-        Environment(String envUrl) {
-            this.url = envUrl;
-        }
-
-        public String getUrl() {
-            return url;
-        }
-
         //****** Reverse Lookup Implementation************//
         //Lookup table
         private static final Map<String, Environment> lookup = new HashMap<>();
@@ -194,9 +201,19 @@ class TestEnum {
             }
         }
 
+        private String url;
+
+        Environment(String envUrl) {
+            this.url = envUrl;
+        }
+
         //This method can be used for reverse lookup purpose
         public static Environment get(String url) {
             return lookup.get(url);
+        }
+
+        public String getUrl() {
+            return url;
         }
     }
 }
