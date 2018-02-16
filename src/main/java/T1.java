@@ -126,6 +126,11 @@ public class T1 {
             ts.removeIf(s -> true);
             System.out.println(ts);
             Set<String> lhs = new LinkedHashSet<>(t.list);
+            lhs.add("A");
+            lhs.add("B");
+            System.out.println(lhs);
+            lhs.retainAll(t.list);
+            lhs.removeAll(Collections.singleton("bene"));
             System.out.println(lhs);
             if (lhs.contains("ene")) System.out.println("Found ene");
 
@@ -135,17 +140,34 @@ public class T1 {
     static class TestQueue {
         public static void main(String[] args) {
             T1 t = new T1();
-            Queue<String> qs = new ArrayDeque<>(t.list);
+            ArrayDeque<String> qs = new ArrayDeque<>(t.list);
             qs.addAll(t.list);
             qs.offer("A");
             qs.offer("Z");
-            qs.offer(null);
+            //qs.offer(null);
             System.out.println(qs);
             System.out.println(qs.poll());
             System.out.println(qs.poll());
             qs.clear();
-            System.out.println(qs.poll());
-            System.out.println(qs.poll());
+            ArrayDeque q = new ArrayDeque();
+            q.add("A");
+            q.add(1);
+            q.offer("B");
+            q.offer("A");
+            System.out.println(q.poll());
+            System.out.println(q.poll());
+            System.out.println(q.poll());
+            System.out.println(q.poll());
+            System.out.println(q);
+            q.push("A");
+            q.push(1);
+            q.push("B");
+            q.push("A");
+            System.out.println(q.poll());
+            System.out.println(q.poll());
+            System.out.println(q.poll());
+            System.out.println(q.poll());
+            System.out.println(q);
         }
     }
 
@@ -178,6 +200,40 @@ public class T1 {
             }
             System.out.println(tm.values());
             System.out.println(tm.keySet());
+
+            Map<String, Integer> hm2 = new HashMap(hm);
+            System.out.println(hm2);
+            Iterator<Integer> i2 = hm2.values().iterator();
+            while (i2.hasNext()) {
+                i2.next();
+                i2.remove();
+            }
+            System.out.println(hm2);
+
+            Map<String, Integer> hm3 = new HashMap(hm);
+            System.out.println(hm3);
+            Iterator<String> i3 = hm3.keySet().iterator();
+            while (i3.hasNext()) {
+                i3.next();
+                i3.remove();
+            }
+            System.out.println(hm3);
+
+            hm3.putAll(hm);
+            System.out.println(hm3);
+            hm3.values().removeAll(Collections.singleton(3));
+            hm3.values().remove(1);
+            System.out.println(hm3);
+
+            NavigableMap<String, Integer> nm = new TreeMap<>(hm);
+            nm.putAll(hm);
+            nm.put("A", 0);
+            System.out.println(nm);
+            System.out.println(nm.floorKey("A"));
+            System.out.println(nm.ceilingKey("A"));
+            System.out.println(nm.tailMap("e"));
+            System.out.println(nm.headMap("e"));
+            System.out.println(nm.pollLastEntry());
         }
     }
 }
