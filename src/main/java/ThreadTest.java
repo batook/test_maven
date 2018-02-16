@@ -172,22 +172,20 @@ class Chess implements Runnable {
 
 class Tjoin implements Runnable {
     public static void main(String[] args) throws InterruptedException {
-        Runnable r = new Tjoin();
-        Thread t1 = new Thread(r);
-        Thread t2 = new Thread(r);
+        Thread t1 = new Thread(new Tjoin());
         t1.start();
         t1.join();
-        System.out.println("Main " + Thread.currentThread().getId());
+        System.out.println("Main " + Thread.currentThread().getName());
     }
 
     @Override
     public void run() {
+        System.out.println(Thread.currentThread().getName());
         try {
-            Thread.sleep(1000);
+            Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println(Thread.currentThread().getId());
     }
 }
 

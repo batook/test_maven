@@ -247,7 +247,7 @@ class TestEnum {
         System.out.println(Environment.PROD.getUrl());
         System.out.println(Environment.valueOf("SIT").getUrl());
         System.out.println(Environment.get("https://sit.domain.com:2019/"));
-
+        assert "SIT".equals(Environment.get("https://sit.domain.com:2019/").toString());
     }
 
     enum Environment {
