@@ -234,6 +234,14 @@ public class T1 {
             System.out.println(nm.tailMap("e"));
             System.out.println(nm.headMap("e"));
             System.out.println(nm.pollLastEntry());
+
+            Map<Integer, Object> hms = Stream.of(t.array)
+                    .collect(Collectors.toMap(String::length, k -> k, (s1, s2) -> s1 + "," + s2));
+            System.out.println(hms.getClass() + " " + hms);
+
+            TreeMap<Integer, String> map = t.list.stream()
+                    .collect(Collectors.toMap(String::length, v -> v, (x, y) -> x + "," + y, TreeMap::new));
+            System.out.println(map.getClass() + " " + map);
         }
     }
 }

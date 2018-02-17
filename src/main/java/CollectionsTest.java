@@ -9,7 +9,12 @@ import java.util.stream.IntStream;
 // Ctrl+Shift+i Quick Defenition View option+space
 
 enum Color {
-    RED(1), GREEN(2), BLUE(3), YELLOW(4), WHITE(5), BLACK(6);
+    RED(1),
+    GREEN(2),
+    BLUE(3),
+    YELLOW(4),
+    WHITE(5),
+    BLACK(6);
     private int index;
 
     Color(int index) {
@@ -123,7 +128,8 @@ class TestArryList {
         ls2.addAll(s);
         System.out.println(ls2);
         // Filter
-        ls2 = new ArrayList<>(Arrays.asList("1,2,3,4,3,2,1".split(","))).stream().filter(e -> e.equals("2") || e.equals("1")).collect(Collectors.toList());
+        ls2 = new ArrayList<>(Arrays.asList("1,2,3,4,3,2,1".split(","))).stream().filter(e -> e.equals("2") || e.equals("1"))
+                .collect(Collectors.toList());
         System.out.println(ls2);
         //Split by spaces
         ls2 = new ArrayList<>(Arrays.asList(Pattern.compile("\\s+").split("a    b c  de f")));
@@ -135,8 +141,7 @@ class TestLinkedList {
     public static void main(String[] args) {
         LinkedList<String> ll = new LinkedList<>(Arrays.asList("a,b,c,d,e".split(",")));
         Iterator<String> i = ll.iterator();
-        while (i.hasNext())
-            System.out.println(i.next());
+        while (i.hasNext()) System.out.println(i.next());
 
     }
 }
@@ -146,7 +151,7 @@ class TestPerformance {
         ArrayList<Integer> arrayList = new ArrayList<Integer>();
         LinkedList<Integer> linkedList = new LinkedList<Integer>();
 
-// ArrayList add
+        // ArrayList add
         long startTime = System.nanoTime();
 
         for (int i = 0; i < 100000; i++) {
@@ -156,7 +161,7 @@ class TestPerformance {
         long duration = endTime - startTime;
         System.out.println("ArrayList add:  " + duration);
 
-// LinkedList add
+        // LinkedList add
         startTime = System.nanoTime();
 
         for (int i = 0; i < 100000; i++) {
@@ -166,7 +171,7 @@ class TestPerformance {
         duration = endTime - startTime;
         System.out.println("LinkedList add: " + duration);
 
-// ArrayList get
+        // ArrayList get
         startTime = System.nanoTime();
 
         for (int i = 0; i < 10000; i++) {
@@ -176,7 +181,7 @@ class TestPerformance {
         duration = endTime - startTime;
         System.out.println("ArrayList get:  " + duration);
 
-// LinkedList get
+        // LinkedList get
         startTime = System.nanoTime();
 
         for (int i = 0; i < 10000; i++) {
@@ -187,7 +192,7 @@ class TestPerformance {
         System.out.println("LinkedList get: " + duration);
 
 
-// ArrayList remove
+        // ArrayList remove
         startTime = System.nanoTime();
 
         for (int i = 9999; i >= 0; i--) {
@@ -198,7 +203,7 @@ class TestPerformance {
         System.out.println("ArrayList remove:  " + duration);
 
 
-// LinkedList remove
+        // LinkedList remove
         startTime = System.nanoTime();
 
         for (int i = 9999; i >= 0; i--) {
@@ -308,7 +313,11 @@ class TestTreeMap {
         List<String> list = Arrays.stream(Object.class.getMethods()).map(Method::getName).distinct().collect(Collectors.toList());
         Map<Integer, String> m = list.stream().collect(Collectors.toMap(String::hashCode, Function.identity()));
         System.out.println(m);
-        TreeMap<Integer, Set<String>> tm2 = list.stream().collect(Collectors.groupingBy(String::length, () -> new TreeMap<>(Comparator.reverseOrder()), Collectors.mapping(Function.identity(), Collectors.toSet())));
+        TreeMap<Integer, Set<String>> tm2 = list.stream().collect(Collectors
+                                                                          .groupingBy(String::length, () -> new TreeMap<>(Comparator
+                                                                                                                                  .reverseOrder()), Collectors
+                                                                                              .mapping(Function.identity(), Collectors
+                                                                                                      .toSet())));
         System.out.println(tm2);
     }
 
@@ -387,7 +396,8 @@ class TestSortAndSearch {
             Collections.sort(li, null);
             System.out.println(li);
             System.out.println(Collections.binarySearch(li, 55));
-            List<String> ls = Arrays.stream(Object.class.getMethods()).map(m -> m.getName()).distinct().collect(Collectors.toList());
+            List<String> ls = Arrays.stream(Object.class.getMethods()).map(m -> m.getName()).distinct()
+                    .collect(Collectors.toList());
             ls.sort(Comparator.naturalOrder());
             System.out.println(ls);
             System.out.println(Collections.binarySearch(ls, "hashCode"));
@@ -441,8 +451,7 @@ class MyObject implements Comparable<MyObject> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MyObject myObject = (MyObject) o;
-        return i == myObject.i &&
-                Objects.equals(s, myObject.s);
+        return i == myObject.i && Objects.equals(s, myObject.s);
     }
 
     @Override

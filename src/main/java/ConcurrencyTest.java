@@ -1,6 +1,9 @@
+import java.util.Arrays;
+
 class ConcurrencyTest {
     public static void main(String[] args) {
-
+        System.out.println(Arrays.asList('w', 'o', 'l', 'f').stream().parallel().reduce("", (c, s1) -> c + s1, (a, b) -> a + b));
+        System.out.println(Arrays.asList("w", "o", "l", "f").stream().reduce("", String::concat));
     }
 }
 
