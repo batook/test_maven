@@ -31,6 +31,9 @@ public class T1 {
         Set<String> set = new HashSet<>(Arrays.asList(text.split("\\s+")));
         for (String e : set)
             System.out.println(e + " " + Collections.frequency(list, e));
+        System.out.println(Arrays.asList('w', 'o', 'l', 'f').stream().parallel().reduce("", (c, s1) -> c + s1, (a, b) -> a + b));
+        System.out.println(Arrays.asList("w", "o", "l", "f").stream().reduce("", String::concat));
+
     }
 
     static class TestList {
