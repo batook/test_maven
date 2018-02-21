@@ -294,3 +294,279 @@ class TestEnum {
         }
     }
 }
+
+class ArrayReversalDemo {
+
+    public static void main(String[] args) {
+        int[] numbers = {1, 2, 3, 4, 5, 6, 7};
+        reverse(numbers);
+        reverseString("Ene bene raba!");
+        reverseByArray("Ene bene raba!");
+    }
+
+    /**
+     * reverse the given array in place * @param input
+     */
+    public static void reverse(int[] input) {
+        System.out.println("original array : " + Arrays.toString(input));
+        // handling null, empty and one element array
+        if (input == null || input.length <= 1) {
+            return;
+        }
+        for (int i = 0; i < input.length / 2; i++) {
+            int temp = input[i];
+            // swap numbers
+            input[i] = input[input.length - 1 - i];
+            input[input.length - 1 - i] = temp;
+        }
+        System.out.println("reversed array : " + Arrays.toString(input));
+    }
+
+    static void reverseString(String st) {
+        System.out.println(st);
+        char[] c = st.toCharArray();
+        for (int i = 0; i < c.length / 2; i++) {
+            char tmp = c[i];
+            c[i] = c[c.length - 1 - i];
+            c[c.length - 1 - i] = tmp;
+        }
+        System.out.println(new String(c));
+        String s = "";
+        for (int i = st.length() - 1; i >= 0; i--) {
+            s += st.charAt(i);
+        }
+        System.out.println(s);
+        System.out.println(new StringBuilder(st).reverse());
+    }
+
+    static void reverseByArray(String s) {
+        char[] a = s.toCharArray();
+        char[] b = new char[a.length];
+        for (int i = 0; i < a.length; i++) {
+            b[(a.length - 1) - i] = a[i];
+        }
+        System.out.println(new String(b));
+    }
+}
+
+class TestSets {
+    List<Integer> i1, i2;
+
+    public static void main(String[] args) {
+        TestSets t = new TestSets();
+        t.i1 = Arrays.asList(1, 1, 2, 3, 4, 5, 7);
+        t.i2 = Arrays.asList(4, 5, 6, 7, 6);
+        Set<Integer> union = new HashSet<>(t.i1);
+        union.addAll(t.i2);
+        System.out.println(union);
+        Set<Integer> intersect = new HashSet<>(t.i1);
+        intersect.retainAll(t.i2);
+        System.out.println(intersect);
+        TestSets.TestLambda t2 = t.new TestLambda();
+        t2.test();
+    }
+
+    class TestLambda {
+        public void test() {
+            System.out.println(this.toString());
+            System.out.println(TestSets.this.toString());
+            System.out.println("union " + Stream.concat(TestSets.this.i1.stream(), TestSets.this.i2.stream())
+                    .collect(Collectors.toSet()));
+            System.out.println("intersect " + i1.stream().filter(i2::contains).collect(Collectors.toSet()));
+        }
+    }
+}
+
+class Tasks {
+    // https://proglib.io/p/15-questions-for-programmers/
+    // http://qa7.ru/blog/2014/06/22/voprosy-po-java-na-interviu/
+    public static void main(String[] args) {
+        getDublicate();
+        testLinkedList();
+        //testing our bubble sort method in Java
+        int[] unsorted = {32, 39, 21, 45, 23, 3};
+        bubbleSort(unsorted);
+        //one more testing of our bubble sort code logic in Java
+        int[] test = {5, 3, 2, 1};
+        bubbleSort(test);
+        for (int i = 1; i <= 10; i++) {
+            System.out.print(fibonacci(i) + " ");
+        }
+        System.out.println();
+        for (int i = 1; i <= 10; i++) {
+            System.out.print(fibonacci2(i) + " ");
+        }
+
+    }
+
+    static void getDublicate() {
+        int[] a1 = {1, 2, 3, 4, 5, 6, 6};
+        int s1 = 0, s2 = 0;
+        System.out.println(Arrays.toString(a1));
+        for (int i = 0; i < a1.length; i++) {
+            s1 += a1[i];
+        }
+        for (int i = 1; i <= 6; i++)
+            s2 += i;
+        System.out.println(a1[s1 - s2]);
+    }
+
+    public static void bubbleSort(int[] unsorted) {
+        System.out.println("unsorted array before sorting : " + Arrays.toString(unsorted));
+        // Outer loop - need n-1 iteration to sort n elements
+        for (int i = 0; i < unsorted.length - 1; i++) {
+            //Inner loop to perform comparision and swapping between adjacent numbers
+            //After each iteration one index from last is sorted
+            for (int j = 1; j < unsorted.length - i; j++) {
+                //If current number is greater than swap those two
+                if (unsorted[j - 1] > unsorted[j]) {
+                    int temp = unsorted[j];
+                    unsorted[j] = unsorted[j - 1];
+                    unsorted[j - 1] = temp;
+                }
+            }
+            System.out.printf("unsorted array after %d pass %s: %n", i + 1, Arrays.toString(unsorted));
+        }
+    }
+
+    /*
+     * Java program for Fibonacci number using recursion.
+     * This program uses tail recursion to calculate Fibonacci number for a given number
+     */
+    public static int fibonacci(int number) {
+        if (number == 1 || number == 2) {
+            return 1;
+        }
+        return fibonacci(number - 1) + fibonacci(number - 2); //tail recursion
+    }
+
+    /*
+     * Java program to calculate Fibonacci number using loop or Iteration.
+     */
+    public static int fibonacci2(int number) {
+        if (number == 1 || number == 2) {
+            return 1;
+        }
+        int fibo1 = 1, fibo2 = 1, fibonacci = 1;
+        for (int i = 3; i <= number; i++) {
+            fibonacci = fibo1 + fibo2; //Fibonacci number is sum of previous two Fibonacci number
+            fibo1 = fibo2;
+            fibo2 = fibonacci;
+        }
+        return fibonacci; //Fibonacci number
+    }
+
+    static void testLinkedList() {
+        LinkedList linkedList = new Tasks().new LinkedList();
+        linkedList.add(linkedList.new Node("1"));
+        linkedList.add(linkedList.new Node("2"));
+        linkedList.add(linkedList.new Node("3"));
+        linkedList.add(linkedList.new Node("4"));
+        linkedList.add(linkedList.new Node("5"));
+        linkedList.add(linkedList.new Node("6"));
+        linkedList.add(linkedList.new Node("7"));
+        linkedList.add(linkedList.new Node("8"));
+        linkedList.add(linkedList.new Node("9"));
+        linkedList.add(linkedList.new Node("10"));
+
+        LinkedList.Node current, middle;
+        //Double pass
+        current = linkedList.first;
+        int length = 0;
+        while (current.next != null) {
+            length++;
+            current = current.next;
+        }
+        current = linkedList.first;
+        for (int i = 1; i <= length / 2; i++) {
+            current = current.next;
+        }
+
+        System.out.println("length of LinkedList: " + length);
+        System.out.println("middle element of LinkedList : " + current);
+
+        //Single pass
+        // need to maintain two-pointer:
+        // one increment at each node while other increments after two nodes at a time,
+        // when first pointer reaches end, second pointer will point to middle element of linked list
+        current = linkedList.first;
+        middle = current;
+        int element = 0;
+        while (current.next != null) {
+            element++;
+            current = current.next;
+            if (element % 2 == 0) {
+                middle = middle.next;
+            }
+        }
+        //        if (element % 2 == 1) {
+        //            middle = middle.next;
+        //        }
+        System.out.println("length of LinkedList: " + length);
+        System.out.println("middle element of LinkedList : " + middle);
+    }
+
+    public static class Palindrome {
+        public static int recursion(int n) {
+            if (n < 10) {
+                return n;
+            } else {
+                System.out.print(n % 10 + " ");
+                return recursion(n / 10);
+            }
+        }
+
+        public static void main(String[] args) {
+            System.out.println(recursion(123));
+        }
+    }
+
+    public static class Palword {
+        public static String recursion(String s) {
+            if (s.length() == 1) {
+                return "YES";
+            } else {
+                if (s.substring(0, 1).equals(s.substring(s.length() - 1, s.length()))) {
+                    if (s.length() == 2) {
+                        return "YES";
+                    }
+                    return recursion(s.substring(1, s.length() - 1));
+                } else {
+                    return "NO";
+                }
+            }
+        }
+
+        public static void main(String[] args) {
+            System.out.println(recursion("ABBA"));
+        }
+    }
+
+    class LinkedList {
+        Node first;
+        Node last;
+
+        public LinkedList() {
+            first = new Node("head");
+            last = first;
+        }
+
+        public void add(Node node) {
+            last.next = node;
+            last = node;
+        }
+
+        class Node {
+            Node next;
+            String data;
+
+            public Node(String data) {
+                this.data = data;
+            }
+
+            public String toString() {
+                return this.data;
+            }
+        }
+    }
+}

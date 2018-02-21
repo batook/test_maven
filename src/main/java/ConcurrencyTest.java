@@ -2,7 +2,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 
-
 class JoinForkTest {
     public static void main(String[] args) {
         JoinForkTest t = new JoinForkTest();
@@ -13,6 +12,7 @@ class JoinForkTest {
         System.out.println(total.stream().mapToInt(Integer::intValue).sum());
         Integer i = pool.invoke(t.new RecursiveTaskTest(1, 10));
         System.out.println(i);
+        assert Integer.valueOf(55).equals(i);
     }
 
     class RecursiveActionTest extends RecursiveAction {
