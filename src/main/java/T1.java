@@ -2,6 +2,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class T1 {
@@ -31,8 +32,8 @@ public class T1 {
         Set<String> set = new HashSet<>(Arrays.asList(text.split("\\s+")));
         for (String e : set)
             System.out.println(e + " " + Collections.frequency(list, e));
-        System.out.println(Arrays.asList('w', 'o', 'l', 'f').stream().parallel().reduce("", (c, s1) -> c + s1, (a, b) -> a + b));
-        System.out.println(Arrays.asList("w", "o", "l", "f").stream().reduce("", String::concat));
+        System.out.println(Stream.of('w', 'o', 'l', 'f').parallel().reduce("", (c, s1) -> c + s1, (a, b) -> a + b));
+        System.out.println(Stream.of("w", "o", "l", "f").reduce("", String::concat));
 
     }
 
@@ -81,9 +82,7 @@ public class T1 {
                     iterator.next();
                     iterator.remove();
                 }
-            } catch (ConcurrentModificationException e) {
-                throw e;
-            } catch (IllegalStateException e) {
+            } catch (ConcurrentModificationException | IllegalStateException e) {
                 throw e;
             } finally {
                 System.out.println(ll);
@@ -177,7 +176,7 @@ public class T1 {
     static class TestMap {
         public static void main(String[] args) {
             T1 t = new T1();
-            Map<String, Integer> hm = new HashMap();
+            Map<String, Integer> hm = new HashMap<>();
             for (int i = 0; i <= t.list.size() - 1; i++)
                 hm.put(t.list.get(i), i);
             hm.put(null, null);
@@ -204,7 +203,7 @@ public class T1 {
             System.out.println(tm.values());
             System.out.println(tm.keySet());
 
-            Map<String, Integer> hm2 = new HashMap(hm);
+            Map<String, Integer> hm2 = new HashMap<>(hm);
             System.out.println(hm2);
             Iterator<Integer> i2 = hm2.values().iterator();
             while (i2.hasNext()) {
@@ -213,7 +212,7 @@ public class T1 {
             }
             System.out.println(hm2);
 
-            Map<String, Integer> hm3 = new HashMap(hm);
+            Map<String, Integer> hm3 = new HashMap<>(hm);
             System.out.println(hm3);
             Iterator<String> i3 = hm3.keySet().iterator();
             while (i3.hasNext()) {
@@ -385,7 +384,9 @@ class Tasks {
         testLinkedList();
         //testing our bubble sort method in Java
         int[] unsorted = {32, 39, 21, 45, 23, 3};
-        bubbleSort(unsorted);
+        //int[] unsortedBig = IntStream.iterate(0, i -> i + 1).limit(100).toArray();
+        int[] unsortedBig = new Random().ints(1, 100).limit(10).toArray();
+        bubbleSort(unsortedBig);
         //one more testing of our bubble sort code logic in Java
         int[] test = {5, 3, 2, 1};
         bubbleSort(test);
@@ -400,14 +401,13 @@ class Tasks {
     }
 
     static void getDublicate() {
-        int[] a1 = {1, 2, 3, 4, 5, 6, 6};
+        int[] a1 = {6, 5, 5, 4, 3, 2, 1};
         int s1 = 0, s2 = 0;
         System.out.println(Arrays.toString(a1));
         for (int i = 0; i < a1.length; i++) {
             s1 += a1[i];
         }
-        for (int i = 1; i <= 6; i++)
-            s2 += i;
+        s2 = IntStream.rangeClosed(1, 6).sum();
         System.out.println(a1[s1 - s2]);
     }
 
@@ -468,7 +468,7 @@ class Tasks {
         linkedList.add(linkedList.new Node("8"));
         linkedList.add(linkedList.new Node("9"));
         linkedList.add(linkedList.new Node("10"));
-
+        linkedList.iterate();
         LinkedList.Node current, middle;
         //Double pass
         current = linkedList.first;
@@ -502,7 +502,7 @@ class Tasks {
         //        if (element % 2 == 1) {
         //            middle = middle.next;
         //        }
-        System.out.println("length of LinkedList: " + length);
+        System.out.println("length of LinkedList: " + element);
         System.out.println("middle element of LinkedList : " + middle);
     }
 
@@ -554,6 +554,16 @@ class Tasks {
         public void add(Node node) {
             last.next = node;
             last = node;
+        }
+
+        public void iterate() {
+            Node current = this.first;
+            System.out.print(current.data);
+            while (current.next != null) {
+                System.out.print(" -> " + current.next);
+                current = current.next;
+            }
+            System.out.println();
         }
 
         class Node {
