@@ -1,3 +1,5 @@
+import java.lang.reflect.Method;
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.function.Function;
 import java.util.regex.Pattern;
@@ -10,7 +12,7 @@ public class T1 {
     List<String> list;
 
     {
-        array = "ene bene raba bene raba".split("\\s+");
+        array = "Ene bene raba bene raba!".split("\\s+");
         list = Arrays.asList(array);
     }
 
@@ -19,6 +21,11 @@ public class T1 {
     }
 
     void test() {
+        long startTime = System.nanoTime();
+        // ... the code being measured ...
+        double estimatedTime = (double) (System.nanoTime() - startTime) / 1_000_000_000;
+        System.out.println(new DecimalFormat("#.##########").format(estimatedTime));
+
         Arrays.asList("a b c d".split("\\s+")).forEach(System.out::println);
         Arrays.asList(Pattern.compile("\\s+").split("a b c d")).forEach(System.out::println);
         System.out.println(Stream.of("a", "b", "c").collect(Collectors.joining(",")));
@@ -34,7 +41,6 @@ public class T1 {
             System.out.println(e + " " + Collections.frequency(list, e));
         System.out.println(Stream.of('w', 'o', 'l', 'f').parallel().reduce("", (c, s1) -> c + s1, (a, b) -> a + b));
         System.out.println(Stream.of("w", "o", "l", "f").reduce("", String::concat));
-
     }
 
     static class TestList {
@@ -237,12 +243,10 @@ public class T1 {
             System.out.println(nm.headMap("e"));
             System.out.println(nm.pollLastEntry());
 
-            Map<Integer, Object> hms = Stream.of(t.array)
-                    .collect(Collectors.toMap(String::length, k -> k, (s1, s2) -> s1 + "," + s2));
+            Map<Integer, Object> hms = Stream.of(t.array).collect(Collectors.toMap(String::length, k -> k, (s1, s2) -> s1 + "," + s2));
             System.out.println(hms.getClass() + " " + hms);
 
-            TreeMap<Integer, String> map = t.list.stream()
-                    .collect(Collectors.toMap(String::length, v -> v, (x, y) -> x + "," + y, TreeMap::new));
+            TreeMap<Integer, String> map = t.list.stream().collect(Collectors.toMap(String::length, v -> v, (x, y) -> x + "," + y, TreeMap::new));
             System.out.println(map.getClass() + " " + map);
         }
     }
@@ -326,8 +330,8 @@ class ArrayReversalDemo {
         char[] c = st.toCharArray();
         for (int i = 0; i < c.length / 2; i++) {
             char tmp = c[i];
-            c[i] = c[c.length - 1 - i];
-            c[c.length - 1 - i] = tmp;
+            c[i] = c[(c.length - 1) - i];
+            c[(c.length - 1) - i] = tmp;
         }
         System.out.println(new String(c));
         String s = "";
@@ -339,12 +343,12 @@ class ArrayReversalDemo {
     }
 
     static void reverseByArray(String s) {
-        char[] a = s.toCharArray();
-        char[] b = new char[a.length];
-        for (int i = 0; i < a.length; i++) {
-            b[(a.length - 1) - i] = a[i];
+        char[] src = s.toCharArray();
+        char[] tgt = new char[src.length];
+        for (int i = 0; i < src.length; i++) {
+            tgt[(src.length - 1) - i] = src[i];
         }
-        System.out.println(new String(b));
+        System.out.println(new String(tgt));
     }
 }
 
@@ -369,8 +373,7 @@ class TestSets {
         public void test() {
             System.out.println(this.toString());
             System.out.println(TestSets.this.toString());
-            System.out.println("union " + Stream.concat(TestSets.this.i1.stream(), TestSets.this.i2.stream())
-                    .collect(Collectors.toSet()));
+            System.out.println("union " + Stream.concat(TestSets.this.i1.stream(), TestSets.this.i2.stream()).collect(Collectors.toSet()));
             System.out.println("intersect " + i1.stream().filter(i2::contains).collect(Collectors.toSet()));
         }
     }
@@ -380,12 +383,23 @@ class Tasks {
     // https://proglib.io/p/15-questions-for-programmers/
     // http://qa7.ru/blog/2014/06/22/voprosy-po-java-na-interviu/
     public static void main(String[] args) {
+        long startTime = System.nanoTime();
         getDublicate();
         testLinkedList();
         //testing our bubble sort method in Java
         int[] unsorted = {32, 39, 21, 45, 23, 3};
         //int[] unsortedBig = IntStream.iterate(0, i -> i + 1).limit(100).toArray();
         int[] unsortedBig = new Random().ints(1, 100).limit(10).toArray();
+
+        List<Integer> t = Arrays.stream(unsortedBig).boxed().collect(Collectors.toList());
+        int max = t.iterator().next();
+        for (int i : t) {
+            if (max < i) max = i;
+        }
+        System.out.println("max=" + max);
+        max = t.stream().max(Comparator.naturalOrder()).get();
+        System.out.println("max=" + max);
+
         bubbleSort(unsortedBig);
         //one more testing of our bubble sort code logic in Java
         int[] test = {5, 3, 2, 1};
@@ -397,7 +411,9 @@ class Tasks {
         for (int i = 1; i <= 10; i++) {
             System.out.print(fibonacci2(i) + " ");
         }
-
+        System.out.println();
+        double estimatedTime = (double) (System.nanoTime() - startTime) / 1_000_000_000;
+        System.out.println(new DecimalFormat("#.##########").format(estimatedTime));
     }
 
     static void getDublicate() {
@@ -580,3 +596,80 @@ class Tasks {
         }
     }
 }
+
+class CompareTest implements Comparable<Integer> {
+    Integer i;
+
+    public static void main(String[] args) {
+        for (Method m : CompareTest.class.getMethods()) {
+            if (m.getName().equals("compareTo")) {
+                System.out.println(m.toGenericString());
+            }
+        }
+    }
+
+    @Override
+    public int compareTo(Integer o) {
+        return i.compareTo(o);
+        //return i.intValue() < o.intValue() ? -1 : i.intValue() == o.intValue() ? 0 : 1;
+    }
+}
+
+class NestedTest {
+    static int s;
+    int i;
+    NestedTest.A a;
+    NestedTest.B b;
+    NestedTest.C c;
+    NestedTest.D d;
+
+
+    static class C {
+        static int s;
+        int i;
+        NestedTest.A a;
+        NestedTest.B b;
+        NestedTest.D d;
+        int sc = NestedTest.s;
+        //int ic = A.i;
+        int ic = NestedTest.D.s;
+    }
+
+    private static class D {
+        static int s;
+        int i;
+        NestedTest.A a;
+        NestedTest.B b;
+        NestedTest.C c;
+        int sd = NestedTest.s;
+    }
+
+    class A {
+        //static int s;
+        int i = NestedTest.this.i;
+        NestedTest.B b;
+        NestedTest.C c;
+        NestedTest.D d;
+        int ia = new B().i;
+    }
+
+    private class B {
+        //static int s;
+        int i;
+        NestedTest.A a;
+        NestedTest.C c;
+        NestedTest.D d;
+        int ib = new A().i;
+        int iab = NestedTest.this.new A().ia;
+    }
+}
+
+class NestedTest2 {
+    static int s;
+    int i;
+    NestedTest.A a;
+    //NestedTest.B b;
+    NestedTest.C c;
+    //NestedTest.D d;
+}
+
