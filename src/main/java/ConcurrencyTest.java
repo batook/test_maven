@@ -164,16 +164,19 @@ class InterruptedTest {
 
 
 class WaitTest {
+    Calc c;
+
     public static void main(String[] args) {
-        Calc c = new WaitTest().new Calc();
-        new Thread(new WaitTest().new ReadCalc(c)).start();
-        new Thread(new WaitTest().new ReadCalc(c)).start();
-        new Thread(c).start();
+        WaitTest wt = new WaitTest();
+        wt.c = wt.new Calc();
+        new Thread(wt.new ReadCalc()).start();
+        new Thread(wt.new ReadCalc()).start();
+        new Thread(wt.c).start();
     }
 
-    class Calc implements Runnable {
+    private class Calc implements Runnable {
         int total;
-        boolean isDone;
+        volatile boolean isDone;
 
         public void run() {
             synchronized (this) {
@@ -187,13 +190,7 @@ class WaitTest {
         }
     }
 
-    class ReadCalc implements Runnable {
-        Calc c;
-
-        public ReadCalc(Calc c) {
-            this.c = c;
-        }
-
+    private class ReadCalc implements Runnable {
         @Override
         public void run() {
             synchronized (c) {

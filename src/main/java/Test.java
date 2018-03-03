@@ -58,7 +58,8 @@ public class Test {
         System.out.println(Arrays.stream("abc de".split(" ")).min(lengthCompare).get());
         List<String> l = Arrays.stream("abc de".split(" ")).map(String::toUpperCase).collect(Collectors.toList());
         System.out.println(l);
-        Set<String> ss = Arrays.stream("a b c a b c".split(" ")).map(String::toUpperCase).collect(Collectors.toCollection(TreeSet::new));
+        Set<String> ss = Arrays.stream("a b c a b c".split(" ")).map(String::toUpperCase)
+                .collect(Collectors.toCollection(TreeSet::new));
         ss.stream().forEach(System.out::println);
         System.out.println(ss);
         Map<Integer, List<String>> m = Arrays.stream("a bb bb ccc ccc ccc".split(" ")).distinct()
@@ -67,7 +68,8 @@ public class Test {
             System.out.print(count);
             words.forEach(System.out::println);
         });
-        Map<Boolean, List<String>> bb = Arrays.stream("a1 bb1 ccc1".split(" ")).collect(Collectors.partitioningBy(s -> s.length() > 2));
+        Map<Boolean, List<String>> bb = Arrays.stream("a1 bb1 ccc1".split(" "))
+                .collect(Collectors.partitioningBy(s -> s.length() > 2));
         System.out.println("length>1 " + bb.get(true));
         bb.get(true).forEach(System.out::println);
         bb.forEach((x, y) -> {

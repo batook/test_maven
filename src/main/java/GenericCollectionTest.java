@@ -1,5 +1,11 @@
 import java.util.*;
 
+enum Priority {
+    HIGH,
+    MEDIUM,
+    LOW
+}
+
 public class GenericCollectionTest {
     public static void main(String[] args) {
         PhoneTask mikePhone = new PhoneTask("Mike", "987 6543");
@@ -19,11 +25,79 @@ public class GenericCollectionTest {
         assert codingTasks.toString().equals("[code db, code gui, code logic]");
         assert mondayTasks.toString().equals("[code logic, phone Mike]");
         assert tuesdayTasks.toString().equals("[code db, code gui, phone Paul]");
+        //
         Collection<Task> mergedTasks = MergeCollections.merge(mondayTasks, tuesdayTasks);
         assert mergedTasks.toString().equals("[code db, code gui, code logic, phone Mike, phone Paul]");
+        //
         Set<Task> phoneAndMondayTasks = new TreeSet<Task>(mondayTasks);
         phoneAndMondayTasks.addAll(phoneTasks);
         assert phoneAndMondayTasks.toString().equals("[code logic, phone Mike, phone Paul]");
+        //
+        Set<Character> s2 = new LinkedHashSet<Character>();
+        Collections.addAll(s2, 'a', 'b', 'j');
+        // iterators of a LinkedHashSet return their elements in proper order:
+        assert s2.toString().equals("[a, b, j]");
+        //
+        Set<Task> naturallyOrderedTasks = new TreeSet<Task>(mondayTasks);
+        naturallyOrderedTasks.addAll(tuesdayTasks);
+        assert naturallyOrderedTasks.toString().equals("[code db, code gui, code logic, phone Mike, phone Paul]");
+        //
+        NavigableSet<PriorityTask> priorityTasks = new TreeSet<PriorityTask>();
+        priorityTasks.add(new PriorityTask(mikePhone, Priority.MEDIUM));
+        priorityTasks.add(new PriorityTask(paulPhone, Priority.HIGH));
+        priorityTasks.add(new PriorityTask(databaseCode, Priority.MEDIUM));
+        priorityTasks.add(new PriorityTask(interfaceCode, Priority.LOW));
+        assert (priorityTasks.toString()).equals("[phone Paul: HIGH, code db: MEDIUM, phone Mike: MEDIUM, code gui: LOW]");
+        //
+        PriorityTask firstLowPriorityTask = new PriorityTask(new EmptyTask(), Priority.LOW);
+        SortedSet<PriorityTask> highAndMediumPriorityTasks = priorityTasks.headSet(firstLowPriorityTask);
+        assert highAndMediumPriorityTasks.toString().equals("[phone Paul: HIGH, code db: MEDIUM, phone Mike: MEDIUM]");
+        //
+        PriorityTask firstMediumPriorityTask = new PriorityTask(new EmptyTask(), Priority.MEDIUM);
+        SortedSet<PriorityTask> mediumPriorityTasks = priorityTasks.subSet(firstMediumPriorityTask, firstLowPriorityTask);
+        assert mediumPriorityTasks.toString().equals("[code db: MEDIUM, phone Mike: MEDIUM]");
+        //
+        NavigableSet<String> stringSet = new TreeSet<String>();
+        Collections.addAll(stringSet, "abc", "cde", "x-ray", "zed");
+        String last = stringSet.floor("x-ray");
+        assert last.equals("x-ray");
+        String secondToLast = last == null ? null : stringSet.lower(last);
+        String thirdToLast = secondToLast == null ? null : stringSet.lower(secondToLast);
+        assert thirdToLast.equals("abc");
+        //
+        NavigableSet<String> headSet = stringSet.headSet(last, true);
+        NavigableSet<String> reverseHeadSet = headSet.descendingSet();
+        assert reverseHeadSet.toString().equals("[x-ray, cde, abc]");
+        String conc = " ";
+        for (String s : reverseHeadSet) {
+            conc += s + " ";
+        }
+        assert conc.equals(" x-ray cde abc ");
+        for (Iterator<String> itr = headSet.descendingIterator(); itr.hasNext(); ) {
+            itr.next();
+            itr.remove();
+        }
+        assert headSet.isEmpty();
+        //
+        // construct and populate a NavigableSet whose iterator returns its
+        // elements in the reverse of natural order:
+        NavigableSet<String> base = new TreeSet<String>(Collections.reverseOrder());
+        Collections.addAll(base, "b", "a", "c");
+        // call the two different constructors for TreeSet, supplying the
+        // set just constructed, but with different static types:
+        NavigableSet<String> sortedSet1 = new TreeSet<String>((Set<String>) base);
+        NavigableSet<String> sortedSet2 = new TreeSet<String>(base);
+        System.out.println(base);
+        System.out.println(sortedSet1);
+        System.out.println(sortedSet2);
+        // and the two sets have different iteration orders:
+        List<String> forward = new ArrayList<String>();
+        forward.addAll(sortedSet1);
+        List<String> backward = new ArrayList<String>();
+        backward.addAll(sortedSet2);
+        assert !forward.equals(backward);
+        Collections.reverse(forward);
+        assert forward.equals(backward);
     }
 }
 
@@ -128,5 +202,43 @@ class MergeCollections {
         } else {
             return null;
         }
+    }
+}
+
+final class PriorityTask implements Comparable<PriorityTask> {
+    private final Task task;
+    private final Priority priority;
+
+    PriorityTask(Task task, Priority priority) {
+        this.task = task;
+        this.priority = priority;
+    }
+
+    public Task getTask() {
+        return task;
+    }
+
+    public Priority getPriority() {
+        return priority;
+    }
+
+    public int compareTo(PriorityTask pt) {
+        int c = priority.compareTo(pt.priority);
+        return c != 0 ? c : task.compareTo(pt.task);
+    }
+
+    public boolean equals(Object o) {
+        if (o instanceof PriorityTask) {
+            PriorityTask pt = (PriorityTask) o;
+            return task.equals(pt.task) && priority.equals(pt.priority);
+        } else return false;
+    }
+
+    public int hashCode() {
+        return task.hashCode();
+    }
+
+    public String toString() {
+        return task + ": " + priority;
     }
 }
