@@ -405,7 +405,7 @@ class CompareTest implements Comparable<Integer> {
 
 class Dummy {
     public static void main(String[] args) {
-        String s = "You are an idiot! Idiot!!!";
+        String s = "Ene, bene, raba!";
         Map<Character, Integer> m = new HashMap<>();
         for (int i = 0; i <= s.length() - 1; i++) {
             int c = m.get(s.charAt(i)) == null ? 1 : m.get(s.charAt(i)) + 1;
