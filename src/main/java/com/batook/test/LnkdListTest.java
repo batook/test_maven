@@ -2,12 +2,12 @@ package com.batook.test;
 
 public class LnkdListTest {
     public static void main(String[] args) {
-        LnkdList linkedList = new LnkdList();
+        LnkdList linkedList = new LnkdList(new Node("0"));
         for (int i = 1; i <= 10; i++)
-            linkedList.add(linkedList.new Node(Integer.toString(i)));
+            linkedList.add(new Node(Integer.toString(i)));
         linkedList.iterate();
-        LnkdList.Node current, result;
-        current = linkedList.first;
+        Node current, result;
+        current = linkedList.head;
         result = current;
         int pos = 0;
         while (current.next != null) {
@@ -22,52 +22,58 @@ public class LnkdListTest {
 }
 
 class LnkdList {
-    Node first;
-    Node last;
+    Node head;
+    Node tail;
 
     public LnkdList() {
-        first = new Node("head");
-        last = first;
+        this(new Node("head"));
+    }
+
+    public LnkdList(Node node) {
+        head = node;
+        tail = head;
     }
 
     public void add(Node node) {
-        last.next = node;
-        last = node;
+        tail.next = node;
+        tail = node;
     }
 
     public void iterate() {
-        Node current = this.first;
-        System.out.print(current.value);
+        Node current = this.head;
+        System.out.print(current);
         while (current.next != null) {
             System.out.print(" -> " + current.next);
+            //System.out.print("[" + current + " -> " + current.next + "]");
             current = current.next;
         }
         System.out.println();
     }
 
     public void reverse() {
-        Node current = this.first;
+        Node current = this.head;
         Node prev = null;
-        Node tmp;
+        Node next;
+        // run through the list. set first.next=null, next.next=previous
         while (current != null) {
-            tmp = current.next;
+            next = current.next;
             current.next = prev;
             prev = current;
-            current = tmp;
+            current = next;
         }
-        this.first = prev;
+        this.head = prev;
+    }
+}
+
+class Node {
+    Node next;
+    String value;
+
+    public Node(String data) {
+        value = data;
     }
 
-    class Node {
-        Node next;
-        String value;
-
-        public Node(String data) {
-            value = data;
-        }
-
-        public String toString() {
-            return value;
-        }
+    public String toString() {
+        return value;
     }
 }
