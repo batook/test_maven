@@ -1,3 +1,5 @@
+package com.batook.test;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -122,7 +124,7 @@ class SingletonPatternEx {
 }
 
 
-// ProxyPatternEx.java
+// com.batook.test.ProxyPatternEx.java
 class ProxyPatternEx {
     public static void main(String[] args) {
         System.out.println("***Proxy Pattern Demo***\n");
@@ -296,7 +298,7 @@ class TestDecorator {
     }
 }
 
-// TemplateMethodPatternEx.java
+// com.batook.test.TemplateMethodPatternEx.java
 class TemplateMethodPatternEx {
     public static void main(String[] args) {
         System.out.println("***Template Method Pattern Demo***\n");

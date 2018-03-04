@@ -125,8 +125,8 @@ class JavaTasks {
             current = current.next;
         }
 
-        System.out.println("length of LinkedList: " + length);
-        System.out.println("middle element of LinkedList : " + current);
+        System.out.println("length of LnkdList: " + length);
+        System.out.println("middle element of LnkdList : " + current);
 
         //Single pass
         // need to maintain two-pointer:
@@ -145,8 +145,8 @@ class JavaTasks {
         //        if (element % 2 == 1) {
         //            middle = middle.next;
         //        }
-        System.out.println("length of LinkedList: " + element);
-        System.out.println("middle element of LinkedList : " + middle);
+        System.out.println("length of LnkdList: " + element);
+        System.out.println("middle element of LnkdList : " + middle);
     }
 
     public static class Palindrome {

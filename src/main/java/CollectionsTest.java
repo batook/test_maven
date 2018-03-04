@@ -161,7 +161,7 @@ class TestPerformance {
         long duration = endTime - startTime;
         System.out.println("ArrayList add:  " + duration);
 
-        // LinkedList add
+        // LnkdList add
         startTime = System.nanoTime();
 
         for (int i = 0; i < 100000; i++) {
@@ -169,7 +169,7 @@ class TestPerformance {
         }
         endTime = System.nanoTime();
         duration = endTime - startTime;
-        System.out.println("LinkedList add: " + duration);
+        System.out.println("LnkdList add: " + duration);
 
         // ArrayList get
         startTime = System.nanoTime();
@@ -181,7 +181,7 @@ class TestPerformance {
         duration = endTime - startTime;
         System.out.println("ArrayList get:  " + duration);
 
-        // LinkedList get
+        // LnkdList get
         startTime = System.nanoTime();
 
         for (int i = 0; i < 10000; i++) {
@@ -189,7 +189,7 @@ class TestPerformance {
         }
         endTime = System.nanoTime();
         duration = endTime - startTime;
-        System.out.println("LinkedList get: " + duration);
+        System.out.println("LnkdList get: " + duration);
 
 
         // ArrayList remove
@@ -203,7 +203,7 @@ class TestPerformance {
         System.out.println("ArrayList remove:  " + duration);
 
 
-        // LinkedList remove
+        // LnkdList remove
         startTime = System.nanoTime();
 
         for (int i = 9999; i >= 0; i--) {
@@ -211,7 +211,7 @@ class TestPerformance {
         }
         endTime = System.nanoTime();
         duration = endTime - startTime;
-        System.out.println("LinkedList remove: " + duration);
+        System.out.println("LnkdList remove: " + duration);
 
     }
 }

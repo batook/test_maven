@@ -7,6 +7,15 @@ class DecoratorTest {
         Component c2 = new BlackCoffee().addComponent(new Milk()).addComponent(new Sugar());
         System.out.println(c2.getDescription());
         System.out.println(c2);
+        ThreadProducer p = new ThreadProducer();
+        new Thread(new ThreadConsumer(p)).start();
+        new Thread(new ThreadConsumer(p)).start();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        new Thread(p).start();
     }
 
 }
@@ -85,5 +94,43 @@ class SingletonTest {
 
     private static final class Helper {
         private final static SingletonTest Instance = new SingletonTest();
+    }
+}
+
+class ThreadConsumer implements Runnable {
+    ThreadProducer p;
+
+    public ThreadConsumer(ThreadProducer p) {
+        this.p = p;
+    }
+
+    @Override
+    public void run() {
+        synchronized (p) {
+            if (!p.isDone) {
+                try {
+                    System.out.println(this + " is waiting for " + p);
+                    p.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            System.out.println(this + " got result " + p.result);
+        }
+    }
+}
+
+class ThreadProducer implements Runnable {
+    int result;
+    volatile boolean isDone;
+
+    @Override
+    public void run() {
+        synchronized (this) {
+            result = 100;
+            isDone = true;
+            notifyAll();
+        }
+
     }
 }
