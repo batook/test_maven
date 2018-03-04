@@ -6,16 +6,17 @@ public class LnkdListTest {
         for (int i = 1; i <= 10; i++)
             linkedList.add(new Node(Integer.toString(i)));
         linkedList.iterate();
-        Node current, result;
+        //
+        Node current, middle;
         current = linkedList.head;
-        result = current;
+        middle = current;
         int pos = 0;
         while (current.next != null) {
             pos++;
             current = current.next;
-            if (pos % 2 == 0) result = result.next;
+            if (pos % 2 == 0) middle = middle.next;
         }
-        System.out.println("Middle=" + result);
+        System.out.println("Middle=" + middle);
         linkedList.reverse();
         linkedList.iterate();
     }
@@ -54,7 +55,7 @@ class LnkdList {
         Node current = this.head;
         Node prev = null;
         Node next;
-        // run through the list. set first.next=null, next.next=previous
+        // run through the list and set first.next=null, next.next=previous
         while (current != null) {
             next = current.next;
             current.next = prev;
