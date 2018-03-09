@@ -8,26 +8,6 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-interface BaseInterface1 {
-    default void getName() {
-        System.out.println("Base 1");
-    }
-}
-
-interface BaseInterface2 {
-    default void getName() {
-        System.out.println("Base 2");
-    }
-}
-
-interface MyInterface extends BaseInterface1, BaseInterface2 {
-    default void getName() {
-        System.out.println("Just me");
-        BaseInterface1.super.getName();
-        BaseInterface2.super.getName();
-    }
-}
-
 public class Test {
     public static void main(String[] args) {
         ThreadProducer p = new ThreadProducer();
@@ -58,6 +38,8 @@ public class Test {
             System.out.print(fibonacci(i) + " ");
         }
         System.out.println();
+        //Reverse
+        reverseArray();
     }
 
     /*
@@ -87,7 +69,6 @@ public class Test {
         }
         return fibonacci; //Fibonacci number
     }
-
 
     static void bubbleSort(int[] unsorted) {
         System.out.println("unsorted array before sorting : " + Arrays.toString(unsorted));
@@ -166,8 +147,78 @@ public class Test {
         s2 = IntStream.rangeClosed(1, 6).sum();
         System.out.println(a1[s1 - s2]);
     }
+
+    static void reverseArray() {
+        char[] t = "Ene bene raba!".toCharArray();
+        for (char i = 0; i < t.length / 2; i++) {
+            /*
+            swap A<->B
+            A ^= B;
+            B ^= A;
+            A ^= B;
+            */
+            t[i] ^= t[t.length - 1 - i];
+            t[t.length - 1 - i] ^= t[i];
+            t[i] ^= t[t.length - 1 - i];
+        }
+        System.out.println(new String(t));
+    }
 }
 
+class ArrayReversalDemo {
+    public static void main(String[] args) {
+        int[] numbers = {1, 2, 3, 4, 5, 6, 7};
+        reverse(numbers);
+        reverseString("Ene bene raba!");
+        reverseByArray("Ene bene raba!");
+    }
+
+    /**
+     * reverse the given array in place * @param input
+     */
+    static void reverse(int[] input) {
+        System.out.println("original array : " + Arrays.toString(input));
+        // handling null, empty and one element array
+        if (input == null || input.length <= 1) {
+            return;
+        }
+        for (int i = 0; i < input.length / 2; i++) {
+            int temp = input[i];
+            // swap numbers
+            input[i] = input[input.length - 1 - i];
+            input[input.length - 1 - i] = temp;
+        }
+        System.out.println("reversed array : " + Arrays.toString(input));
+    }
+
+    static void reverseString(String st) {
+        System.out.println(st);
+        char[] c = st.toCharArray();
+        for (int i = 0; i < c.length / 2; i++) {
+            char tmp = c[i];
+            c[i] = c[(c.length - 1) - i];
+            c[(c.length - 1) - i] = tmp;
+        }
+        System.out.println(new String(c));
+        //
+        String s = "";
+        for (int i = st.length() - 1; i >= 0; i--) {
+            s += st.charAt(i);
+        }
+        System.out.println(s);
+        //
+        System.out.println(new StringBuilder(st).reverse());
+    }
+
+    static void reverseByArray(String s) {
+        char[] src = s.toCharArray();
+        char[] tgt = new char[src.length];
+        for (int i = 0; i < src.length; i++) {
+            tgt[(src.length - 1) - i] = src[i];
+        }
+        System.out.println(new String(tgt));
+    }
+}
 
 class DecoratorTest {
     public static void main(String[] args) {
@@ -299,95 +350,3 @@ class ThreadProducer implements Runnable {
     }
 }
 
-class ArrayReversalDemo {
-
-    public static void main(String[] args) {
-        int[] numbers = {1, 2, 3, 4, 5, 6, 7};
-        reverse(numbers);
-        reverseString("Ene bene raba!");
-        reverseByArray("Ene bene raba!");
-    }
-
-    /**
-     * reverse the given array in place * @param input
-     */
-    public static void reverse(int[] input) {
-        System.out.println("original array : " + Arrays.toString(input));
-        // handling null, empty and one element array
-        if (input == null || input.length <= 1) {
-            return;
-        }
-        for (int i = 0; i < input.length / 2; i++) {
-            int temp = input[i];
-            // swap numbers
-            input[i] = input[input.length - 1 - i];
-            input[input.length - 1 - i] = temp;
-        }
-        System.out.println("reversed array : " + Arrays.toString(input));
-    }
-
-    static void reverseString(String st) {
-        System.out.println(st);
-        char[] c = st.toCharArray();
-        for (int i = 0; i < c.length / 2; i++) {
-            char tmp = c[i];
-            c[i] = c[(c.length - 1) - i];
-            c[(c.length - 1) - i] = tmp;
-        }
-        System.out.println(new String(c));
-        //
-        String s = "";
-        for (int i = st.length() - 1; i >= 0; i--) {
-            s += st.charAt(i);
-        }
-        System.out.println(s);
-        //
-        System.out.println(new StringBuilder(st).reverse());
-    }
-
-    static void reverseByArray(String s) {
-        char[] src = s.toCharArray();
-        char[] tgt = new char[src.length];
-        for (int i = 0; i < src.length; i++) {
-            tgt[(src.length - 1) - i] = src[i];
-        }
-        System.out.println(new String(tgt));
-    }
-}
-
-class TT implements MyInterface {
-    public static void main(String[] args) {
-
-
-    }
-
-}
-
-class Employee {
-    String name = "Employee";
-
-    void printName() {
-        System.out.println(name);
-    }
-}
-
-class Programmer extends Employee {
-    String name = "Programmer";
-
-    void printName() {
-        System.out.println(name);
-    }
-}
-
-class Office1 {
-    public static void main(String[] args) {
-        Employee emp = new Employee();
-        Employee programmer = new Programmer();
-        System.out.println(emp.name);
-        System.out.println(programmer.name);
-        emp.printName();
-        programmer.printName();
-        System.out.println(new Employee() instanceof Programmer);
-        System.out.println(new Programmer() instanceof Employee);
-    }
-}

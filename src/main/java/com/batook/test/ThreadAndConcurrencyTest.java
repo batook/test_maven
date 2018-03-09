@@ -1,3 +1,5 @@
+package com.batook.test;
+
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
@@ -19,8 +21,7 @@ class ThreadDemo {
             public void run() {
                 Thread thd = Thread.currentThread();
                 while (!Thread.interrupted()) {
-                    System.out.printf("%s is %salive and in %s " + "state%n", thd.getName(), thd.isAlive() ? "" : "not ", thd
-                            .getState());
+                    System.out.printf("%s is %salive and in %s " + "state%n", thd.getName(), thd.isAlive() ? "" : "not ", thd.getState());
                     try {
                         Thread.sleep(100);
                     } catch (InterruptedException e) {
