@@ -51,7 +51,7 @@ public class BlckQueue {
             while (true) {
                 try {
                     Thread.sleep(1000);
-                    q.offer(String.valueOf(String.valueOf(r.nextInt(100))));
+                    q.offer(String.valueOf(r.nextInt(100)));
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

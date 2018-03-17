@@ -9,6 +9,8 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class Test {
+    String id;
+
     public static void main(String[] args) {
         ThreadProducer p = new ThreadProducer();
         new Thread(new ThreadConsumer(p)).start();
@@ -40,6 +42,7 @@ public class Test {
         System.out.println();
         //Reverse
         reverseArray();
+        removeDublicate();
     }
 
     /*
@@ -53,10 +56,6 @@ public class Test {
         return fibonacci(number - 1) + fibonacci(number - 2); //tail recursion
     }
 
-    /*
-     * Java program to calculate Fibonacci number using loop or Iteration.
-     */
-
     static int fibonacci2(int number) {
         if (number == 1 || number == 2) {
             return 1;
@@ -69,6 +68,10 @@ public class Test {
         }
         return fibonacci; //Fibonacci number
     }
+
+    /*
+     * Java program to calculate Fibonacci number using loop or Iteration.
+     */
 
     static void bubbleSort(int[] unsorted) {
         System.out.println("unsorted array before sorting : " + Arrays.toString(unsorted));
@@ -103,6 +106,18 @@ public class Test {
         new Random().ints(1, 10).limit(3).forEach(System.out::println);
         System.out.println(Stream.of('w', 'o', 'l', 'f').parallel().reduce("", (c, s1) -> c + s1, (a, b) -> a + b));
         System.out.println(Stream.of("w", "o", "l", "f").reduce("", String::concat));
+
+        List<String> list = new ArrayList<String>();
+        list.add("Yuri");
+        list.add("Ron");
+        list.add("Interview");
+        list.add("Longest");
+        list.add("List");
+        list.add("Contain");
+        Map<String, Integer> map = list.stream().collect(Collectors.toMap(Function.identity(), String::length));
+        map.entrySet().stream().filter(e -> e.getValue() == 7).forEach(System.out::println);
+        Map<Integer, List<String>> map2 = list.stream().collect(Collectors.groupingBy(String::length));
+        System.out.println(map2);
     }
 
     static void top3() {
@@ -148,6 +163,20 @@ public class Test {
         System.out.println(a1[s1 - s2]);
     }
 
+    static void removeDublicate() {
+        int[] a1 = {6, 5, 5, 4, 3, 2, 2, 1, 1};
+        Arrays.sort(a1);
+        int t = a1[0];
+        System.out.println(Arrays.toString(a1));
+        for (int i = 1; i < a1.length; i++) {
+            if (a1[i] != t) {
+                System.out.print(t);
+                t = a1[i];
+            }
+        }
+        System.out.println();
+    }
+
     static void reverseArray() {
         char[] t = "Ene bene raba!".toCharArray();
         for (char i = 0; i < t.length / 2; i++) {
@@ -162,6 +191,13 @@ public class Test {
             t[i] ^= t[t.length - 1 - i];
         }
         System.out.println(new String(t));
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        return ((Test) obj).id.equals(this.id);
     }
 }
 
@@ -199,15 +235,22 @@ class ArrayReversalDemo {
             c[i] = c[(c.length - 1) - i];
             c[(c.length - 1) - i] = tmp;
         }
-        System.out.println(new String(c));
+        System.out.println("Array " + new String(c));
+        //
+        LinkedList<Character> stack = new LinkedList<>();
+        for (char ch : st.toCharArray())
+            stack.push(ch);
+        StringBuilder sb = new StringBuilder();
+        while (!stack.isEmpty()) sb.append(stack.pop());
+        System.out.println("Stack " + sb.toString());
         //
         String s = "";
         for (int i = st.length() - 1; i >= 0; i--) {
             s += st.charAt(i);
         }
-        System.out.println(s);
+        System.out.println("Array2 " + s);
         //
-        System.out.println(new StringBuilder(st).reverse());
+        System.out.println("SB " + new StringBuilder(st).reverse());
     }
 
     static void reverseByArray(String s) {
@@ -350,3 +393,8 @@ class ThreadProducer implements Runnable {
     }
 }
 
+class TT {
+    public static void main(String[] args) {
+
+    }
+}
