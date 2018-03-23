@@ -6,6 +6,7 @@ import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 public class Test {
@@ -43,6 +44,7 @@ public class Test {
         //Reverse
         reverseArray();
         removeDublicate();
+        test();
     }
 
     /*
@@ -56,6 +58,9 @@ public class Test {
         return fibonacci(number - 1) + fibonacci(number - 2); //tail recursion
     }
 
+    /*
+     * Java program to calculate Fibonacci number using loop or Iteration.
+     */
     static int fibonacci2(int number) {
         if (number == 1 || number == 2) {
             return 1;
@@ -69,9 +74,13 @@ public class Test {
         return fibonacci; //Fibonacci number
     }
 
-    /*
-     * Java program to calculate Fibonacci number using loop or Iteration.
-     */
+    static long factorialRecursive(long n) {
+        return n == 1 ? 1 : n * factorialRecursive(n - 1);
+    }
+
+    static long factorialStreams(long n) {
+        return LongStream.rangeClosed(1, n).reduce(1, (long a, long b) -> a * b);
+    }
 
     static void bubbleSort(int[] unsorted) {
         System.out.println("unsorted array before sorting : " + Arrays.toString(unsorted));
@@ -118,6 +127,17 @@ public class Test {
         map.entrySet().stream().filter(e -> e.getValue() == 7).forEach(System.out::println);
         Map<Integer, List<String>> map2 = list.stream().collect(Collectors.groupingBy(String::length));
         System.out.println(map2);
+
+        Comparator<Map.Entry<String, Integer>> valComparator = new Comparator<Map.Entry<String, Integer>>() {
+            @Override
+            public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+                return o1.getValue().compareTo(o2.getValue());
+            }
+        };
+        List<Map.Entry<String, Integer>> sortList = new ArrayList<>(map.entrySet());
+        Collections.sort(sortList, valComparator);
+        System.out.println(sortList);
+        System.out.println(sortList.stream().filter(e -> e.getValue() == 7).collect(Collectors.toList()));
     }
 
     static void top3() {
@@ -152,14 +172,22 @@ public class Test {
         System.out.println("Char count: " + m2);
     }
 
+    static void missingN() {
+        //10 is missing
+        int[] numbers = {1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12};
+
+        int idealSum = IntStream.rangeClosed(1, 12).sum();
+        int sum = Arrays.stream(numbers).sum();
+
+        int missingNumber = idealSum - sum;
+        System.out.println(missingNumber);
+    }
+
     static void getDublicate() {
         int[] a1 = {6, 5, 5, 4, 3, 2, 1};
-        int s1 = 0, s2 = 0;
         System.out.println(Arrays.toString(a1));
-        for (int i = 0; i < a1.length; i++) {
-            s1 += a1[i];
-        }
-        s2 = IntStream.rangeClosed(1, 6).sum();
+        int s1 = Arrays.stream(a1).sum();
+        int s2 = IntStream.rangeClosed(1, 6).sum();
         System.out.println(a1[s1 - s2]);
     }
 
@@ -395,6 +423,54 @@ class ThreadProducer implements Runnable {
 
 class TT {
     public static void main(String[] args) {
+        int[] numbers = {1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12};
+        int idealSum = IntStream.rangeClosed(1, 12).sum();
+        int sum = Arrays.stream(numbers).sum();
+        int missingNumber = idealSum - sum;
+        System.out.println(missingNumber);
+
+        List<String> l = Arrays.asList("Ene bene raba!".split(""));
+        Set<String> c = new HashSet<>(l);
+        Map<String, Integer> m = new TreeMap<>();
+
+        for (String s : c) {
+            m.put(s, Collections.frequency(l, s));
+        }
+        System.out.println(m);
+        Map<String, Integer> sorted = new TreeMap<>(new ValueComparator(m));
+        sorted.putAll(m);
+        System.out.println(sorted);
+        Map<String, Integer> sorted2 = new TreeMap<>(new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return m.get(o1).compareTo(m.get(o2));
+            }
+        });
+        sorted2.putAll(m);
+        System.out.println(sorted2);
+        Comparator<Map.Entry<String, Integer>> valComparator = new Comparator<Map.Entry<String, Integer>>() {
+            @Override
+            public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+                return o1.getValue().compareTo(o2.getValue());
+            }
+        };
+        List<Map.Entry<String, Integer>> list = new ArrayList<>(m.entrySet());
+        Collections.sort(list, valComparator);
+        System.out.println(list.stream().filter(e -> e.getValue() == 1).collect(Collectors.toList()));
 
     }
+
+    static class ValueComparator implements Comparator<String> {
+        Map map;
+
+        public ValueComparator(Map map) {
+            this.map = map;
+        }
+
+        @Override
+        public int compare(String o1, String o2) {
+            return ((Comparable) map.get(o1)).compareTo(map.get(o2));
+        }
+    }
 }
+

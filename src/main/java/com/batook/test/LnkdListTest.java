@@ -22,6 +22,19 @@ public class LnkdListTest {
     }
 }
 
+class Node {
+    Node next;
+    String value;
+
+    public Node(String data) {
+        value = data;
+    }
+
+    public String toString() {
+        return value;
+    }
+}
+
 class LnkdList {
     Node head;
     Node tail;
@@ -66,15 +79,3 @@ class LnkdList {
     }
 }
 
-class Node {
-    Node next;
-    String value;
-
-    public Node(String data) {
-        value = data;
-    }
-
-    public String toString() {
-        return value;
-    }
-}

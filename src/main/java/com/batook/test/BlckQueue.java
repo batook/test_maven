@@ -6,7 +6,7 @@ import java.util.Random;
 public class BlckQueue {
     private int threshold;
     private volatile int count;
-    private LinkedList<String> queue = new LinkedList<>();
+    private final LinkedList<String> queue = new LinkedList<>();
 
     BlckQueue() {
         this(10);
@@ -46,32 +46,36 @@ public class BlckQueue {
 
     public static void main(String[] args) {
         BlckQueue q = new BlckQueue();
-        Random r = new Random();
+        Random rnd = new Random();
         Runnable runnable = () -> {
             while (true) {
                 try {
                     Thread.sleep(1000);
-                    q.offer(String.valueOf(r.nextInt(100)));
+                    q.offer(String.valueOf(rnd.nextInt(100)));
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    System.out.println(Thread.currentThread() + " Interrupted");
+                    return;
                 }
             }
         };
-
+        //Writers
         new Thread(runnable).start();
         new Thread(runnable).start();
         new Thread(runnable).start();
+        //Reader
         new Thread(() -> {
             while (true) {
                 try {
                     Thread.sleep(1000);
                     q.poll();
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    System.out.println(Thread.currentThread() + " Interrupted");
+                    return;
                 }
             }
 
         }).start();
     }
 }
+
 

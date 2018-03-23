@@ -26,16 +26,6 @@ class ObserverPatternEx {
         sub2.setFlag(50);
     }
 
-    interface ISubject {
-        void register(Observer o);
-
-        void unregister(Observer o);
-
-        void notifyObservers();
-    }
-
-    class PatternsTest {
-    }
 
     class Observer {
         public void update(Object subj, int val) {
@@ -43,13 +33,9 @@ class ObserverPatternEx {
         }
     }
 
-    class Subject implements ISubject {
+    class Subject {
         List<Observer> observerList = new ArrayList<Observer>();
         private int _flag;
-
-        public int getFlag() {
-            return _flag;
-        }
 
         public void setFlag(int _flag) {
             this._flag = _flag;
@@ -57,17 +43,14 @@ class ObserverPatternEx {
             notifyObservers();
         }
 
-        @Override
         public void register(Observer o) {
             observerList.add(o);
         }
 
-        @Override
         public void unregister(Observer o) {
             observerList.remove(o);
         }
 
-        @Override
         public void notifyObservers() {
             for (int i = 0; i < observerList.size(); i++) {
                 observerList.get(i).update(this, _flag);
