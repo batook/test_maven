@@ -1,3 +1,5 @@
+package com.batook.test;
+
 import org.junit.Assert;
 import org.junit.Test;
 
