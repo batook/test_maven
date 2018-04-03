@@ -47,6 +47,45 @@ public class Test {
         test();
     }
 
+    static void deadlock() {
+        Object A = new Object();
+        Object B = new Object();
+        Thread t1 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (A) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    synchronized (B) {
+                        System.out.println("Lock AB");
+                    }
+                }
+
+            }
+        });
+        Thread t2 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (B) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    synchronized (A) {
+                        System.out.println("Lock BA");
+                    }
+                }
+
+            }
+        });
+        t1.start();
+        t2.start();
+    }
+
     /*
      * Java program for Fibonacci number using recursion.
      * This program uses tail recursion to calculate Fibonacci number for a given number
@@ -128,6 +167,15 @@ public class Test {
         Map<Integer, List<String>> map2 = list.stream().collect(Collectors.groupingBy(String::length));
         System.out.println(map2);
 
+        Map<String, Integer> sorted2 = new TreeMap<>(new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return map.get(o1).compareTo(map.get(o2));
+            }
+        });
+        sorted2.putAll(map);
+        System.out.println("sorted2 " + sorted2);
+
         Comparator<Map.Entry<String, Integer>> valComparator = new Comparator<Map.Entry<String, Integer>>() {
             @Override
             public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
@@ -136,7 +184,7 @@ public class Test {
         };
         List<Map.Entry<String, Integer>> sortList = new ArrayList<>(map.entrySet());
         Collections.sort(sortList, valComparator);
-        System.out.println(sortList);
+        System.out.println("sortList " + sortList);
         System.out.println(sortList.stream().filter(e -> e.getValue() == 7).collect(Collectors.toList()));
     }
 
