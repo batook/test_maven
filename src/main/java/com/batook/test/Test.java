@@ -469,6 +469,53 @@ class ThreadProducer implements Runnable {
     }
 }
 
+class TestEnum {
+    public static void main(String[] args) {
+        //Get all enums
+        for (Environment env : Environment.values()) {
+            System.out.println(env.name() + " :: " + env.getUrl());
+        }
+        System.out.println(Environment.PROD.getUrl());
+        System.out.println(Environment.valueOf("SIT").getUrl());
+        System.out.println(Environment.get("https://sit.domain.com:2019/"));
+        assert "SIT".equals(Environment.get("https://sit.domain.com:2019/").toString());
+    }
+
+    enum Environment {
+        PROD("https://prod.domain.com:1088/"),
+        SIT("https://sit.domain.com:2019/"),
+        CIT("https://cit.domain.com:8080/"),
+        DEV("https://dev.domain.com:21323/");
+
+        //****** Reverse Lookup Implementation************//
+        //Lookup table
+        private static final Map<String, Environment> lookup = new HashMap<>();
+
+        //Populate the lookup table on loading time
+        static {
+            for (Environment env : Environment.values()) {
+                lookup.put(env.getUrl(), env);
+            }
+        }
+
+        private String url;
+
+        Environment(String envUrl) {
+            this.url = envUrl;
+        }
+
+        //This method can be used for reverse lookup purpose
+        public static Environment get(String url) {
+            return lookup.get(url);
+        }
+
+        public String getUrl() {
+            return url;
+        }
+    }
+}
+
+
 class TT {
     public static void main(String[] args) {
         int[] numbers = {1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12};
@@ -522,48 +569,3 @@ class TT {
     }
 }
 
-class TestEnum {
-    public static void main(String[] args) {
-        //Get all enums
-        for (Environment env : Environment.values()) {
-            System.out.println(env.name() + " :: " + env.getUrl());
-        }
-        System.out.println(Environment.PROD.getUrl());
-        System.out.println(Environment.valueOf("SIT").getUrl());
-        System.out.println(Environment.get("https://sit.domain.com:2019/"));
-        assert "SIT".equals(Environment.get("https://sit.domain.com:2019/").toString());
-    }
-
-    enum Environment {
-        PROD("https://prod.domain.com:1088/"),
-        SIT("https://sit.domain.com:2019/"),
-        CIT("https://cit.domain.com:8080/"),
-        DEV("https://dev.domain.com:21323/");
-
-        //****** Reverse Lookup Implementation************//
-        //Lookup table
-        private static final Map<String, Environment> lookup = new HashMap<>();
-
-        //Populate the lookup table on loading time
-        static {
-            for (Environment env : Environment.values()) {
-                lookup.put(env.getUrl(), env);
-            }
-        }
-
-        private String url;
-
-        Environment(String envUrl) {
-            this.url = envUrl;
-        }
-
-        //This method can be used for reverse lookup purpose
-        public static Environment get(String url) {
-            return lookup.get(url);
-        }
-
-        public String getUrl() {
-            return url;
-        }
-    }
-}

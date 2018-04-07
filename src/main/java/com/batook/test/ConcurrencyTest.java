@@ -7,7 +7,7 @@ import java.util.concurrent.*;
 class JoinForkTest {
     public static void main(String[] args) {
         JoinForkTest t = new JoinForkTest();
-        ForkJoinPool pool = new ForkJoinPool(2);
+        ForkJoinPool pool = new ForkJoinPool(4);
         List<Integer> total = new ArrayList<>();
         pool.invoke(t.new RecursiveActionTest(total, 1, 10));
         System.out.println(total.stream().reduce((e1, e2) -> e1 + e2).get());
@@ -15,6 +15,8 @@ class JoinForkTest {
         Integer i = pool.invoke(t.new RecursiveTaskTest(1, 10));
         System.out.println(i);
         assert Integer.valueOf(55).equals(i);
+        i = pool.invoke(t.new Fibonacci(10));
+        System.out.println("Fibo=" + i);
     }
 
     class RecursiveActionTest extends RecursiveAction {
@@ -72,6 +74,22 @@ class JoinForkTest {
                 other.fork();
                 return new RecursiveTaskTest(middle + 1, end).compute() + other.join();
             }
+        }
+    }
+
+    class Fibonacci extends RecursiveTask<Integer> {
+        final int n;
+
+        Fibonacci(int n) {
+            this.n = n;
+        }
+
+        protected Integer compute() {
+            if (n <= 1) return n;
+            Fibonacci f1 = new Fibonacci(n - 1);
+            f1.fork();
+            Fibonacci f2 = new Fibonacci(n - 2);
+            return f2.compute() + f1.join();
         }
     }
 }

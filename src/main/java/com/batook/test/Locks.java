@@ -94,7 +94,7 @@ class SimpleLock {
     }
 }
 
-class ReentrantLock {
+class MyReentrantLock {
     boolean isLocked = false;
     Thread lockedBy = null;
     int lockedCount = 0;
@@ -121,7 +121,7 @@ class ReentrantLock {
     }
 }
 
-class ReadWriteLock {
+class MyReadWriteLock {
     private int readers = 0;
     private int writers = 0;
 
