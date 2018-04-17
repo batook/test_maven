@@ -129,7 +129,7 @@ class BarrierTest {
         try {
             service = Executors.newFixedThreadPool(4);
             CyclicBarrier barrier = new CyclicBarrier(4, () -> System.out.println("All workers are here"));
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 12; i++)
                 service.submit(b.new Worker(barrier));
         } finally {
             if (service != null) {

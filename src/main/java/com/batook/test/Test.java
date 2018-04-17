@@ -2,6 +2,7 @@ package com.batook.test;
 
 import java.text.DecimalFormat;
 import java.util.*;
+import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -553,6 +554,27 @@ class TT {
         Collections.sort(list, valComparator);
         System.out.println(list.stream().filter(e -> e.getValue() == 1).collect(Collectors.toList()));
 
+    }
+
+    void testReduceCollect() {
+        System.out.println(Arrays.asList("w", "o", "l", "f", "s").parallelStream().
+                reduce("X", (s1, s2) -> {
+                    System.out.println("accum " + s1 + s2);
+                    return s1 + s2;
+                }, (s3, s4) -> {
+                    System.out.println("combiner " + s3 + s4);
+                    return s3 + s4;
+                }));
+
+        Stream<String> stream = Stream.of("w", "o", "l", "f").parallel();
+        SortedSet<String> set = stream.collect(ConcurrentSkipListSet::new, (c, s) -> {
+            System.out.println("add " + s);
+            c.add(s);
+        }, (c1, c2) -> {
+            System.out.println(c1 + " addAll " + c2);
+            c1.addAll(c2);
+        });
+        System.out.println(set);
     }
 
     static class ValueComparator implements Comparator<String> {
