@@ -23,11 +23,12 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
 import java.io.*;
+import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 public class MediaXML {
@@ -66,17 +67,14 @@ public class MediaXML {
     }
 
     void checkItems() {
-        itemList.sort(null);
-        itemList.sort(new Comparator<Item>() {
-            @Override
-            public int compare(Item o1, Item o2) {
-                int result;
-                result = o1.getType().compareTo(o2.getType());
-                if (result != 0) return result;
-                result = o1.getTitle().compareTo(o2.getTitle());
-                return result;
-            }
+        itemList.sort((o1, o2) -> {
+            int result;
+            result = o1.getType().compareTo(o2.getType());
+            if (result != 0) return result;
+            result = o1.getTitle().compareTo(o2.getTitle());
+            return result;
         });
+
         for (Item item : itemList) {
             System.out.println(item);
             System.out.println("\t" + item.getBarcodes());
@@ -417,7 +415,7 @@ class Item implements Comparable<Item> {
 
     @Override
     public String toString() {
-        return "Item ID=" + id;
+        return id;
     }
 
     public List<Barcode> getBarcodes() {
@@ -577,8 +575,7 @@ class Track {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Track that = (Track) o;
-        return Objects.equals(this.number, that.number) &&
-                this.name.equals(that.name);
+        return Objects.equals(this.number, that.number) && this.name.equals(that.name);
     }
 
     @Override
@@ -614,5 +611,110 @@ class Track {
 
     public void setPath(String path) {
         this.path = path;
+    }
+}
+
+class OracleDAO {
+    private Connection conn;
+
+    private OracleDAO() {
+        Locale.setDefault(Locale.ENGLISH);
+        String dbURL = "jdbc:oracle:thin:batook/gfhjdjp@192.168.1.20:1521/xe";
+        try {
+            conn = DriverManager.getConnection(dbURL);
+            if (conn != null) {
+                conn.setAutoCommit(false);
+                System.out.println("Connected ");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public final static OracleDAO getInstance() {
+        return Helper.instance;
+    }
+
+
+    public Connection getConnection() {
+        return conn;
+    }
+
+    public void disconnect() {
+        try {
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static final class Helper {
+        final static OracleDAO instance = new OracleDAO();
+
+    }
+}
+
+class MediaData {
+    OracleDAO dao = OracleDAO.getInstance();
+    Connection conn = dao.getConnection();
+
+    public static void main(String[] args) throws SQLException {
+        MediaData m = new MediaData();
+        List<Item> list = m.getItems();
+        new MediaDOM().createXML(list, "testMedia.xml");
+        System.out.println(new XSDValidate().validateXMLSchema("media.xsd", "testMedia.xml") ? "valid" : "not valid");
+    }
+
+    public List<Item> getItems() throws SQLException {
+        List<Item> items = new ArrayList<>();
+        Statement st = conn.createStatement();
+        ResultSet rs = st
+                .executeQuery("select ITEMID,TITLE,COVER_PATH,DESCRIPTION,VIDEO_PATH,MEDIA_TYPE,GENRE,IS_HIT from GOODS");
+        PreparedStatement ps1 = conn.prepareStatement("select distinct DISK from GOODS_DETAIL where ITEMID=?");
+        PreparedStatement ps2 = conn.prepareStatement("select TRACK,NAME,PATH from GOODS_DETAIL where ITEMID=? and disk=?");
+        PreparedStatement ps3 = conn.prepareStatement("select BARCODE from GOODS_BARCODES where ITEMID=?");
+        while (rs.next()) {
+            Item item = new Item();
+            item.setId(rs.getString(1));
+            item.setTitle(rs.getString(2));
+            item.setCoverPath(rs.getString(3));
+            item.setDescription(rs.getString(4));
+            item.setVideoPath(rs.getString(5));
+            item.setType(rs.getString(6));
+            item.setGenre(rs.getString(7));
+            item.setHit(rs.getString(8));
+            ps1.setString(1, rs.getString(1));
+            ResultSet rs1 = ps1.executeQuery();
+            while (rs1.next()) {
+                Disk disk = new Disk();
+                List<Track> tracks = new ArrayList<>();
+                disk.setNumber(rs1.getString(1));
+                ps2.setString(1, rs.getString(1));
+                ps2.setString(2, rs1.getString(1));
+                ResultSet rs2 = ps2.executeQuery();
+                while (rs2.next()) {
+                    Track track = new Track();
+                    track.setNumber(rs2.getString(1));
+                    track.setName(rs2.getString(2));
+                    track.setPath(rs2.getString(3));
+                    tracks.add(track);
+                }
+                disk.setTracks(tracks);
+                item.setDisk(disk);
+            }
+            List<Barcode> barcodes = new ArrayList<>();
+            ps3.setString(1, rs.getString(1));
+            ResultSet rs3 = ps3.executeQuery();
+            while (rs3.next()) {
+                Barcode barcode = new Barcode();
+                barcode.setBarcode(rs3.getString(1));
+                barcodes.add(barcode);
+            }
+            item.setBarcodes(barcodes);
+            items.add(item);
+        }
+        st.close();
+        return items;
     }
 }

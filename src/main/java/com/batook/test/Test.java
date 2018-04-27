@@ -591,3 +591,9 @@ class TT {
     }
 }
 
+class Dummy {
+    public static void main(String[] args) {
+
+
+    }
+}

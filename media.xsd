@@ -12,7 +12,7 @@
     </xs:complexType>
     <xs:complexType name="BARCODESType">
         <xs:sequence>
-            <xs:element type="xs:string" name="BARCODE"/>
+            <xs:element type="xs:string" name="BARCODE" maxOccurs="unbounded" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="DISKType">
