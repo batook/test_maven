@@ -40,19 +40,19 @@ public class MediaXML {
         boolean isValid = new XSDValidate().validateXMLSchema("media.xsd", fileName);
         if (isValid) {
             new MediaSAX(mediaXML).parse();
-            //mediaXML.checkItems();
+            //mediaXML.checkItems(itemList);
             new MediaDOM().createXML(mediaXML.itemList, "test.xml");
             System.out.println(new XSDValidate().validateXMLSchema("media.xsd", "test.xml") ? "valid" : "not valid");
-            mediaXML.printTitles();
+            mediaXML.printTitles("media.xml");
         }
         new XSLTransform().xml2html("test.xml", "media.xsl");
         new XSLTransform().xml2html("Phonebook.xml", "Phonebook.xsl");
     }
 
-    void printTitles() {
+    void printTitles(String xmlName) {
         try {
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            Document doc = builder.parse("media.xml");
+            Document doc = builder.parse(xmlName);
             XPathFactory pathFactory = XPathFactory.newInstance();
             XPath xpath = pathFactory.newXPath();
             XPathExpression expr = xpath.compile("//REPORT/ITEMS/ITEM/TITLE");
@@ -66,7 +66,7 @@ public class MediaXML {
         }
     }
 
-    void checkItems() {
+    void checkItems(List<Item> itemList) {
         itemList.sort((o1, o2) -> {
             int result;
             result = o1.getType().compareTo(o2.getType());
@@ -661,9 +661,13 @@ class MediaData {
 
     public static void main(String[] args) throws SQLException {
         MediaData m = new MediaData();
+        MediaXML mediaXML = new MediaXML();
         List<Item> list = m.getItems();
+        m.dao.disconnect();
         new MediaDOM().createXML(list, "testMedia.xml");
         System.out.println(new XSDValidate().validateXMLSchema("media.xsd", "testMedia.xml") ? "valid" : "not valid");
+        //mediaXML.checkItems(list);
+        //mediaXML.printTitles("testMedia.xml");
     }
 
     public List<Item> getItems() throws SQLException {
@@ -672,7 +676,7 @@ class MediaData {
         ResultSet rs = st
                 .executeQuery("select ITEMID,TITLE,COVER_PATH,DESCRIPTION,VIDEO_PATH,MEDIA_TYPE,GENRE,IS_HIT from GOODS");
         PreparedStatement ps1 = conn.prepareStatement("select distinct DISK from GOODS_DETAIL where ITEMID=?");
-        PreparedStatement ps2 = conn.prepareStatement("select TRACK,NAME,PATH from GOODS_DETAIL where ITEMID=? and disk=?");
+        PreparedStatement ps2 = conn.prepareStatement("select TRACK,NAME,PATH from GOODS_DETAIL where ITEMID=? and DISK=?");
         PreparedStatement ps3 = conn.prepareStatement("select BARCODE from GOODS_BARCODES where ITEMID=?");
         while (rs.next()) {
             Item item = new Item();
@@ -714,6 +718,9 @@ class MediaData {
             item.setBarcodes(barcodes);
             items.add(item);
         }
+        ps3.close();
+        ps2.close();
+        ps1.close();
         st.close();
         return items;
     }
