@@ -26,10 +26,7 @@ import java.io.*;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
+import java.util.*;
 
 public class MediaXML {
     final static String fileName = "media.xml";
@@ -392,6 +389,13 @@ class Item implements Comparable<Item> {
     private String genre;
     private String isHit;
 
+    public Item() {
+    }
+
+    public Item(String id) {
+        this.id = id;
+    }
+
     public String getId() {
         return id;
     }
@@ -614,6 +618,107 @@ class Track {
     }
 }
 
+class Goods extends Item {
+}
+
+class GoodsDetail {
+    private String id;
+    private String disk;
+    private String number;
+    private String name;
+    private String path;
+
+    GoodsDetail(String id, String disk, String number) {
+        this.id = id;
+        this.disk = disk;
+        this.number = number;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getDisk() {
+        return disk;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GoodsDetail that = (GoodsDetail) o;
+        return Objects.equals(this.id, that.id) && this.disk.equals(that.disk) && this.number.equals(that.number);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode() ^ disk.hashCode() ^ number.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return id + "_" + disk + "_" + number;
+
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+}
+
+class GoodsBarcodes {
+    private String id;
+    private String barcode;
+
+    public GoodsBarcodes(String id, String barcode) {
+        this.id = id;
+        this.barcode = barcode;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getBarcode() {
+        return barcode;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GoodsBarcodes that = (GoodsBarcodes) o;
+        return Objects.equals(this.id, that.id) && this.barcode.equals(that.barcode);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode() ^ barcode.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return id + "_" + barcode;
+
+    }
+}
+
 class OracleDAO {
     private Connection conn;
 
@@ -668,6 +773,57 @@ class MediaData {
         System.out.println(new XSDValidate().validateXMLSchema("media.xsd", "testMedia.xml") ? "valid" : "not valid");
         //mediaXML.checkItems(list);
         //mediaXML.printTitles("testMedia.xml");
+        HashMap<String, Item> hm = new HashMap<>();
+        for (Item i : list) {
+            hm.put(i.getId(), i);
+        }
+        System.out.println(hm.get("1211112305").getTitle());
+
+    }
+
+    public List<Goods> getGoods() throws SQLException {
+        List<Goods> goods = new ArrayList<>();
+        Statement st = conn.createStatement();
+        ResultSet rs = st
+                .executeQuery("select ITEMID,TITLE,COVER_PATH,DESCRIPTION,VIDEO_PATH,MEDIA_TYPE,GENRE,IS_HIT from GOODS");
+        while (rs.next()) {
+            Item item = new Item();
+            item.setId(rs.getString(1));
+            item.setTitle(rs.getString(2));
+            item.setCoverPath(rs.getString(3));
+            item.setDescription(rs.getString(4));
+            item.setVideoPath(rs.getString(5));
+            item.setType(rs.getString(6));
+            item.setGenre(rs.getString(7));
+            item.setHit(rs.getString(8));
+        }
+        st.close();
+        return goods;
+    }
+
+    public List<GoodsDetail> getGoodsDetail() throws SQLException {
+        List<GoodsDetail> goodsDetail = new ArrayList<>();
+        Statement st = conn.createStatement();
+        ResultSet rs = st.executeQuery("select ITEMID,DISK,TRACK,NAME,PATH from GOODS_DETAIL");
+        while (rs.next()) {
+            GoodsDetail gd = new GoodsDetail(rs.getString(1), rs.getString(2), rs.getString(3));
+            gd.setName(rs.getString(4));
+            gd.setPath(rs.getString(5));
+            goodsDetail.add(gd);
+        }
+        st.close();
+        return goodsDetail;
+    }
+
+    public List<GoodsBarcodes> getGoodsBarcodes() throws SQLException {
+        List<GoodsBarcodes> goodsBarcodes = new ArrayList<>();
+        Statement st = conn.createStatement();
+        ResultSet rs = st.executeQuery("select BARCODE,ITEMID from GOODS_BARCODES");
+        while (rs.next()) {
+            goodsBarcodes.add(new GoodsBarcodes(rs.getString(2), rs.getString(1)));
+        }
+        st.close();
+        return goodsBarcodes;
     }
 
     public List<Item> getItems() throws SQLException {
