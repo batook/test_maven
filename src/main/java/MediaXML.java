@@ -8,6 +8,9 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.*;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
@@ -24,6 +27,7 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
 import java.io.*;
 import java.sql.*;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -38,9 +42,16 @@ public class MediaXML {
         if (isValid) {
             new MediaSAX(mediaXML).parse();
             //mediaXML.checkItems(itemList);
+            long startTime = System.nanoTime();
             new MediaDOM().createXML(mediaXML.itemList, "test.xml");
+            double estimatedTime = (double) (System.nanoTime() - startTime) / 1_000_000_000;
+            System.out.println("DOM: " + new DecimalFormat("#.##########").format(estimatedTime));
+            startTime = System.nanoTime();
+            new MediaStAX().writeDocument(mediaXML.itemList, "test.xml");
+            estimatedTime = (double) (System.nanoTime() - startTime) / 1_000_000_000;
+            System.out.println("StAX: " + new DecimalFormat("#.##########").format(estimatedTime));
             System.out.println(new XSDValidate().validateXMLSchema("media.xsd", "test.xml") ? "valid" : "not valid");
-            mediaXML.printTitles("media.xml");
+            //mediaXML.printTitles("media.xml");
         }
         new XSLTransform().xml2html("test.xml", "media.xsl");
         new XSLTransform().xml2html("Phonebook.xml", "Phonebook.xsl");
@@ -48,7 +59,8 @@ public class MediaXML {
 
     void printTitles(String xmlName) {
         try {
-            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            DocumentBuilder builder = DocumentBuilderFactory.newInstance()
+                                                            .newDocumentBuilder();
             Document doc = builder.parse(xmlName);
             XPathFactory pathFactory = XPathFactory.newInstance();
             XPath xpath = pathFactory.newXPath();
@@ -66,9 +78,11 @@ public class MediaXML {
     void checkItems(List<Item> itemList) {
         itemList.sort((o1, o2) -> {
             int result;
-            result = o1.getType().compareTo(o2.getType());
+            result = o1.getType()
+                       .compareTo(o2.getType());
             if (result != 0) return result;
-            result = o1.getTitle().compareTo(o2.getTitle());
+            result = o1.getTitle()
+                       .compareTo(o2.getTitle());
             return result;
         });
 
@@ -84,7 +98,8 @@ public class MediaXML {
             System.out.println("\t" + item.getHit());
             if (item.getDisk() != null) {
                 System.out.println("\t" + item.getDisk());
-                for (Track track : item.getDisk().getTracks()) {
+                for (Track track : item.getDisk()
+                                       .getTracks()) {
                     System.out.println("\t\t" + track);
                     System.out.println("\t\t" + track.getName());
                     System.out.println("\t\t" + track.getPath());
@@ -118,7 +133,8 @@ class XSLTransform {
             StreamSource style = new StreamSource(new FileInputStream(xslFile));
             System.out.println("ResultHTML " + htmlFile);
             StreamResult result = new StreamResult(new FileOutputStream(htmlFile));
-            Transformer transformer = TransformerFactory.newInstance().newTransformer(style);
+            Transformer transformer = TransformerFactory.newInstance()
+                                                        .newTransformer(style);
             //transformer.setOutputProperty(OutputKeys.ENCODING, "windows-1251");
             transformer.setOutputProperty(OutputKeys.METHOD, "html");
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
@@ -133,7 +149,8 @@ class MediaDOM {
     void createXML(List<Item> itemList, String xmlFile) {
         Document doc = getDocument();
         Element root = doc.createElement("REPORT");
-        root.setAttribute("MediaStation", LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        root.setAttribute("MediaStation", LocalDate.now()
+                                                   .format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         doc.appendChild(root);
         Element items = doc.createElement("ITEMS");
         root.appendChild(items);
@@ -171,9 +188,11 @@ class MediaDOM {
             item.appendChild(hit);
             if (i.getDisk() != null) {
                 Element disk = doc.createElement("DISK");
-                disk.setAttribute("NUMBER", i.getDisk().getNumber());
+                disk.setAttribute("NUMBER", i.getDisk()
+                                             .getNumber());
                 item.appendChild(disk);
-                for (Track t : i.getDisk().getTracks()) {
+                for (Track t : i.getDisk()
+                                .getTracks()) {
                     Element track = doc.createElement("TRACK");
                     track.setAttribute("NUMBER", t.getNumber());
                     disk.appendChild(track);
@@ -191,7 +210,8 @@ class MediaDOM {
 
     Document getDocument() {
         try {
-            DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance()
+                                                                    .newDocumentBuilder();
             Document doc = documentBuilder.newDocument();
             System.out.printf("Version = %s%n", doc.getXmlVersion());
             System.out.printf("Encoding = %s%n", doc.getXmlEncoding());
@@ -205,7 +225,8 @@ class MediaDOM {
 
     void writeDocument(Document doc, String xmlFile) {
         try {
-            Transformer tr = TransformerFactory.newInstance().newTransformer();
+            Transformer tr = TransformerFactory.newInstance()
+                                               .newTransformer();
             tr.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
             tr.setOutputProperty(OutputKeys.METHOD, "xml");
             tr.setOutputProperty(OutputKeys.INDENT, "yes");
@@ -214,6 +235,77 @@ class MediaDOM {
             tr.transform(source, result);
         } catch (FileNotFoundException | TransformerException e) {
             e.printStackTrace();
+        }
+    }
+}
+
+class MediaStAX {
+    public void writeDocument(List<Item> itemList, String xmlFile) {
+        try {
+            XMLOutputFactory output = XMLOutputFactory.newInstance();
+            XMLStreamWriter writer = output.createXMLStreamWriter(new FileWriter(xmlFile));
+            writer.writeStartDocument("1.0");
+            writer.writeStartElement("REPORT");
+            writer.writeAttribute("MediaStation", LocalDate.now()
+                                                           .format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+            writer.writeStartElement("ITEMS");
+            for (Item i : itemList) {
+                writer.writeStartElement("ITEM");
+                writer.writeAttribute("ID", i.getId());
+                writer.writeStartElement("BARCODES");
+                for (Barcode b : i.getBarcodes()) {
+                    writer.writeStartElement("BARCODE");
+                    writer.writeCharacters(b.getBarcode());
+                    writer.writeEndElement();
+                }
+                writer.writeEndElement();
+                writer.writeStartElement("TITLE");
+                writer.writeCharacters(i.getTitle());
+                writer.writeEndElement();
+                writer.writeStartElement("COVER_PATH");
+                writer.writeCharacters(i.getCoverPath());
+                writer.writeEndElement();
+                writer.writeStartElement("VIDEO_PATH");
+                writer.writeCharacters(i.getVideoPath());
+                writer.writeEndElement();
+                writer.writeStartElement("DESCRIPTION");
+                writer.writeCharacters(i.getDescription());
+                writer.writeEndElement();
+                writer.writeStartElement("TYPE");
+                writer.writeCharacters(i.getType());
+                writer.writeEndElement();
+                writer.writeStartElement("GENRE");
+                writer.writeCharacters(i.getGenre());
+                writer.writeEndElement();
+                writer.writeStartElement("IS_HIT");
+                writer.writeCharacters(i.getHit());
+                writer.writeEndElement();
+                if (i.getDisk() != null) {
+                    writer.writeStartElement("DISK");
+                    writer.writeAttribute("NUMBER", i.getDisk()
+                                                     .getNumber());
+                    for (Track t : i.getDisk()
+                                    .getTracks()) {
+                        writer.writeStartElement("TRACK");
+                        writer.writeAttribute("NUMBER", t.getNumber());
+                        writer.writeStartElement("NAME");
+                        writer.writeCharacters(t.getName());
+                        writer.writeEndElement();
+                        writer.writeStartElement("PATH");
+                        writer.writeCharacters(t.getPath());
+                        writer.writeEndElement();
+                        writer.writeEndElement();
+                    }
+                    writer.writeEndElement();
+                }
+                writer.writeEndElement();
+            }
+            writer.writeEndElement();
+            writer.writeEndElement();
+            writer.writeEndDocument();
+            writer.flush();
+        } catch (XMLStreamException | IOException ex) {
+            ex.printStackTrace();
         }
     }
 }
@@ -769,7 +861,14 @@ class MediaData {
         MediaXML mediaXML = new MediaXML();
         List<Item> list = m.getItems();
         m.dao.disconnect();
+        long startTime = System.nanoTime();
         new MediaDOM().createXML(list, "testMedia.xml");
+        double estimatedTime = (double) (System.nanoTime() - startTime) / 1_000_000_000;
+        System.out.println("DOM: " + new DecimalFormat("#.##########").format(estimatedTime));
+        startTime = System.nanoTime();
+        new MediaStAX().writeDocument(list, "testMedia.xml");
+        estimatedTime = (double) (System.nanoTime() - startTime) / 1_000_000_000;
+        System.out.println("StAX: " + new DecimalFormat("#.##########").format(estimatedTime));
         System.out.println(new XSDValidate().validateXMLSchema("media.xsd", "testMedia.xml") ? "valid" : "not valid");
         //mediaXML.checkItems(list);
         //mediaXML.printTitles("testMedia.xml");
@@ -777,15 +876,14 @@ class MediaData {
         for (Item i : list) {
             hm.put(i.getId(), i);
         }
-        System.out.println(hm.get("1211112305").getTitle());
-
+        System.out.println(hm.get("1211112305")
+                             .getTitle());
     }
 
     public List<Goods> getGoods() throws SQLException {
         List<Goods> goods = new ArrayList<>();
         Statement st = conn.createStatement();
-        ResultSet rs = st
-                .executeQuery("select ITEMID,TITLE,COVER_PATH,DESCRIPTION,VIDEO_PATH,MEDIA_TYPE,GENRE,IS_HIT from GOODS");
+        ResultSet rs = st.executeQuery("select ITEMID,TITLE,COVER_PATH,DESCRIPTION,VIDEO_PATH,MEDIA_TYPE,GENRE,IS_HIT from GOODS");
         while (rs.next()) {
             Item item = new Item();
             item.setId(rs.getString(1));
@@ -827,10 +925,10 @@ class MediaData {
     }
 
     public List<Item> getItems() throws SQLException {
+        long startTime = System.nanoTime();
         List<Item> items = new ArrayList<>();
         Statement st = conn.createStatement();
-        ResultSet rs = st
-                .executeQuery("select ITEMID,TITLE,COVER_PATH,DESCRIPTION,VIDEO_PATH,MEDIA_TYPE,GENRE,IS_HIT from GOODS");
+        ResultSet rs = st.executeQuery("select ITEMID,TITLE,COVER_PATH,DESCRIPTION,VIDEO_PATH,MEDIA_TYPE,GENRE,IS_HIT from GOODS");
         PreparedStatement ps1 = conn.prepareStatement("select distinct DISK from GOODS_DETAIL where ITEMID=?");
         PreparedStatement ps2 = conn.prepareStatement("select TRACK,NAME,PATH from GOODS_DETAIL where ITEMID=? and DISK=?");
         PreparedStatement ps3 = conn.prepareStatement("select BARCODE from GOODS_BARCODES where ITEMID=?");
@@ -878,6 +976,8 @@ class MediaData {
         ps2.close();
         ps1.close();
         st.close();
+        double estimatedTime = (double) (System.nanoTime() - startTime) / 1_000_000_000;
+        System.out.println("getItems :" + new DecimalFormat("#.##########").format(estimatedTime));
         return items;
     }
 }

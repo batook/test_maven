@@ -25,16 +25,23 @@ public class Test {
         bubbleSort(unsorted);
 
         //int[] unsortedBig = IntStream.iterate(0, i -> i + 1).limit(10).toArray();
-        int[] unsortedBig = new Random().ints(1, 100).limit(100).toArray();
+        int[] unsortedBig = new Random().ints(1, 100)
+                                        .limit(100)
+                                        .toArray();
 
         // Get MAX
-        List<Integer> t = Arrays.stream(unsortedBig).boxed().collect(Collectors.toList());
-        int max = t.iterator().next();
+        List<Integer> t = Arrays.stream(unsortedBig)
+                                .boxed()
+                                .collect(Collectors.toList());
+        int max = t.iterator()
+                   .next();
         for (int i : t) {
             if (max < i) max = i;
         }
         System.out.println("max=" + max);
-        max = t.stream().max(Comparator.naturalOrder()).get();
+        max = t.stream()
+               .max(Comparator.naturalOrder())
+               .get();
         System.out.println("max=" + max);
 
         // Fibonacci
@@ -119,7 +126,8 @@ public class Test {
     }
 
     static long factorialStreams(long n) {
-        return LongStream.rangeClosed(1, n).reduce(1, (long a, long b) -> a * b);
+        return LongStream.rangeClosed(1, n)
+                         .reduce(1, (long a, long b) -> a * b);
     }
 
     static void bubbleSort(int[] unsorted) {
@@ -146,15 +154,26 @@ public class Test {
         double estimatedTime = (double) (System.nanoTime() - startTime) / 1_000_000_000;
         System.out.println(new DecimalFormat("#.##########").format(estimatedTime));
 
-        Arrays.asList("a b c d".split("\\s+")).forEach(System.out::println);
-        Arrays.asList(Pattern.compile("\\s+").split("a b c d")).forEach(System.out::println);
-        System.out.println(Stream.of("a", "b", "c").collect(Collectors.joining(",")));
-        System.out.println(Stream.of("a", "b", "c").reduce("concat: ", String::concat));
-        System.out.println(Stream.of(1, 2, 3, 4, 5).reduce(1, (i, j) -> i * j));
+        Arrays.asList("a b c d".split("\\s+"))
+              .forEach(System.out::println);
+        Arrays.asList(Pattern.compile("\\s+")
+                             .split("a b c d"))
+              .forEach(System.out::println);
+        System.out.println(Stream.of("a", "b", "c")
+                                 .collect(Collectors.joining(",")));
+        System.out.println(Stream.of("a", "b", "c")
+                                 .reduce("concat: ", String::concat));
+        System.out.println(Stream.of(1, 2, 3, 4, 5)
+                                 .reduce(1, (i, j) -> i * j));
 
-        new Random().ints(1, 10).limit(3).forEach(System.out::println);
-        System.out.println(Stream.of('w', 'o', 'l', 'f').parallel().reduce("", (c, s1) -> c + s1, (a, b) -> a + b));
-        System.out.println(Stream.of("w", "o", "l", "f").reduce("", String::concat));
+        new Random().ints(1, 10)
+                    .limit(3)
+                    .forEach(System.out::println);
+        System.out.println(Stream.of('w', 'o', 'l', 'f')
+                                 .parallel()
+                                 .reduce("", (c, s1) -> c + s1, (a, b) -> a + b));
+        System.out.println(Stream.of("w", "o", "l", "f")
+                                 .reduce("", String::concat));
 
         List<String> list = new ArrayList<String>();
         list.add("Yuri");
@@ -163,15 +182,21 @@ public class Test {
         list.add("Longest");
         list.add("List");
         list.add("Contain");
-        Map<String, Integer> map = list.stream().collect(Collectors.toMap(Function.identity(), String::length));
-        map.entrySet().stream().filter(e -> e.getValue() == 7).forEach(System.out::println);
-        Map<Integer, List<String>> map2 = list.stream().collect(Collectors.groupingBy(String::length));
+        Map<String, Integer> map = list.stream()
+                                       .collect(Collectors.toMap(Function.identity(), String::length));
+        map.entrySet()
+           .stream()
+           .filter(e -> e.getValue() == 7)
+           .forEach(System.out::println);
+        Map<Integer, List<String>> map2 = list.stream()
+                                              .collect(Collectors.groupingBy(String::length));
         System.out.println(map2);
 
         Map<String, Integer> sorted2 = new TreeMap<>(new Comparator<String>() {
             @Override
             public int compare(String o1, String o2) {
-                return map.get(o1).compareTo(map.get(o2));
+                return map.get(o1)
+                          .compareTo(map.get(o2));
             }
         });
         sorted2.putAll(map);
@@ -180,13 +205,16 @@ public class Test {
         Comparator<Map.Entry<String, Integer>> valComparator = new Comparator<Map.Entry<String, Integer>>() {
             @Override
             public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
-                return o1.getValue().compareTo(o2.getValue());
+                return o1.getValue()
+                         .compareTo(o2.getValue());
             }
         };
         List<Map.Entry<String, Integer>> sortList = new ArrayList<>(map.entrySet());
         Collections.sort(sortList, valComparator);
         System.out.println("sortList " + sortList);
-        System.out.println(sortList.stream().filter(e -> e.getValue() == 7).collect(Collectors.toList()));
+        System.out.println(sortList.stream()
+                                   .filter(e -> e.getValue() == 7)
+                                   .collect(Collectors.toList()));
     }
 
     static void top3() {
@@ -206,10 +234,12 @@ public class Test {
         String text = "a r b k c d se f g a d f s s f d s ft gh f ws w f v x s g h d h j j k f sd j e wed a d f";
         //
         List<String> list = Arrays.asList(text.split("\\s+"));
-        Map<String, Long> m = list.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+        Map<String, Long> m = list.stream()
+                                  .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
         m.forEach((k, v) -> System.out.println(k + ":" + v));
         //
-        Set<String> set = new HashSet<>(Arrays.asList(Pattern.compile("\\s+").split(text)));
+        Set<String> set = new HashSet<>(Arrays.asList(Pattern.compile("\\s+")
+                                                             .split(text)));
         for (String e : set)
             System.out.println(e + " " + Collections.frequency(list, e));
         //
@@ -225,8 +255,10 @@ public class Test {
         //10 is missing
         int[] numbers = {1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12};
 
-        int idealSum = IntStream.rangeClosed(1, 12).sum();
-        int sum = Arrays.stream(numbers).sum();
+        int idealSum = IntStream.rangeClosed(1, 12)
+                                .sum();
+        int sum = Arrays.stream(numbers)
+                        .sum();
 
         int missingNumber = idealSum - sum;
         System.out.println(missingNumber);
@@ -235,8 +267,10 @@ public class Test {
     static void getDublicate() {
         int[] a1 = {6, 5, 5, 4, 3, 2, 1};
         System.out.println(Arrays.toString(a1));
-        int s1 = Arrays.stream(a1).sum();
-        int s2 = IntStream.rangeClosed(1, 6).sum();
+        int s1 = Arrays.stream(a1)
+                       .sum();
+        int s2 = IntStream.rangeClosed(1, 6)
+                          .sum();
         System.out.println(a1[s1 - s2]);
     }
 
@@ -344,7 +378,8 @@ class DecoratorTest {
     public static void main(String[] args) {
         Component c = new Cocnag(new Sugar(new Milk(new BlackCoffee())));
         System.out.println(c.getDescription());
-        Component c2 = new BlackCoffee().addComponent(new Milk()).addComponent(new Sugar());
+        Component c2 = new BlackCoffee().addComponent(new Milk())
+                                        .addComponent(new Sugar());
         System.out.println(c2.getDescription());
         System.out.println(c2);
     }
@@ -477,9 +512,11 @@ class TestEnum {
             System.out.println(env.name() + " :: " + env.getUrl());
         }
         System.out.println(Environment.PROD.getUrl());
-        System.out.println(Environment.valueOf("SIT").getUrl());
+        System.out.println(Environment.valueOf("SIT")
+                                      .getUrl());
         System.out.println(Environment.get("https://sit.domain.com:2019/"));
-        assert "SIT".equals(Environment.get("https://sit.domain.com:2019/").toString());
+        assert "SIT".equals(Environment.get("https://sit.domain.com:2019/")
+                                       .toString());
     }
 
     enum Environment {
@@ -520,8 +557,10 @@ class TestEnum {
 class TT {
     public static void main(String[] args) {
         int[] numbers = {1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12};
-        int idealSum = IntStream.rangeClosed(1, 12).sum();
-        int sum = Arrays.stream(numbers).sum();
+        int idealSum = IntStream.rangeClosed(1, 12)
+                                .sum();
+        int sum = Arrays.stream(numbers)
+                        .sum();
         int missingNumber = idealSum - sum;
         System.out.println(missingNumber);
 
@@ -539,7 +578,8 @@ class TT {
         Map<String, Integer> sorted2 = new TreeMap<>(new Comparator<String>() {
             @Override
             public int compare(String o1, String o2) {
-                return m.get(o1).compareTo(m.get(o2));
+                return m.get(o1)
+                        .compareTo(m.get(o2));
             }
         });
         sorted2.putAll(m);
@@ -547,26 +587,32 @@ class TT {
         Comparator<Map.Entry<String, Integer>> valComparator = new Comparator<Map.Entry<String, Integer>>() {
             @Override
             public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
-                return o1.getValue().compareTo(o2.getValue());
+                return o1.getValue()
+                         .compareTo(o2.getValue());
             }
         };
         List<Map.Entry<String, Integer>> list = new ArrayList<>(m.entrySet());
         Collections.sort(list, valComparator);
-        System.out.println(list.stream().filter(e -> e.getValue() == 1).collect(Collectors.toList()));
+        System.out.println(list.stream()
+                               .filter(e -> e.getValue() == 1)
+                               .collect(Collectors.toList()));
 
     }
 
     void testReduceCollect() {
-        System.out.println(Arrays.asList("w", "o", "l", "f", "s").parallelStream().
-                reduce("X", (s1, s2) -> {
-                    System.out.println("accum " + s1 + s2);
-                    return s1 + s2;
-                }, (s3, s4) -> {
-                    System.out.println("combiner " + s3 + s4);
-                    return s3 + s4;
-                }));
+        System.out.println(Arrays.asList("w", "o", "l", "f", "s")
+                                 .parallelStream()
+                                 .
+                                         reduce("X", (s1, s2) -> {
+                                             System.out.println("accum " + s1 + s2);
+                                             return s1 + s2;
+                                         }, (s3, s4) -> {
+                                             System.out.println("combiner " + s3 + s4);
+                                             return s3 + s4;
+                                         }));
 
-        Stream<String> stream = Stream.of("w", "o", "l", "f").parallel();
+        Stream<String> stream = Stream.of("w", "o", "l", "f")
+                                      .parallel();
         SortedSet<String> set = stream.collect(ConcurrentSkipListSet::new, (c, s) -> {
             System.out.println("add " + s);
             c.add(s);
@@ -593,7 +639,18 @@ class TT {
 
 class Dummy {
     public static void main(String[] args) {
-
-
+        // Разность коллекций
+        List a = new ArrayList(Arrays.asList(1, 2, 3, 4, 5));
+        List b = new ArrayList(Arrays.asList(3, 4, 5, 6, 7));
+        List i = new ArrayList(a);
+        i.retainAll(b); //[3, 4, 5]
+        System.out.println(i);
+        a.addAll(b); //[1, 2, 3, 4, 5, 3, 4, 5, 6, 7]
+        System.out.println(a);
+        a.removeAll(i);
+        System.out.println(a); //[1, 2, 6, 7]
+        System.out.println(Stream.concat(a.stream(), b.stream())
+                                 .filter(e -> !i.contains(e))
+                                 .collect(Collectors.toSet()));
     }
 }
