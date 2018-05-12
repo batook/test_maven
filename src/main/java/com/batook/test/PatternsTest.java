@@ -53,7 +53,8 @@ class ObserverPatternEx {
 
         public void notifyObservers() {
             for (int i = 0; i < observerList.size(); i++) {
-                observerList.get(i).update(this, _flag);
+                observerList.get(i)
+                            .update(this, _flag);
             }
         }
     }
@@ -228,7 +229,6 @@ class TestDecorator {
         Component c = t.new DecoratorC(t.new DecoratorB(t.new DecoratorA(t.new ConcreteComponent())));
         System.out.println(c.getDescription());
     }
-
 
     abstract class Component {
         Component component;

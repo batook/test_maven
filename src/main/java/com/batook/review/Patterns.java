@@ -1,5 +1,7 @@
 package com.batook.review;
 
+import java.util.ArrayList;
+
 public class Patterns {
 }
 
@@ -12,7 +14,6 @@ class SingletonTest {
                                         .toString());
         System.out.println(SingletonTest.getInstance()
                                         .toString());
-
     }
 
     public static SingletonTest getInstance() {
@@ -22,6 +23,47 @@ class SingletonTest {
     private static class Helper {
         private static final SingletonTest instance = new SingletonTest();
 
+    }
+}
+
+class ObserverTest {
+    public static void main(String[] args) {
+        Observer observer = new Observer();
+        Subject sub1 = new Subject();
+        Subject sub2 = new Subject();
+        sub1.register(observer);
+        sub2.register(observer);
+        sub1.setVal(10);
+        sub2.setVal(20);
+    }
+
+    static class Observer {
+        public void update(Subject s, int val) {
+            System.out.println("subject " + s + " was updated by " + val);
+        }
+    }
+
+    static class Subject {
+        private int val;
+        private ArrayList<Observer> observers = new ArrayList<>();
+
+        public void register(Observer o) {
+            observers.add(o);
+        }
+
+        public void unregister(Observer o) {
+            observers.remove(o);
+        }
+
+        public void setVal(int val) {
+            this.val = val;
+            notifyObservers();
+        }
+
+        private void notifyObservers() {
+            for (Observer o : observers)
+                o.update(this, val);
+        }
     }
 }
 
@@ -63,7 +105,6 @@ class DecoratorTest {
             this();
             this.parentComponent = c;
         }
-
     }
 
     static class Milk extends Component {

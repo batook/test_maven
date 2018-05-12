@@ -57,11 +57,11 @@ class QuickSort extends SortTest {
     }
 
     /*
-    Select an element as a pivot element, generally from middle but not necessary.
-    Data elements are grouped into two parts:
+    1.Select an element as a pivot element, generally from middle but not necessary.
+    2.Data elements are grouped into two parts:
      one with elements that are in lower order than the pivot element,
      one with element that are in higher order than the pivot element.
-    Sort the both parts separately by repeating step 1 and 2.
+    3.Sort the both parts separately by repeating step 1 and 2.
      */
     class Hoare {
         private void sort(int lo, int hi) {
@@ -107,11 +107,22 @@ class QuickSort extends SortTest {
                 sort(right);
 
                 //Merge both halves together, overwriting to original array
-                System.out.print(Arrays.toString(array));
+                System.out.print("array=" + Arrays.toString(array));
                 merge(array, left, right);
                 System.out.println("> " + Arrays.toString(left) + "+" + Arrays.toString(right) + "=" + Arrays.toString(array));
             }
         }
+
+        /*
+        merge ( упорядоченные последовательности A, B , буфер C ) {
+	    пока A и B непусты {
+		    cравнить первые элементы A и B
+		    переместить наименьший в буфер
+            }
+	    если в одной из последовательностей еще есть элементы
+		дописать их в конец буфера, сохраняя имеющийся порядок
+        }
+         */
 
         public void merge(int[] result, int[] left, int[] right) {
             //Index Position in left array - starting with first element
