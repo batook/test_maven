@@ -112,13 +112,13 @@ public class Test {
         if (number == 1 || number == 2) {
             return 1;
         }
-        int fibo1 = 1, fibo2 = 1, fibonacci = 1;
+        int fibo1 = 1, fibo2 = 1, result = 1;
         for (int i = 3; i <= number; i++) {
-            fibonacci = fibo1 + fibo2; //Fibonacci number is sum of previous two Fibonacci number
+            result = fibo1 + fibo2; //Fibonacci number is sum of previous two Fibonacci number
             fibo1 = fibo2;
-            fibo2 = fibonacci;
+            fibo2 = result;
         }
-        return fibonacci; //Fibonacci number
+        return result; //Fibonacci number
     }
 
     static long factorialRecursive(long n) {
@@ -217,18 +217,6 @@ public class Test {
                                    .collect(Collectors.toList()));
     }
 
-    static void top3() {
-        int cnt = 0;
-        List<String> src = new ArrayList<>(Arrays.asList("q q w e r t y a a b c d".split("\\s+")));
-        TreeSet<String> t = new TreeSet<>(src);
-        Iterator<String> i = t.iterator();
-        while (i.hasNext() && cnt < 3) {
-            System.out.println(i.next());
-            cnt++;
-        }
-        List<String> res = new ArrayList<>(t).subList(0, 3);
-        System.out.println(res);
-    }
 
     static void charFreq() {
         String text = "a r b k c d se f g a d f s s f d s ft gh f ws w f v x s g h d h j j k f sd j e wed a d f";
@@ -290,7 +278,7 @@ public class Test {
 
     static void reverseArray() {
         char[] t = "Ene bene raba!".toCharArray();
-        for (char i = 0; i < t.length / 2; i++) {
+        for (int i = 0; i < t.length / 2; i++) {
             /*
             swap A<->B
             A ^= B;
@@ -602,14 +590,13 @@ class TT {
     void testReduceCollect() {
         System.out.println(Arrays.asList("w", "o", "l", "f", "s")
                                  .parallelStream()
-                                 .
-                                         reduce("X", (s1, s2) -> {
-                                             System.out.println("accum " + s1 + s2);
-                                             return s1 + s2;
-                                         }, (s3, s4) -> {
-                                             System.out.println("combiner " + s3 + s4);
-                                             return s3 + s4;
-                                         }));
+                                 .reduce("X", (s1, s2) -> {
+                                     System.out.println("accum " + s1 + s2);
+                                     return s1 + s2;
+                                 }, (s3, s4) -> {
+                                     System.out.println("combiner " + s3 + s4);
+                                     return s3 + s4;
+                                 }));
 
         Stream<String> stream = Stream.of("w", "o", "l", "f")
                                       .parallel();
