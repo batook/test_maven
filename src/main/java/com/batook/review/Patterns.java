@@ -2,8 +2,6 @@ package com.batook.review;
 
 import java.util.ArrayList;
 
-public class Patterns {
-}
 
 class SingletonTest {
     private SingletonTest() {
@@ -67,6 +65,7 @@ class ObserverTest {
     }
 }
 
+//GUI
 class DecoratorTest {
     public static void main(String[] args) {
         Component c = new Coffe().setComponent(new Milk())
@@ -80,10 +79,10 @@ class DecoratorTest {
 
     static class Component {
         String description;
-        Component parentComponent;
+        Component parent;
 
         public String getDescription() {
-            return parentComponent == null ? this.description : parentComponent.getDescription() + this.description;
+            return parent == null ? this.description : parent.getDescription() + this.description;
         }
 
         public Component getComponent() {
@@ -91,7 +90,7 @@ class DecoratorTest {
         }
 
         public Component setComponent(Component component) {
-            component.parentComponent = this;
+            component.parent = this;
             return component;
         }
     }
@@ -103,7 +102,7 @@ class DecoratorTest {
 
         Coffe(Component c) {
             this();
-            this.parentComponent = c;
+            this.parent = c;
         }
     }
 
@@ -114,7 +113,7 @@ class DecoratorTest {
 
         Milk(Component c) {
             this();
-            this.parentComponent = c;
+            this.parent = c;
         }
     }
 
@@ -125,7 +124,90 @@ class DecoratorTest {
 
         Sugar(Component c) {
             this();
-            this.parentComponent = c;
+            this.parent = c;
+        }
+    }
+}
+
+//AOP
+class ProxyTest {
+    public static void main(String[] args) {
+        System.out.println("***Proxy Pattern Demo***\n");
+        Proxy px = new Proxy();
+        px.doSomeWork();
+    }
+
+    static abstract class Subject {
+        public abstract void doSomeWork();
+    }
+
+    public static class ConcreteSubject extends Subject {
+        @Override
+        public void doSomeWork() {
+            System.out.println(" I am from concrete subject");
+        }
+    }
+
+    public static class Proxy extends Subject {
+        ConcreteSubject cs;
+
+        @Override
+        public void doSomeWork() {
+            System.out.println("Proxy call happening now");
+            //Lazy initialization
+            if (cs == null) {
+                cs = new ConcreteSubject();
+            }
+            cs.doSomeWork();
+        }
+    }
+}
+
+//SQL connection or Oracle connection
+class FactoryMethodTest {
+    public static void main(String[] args) throws Exception {
+        IAnimalFactory animalFactory = new ConcreteFactory();
+        //
+        IAnimal DuckType = animalFactory.GetAnimalType("Duck");
+        DuckType.Speak();
+        //
+        IAnimal TigerType = animalFactory.GetAnimalType("Tiger");
+        TigerType.Speak();
+    }
+
+    interface IAnimal {
+        void Speak();
+    }
+
+    abstract static class IAnimalFactory {
+        public abstract IAnimal GetAnimalType(String type) throws Exception;
+    }
+
+    static class ConcreteFactory extends IAnimalFactory {
+        @Override
+        public IAnimal GetAnimalType(String type) throws Exception {
+            switch (type) {
+                case "Duck":
+                    return new Duck();
+                case "Tiger":
+                    return new Tiger();
+                default:
+                    throw new Exception("Animal type : " + type + " cannot be instantiated");
+            }
+        }
+    }
+
+    static class Duck implements IAnimal {
+        @Override
+        public void Speak() {
+            System.out.println("Duck says Pack-pack");
+        }
+    }
+
+    static class Tiger implements IAnimal {
+        @Override
+        public void Speak() {
+            System.out.println("Tiger says: Halum..Halum");
         }
     }
 }

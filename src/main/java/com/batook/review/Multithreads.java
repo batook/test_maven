@@ -1,9 +1,10 @@
 package com.batook.review;
 
-public class Multithreads {
-}
 
-class DeadlockTest {
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicInteger;
+
+class Deadlock {
     public static void main(String[] args) {
         Object A = new Object();
         Object B = new Object();
@@ -37,6 +38,29 @@ class DeadlockTest {
                 }
             }
         }).start();
+    }
+}
+
+class InterruptedTest {
+    public static void main(String[] args) throws InterruptedException {
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (!Thread.currentThread()
+                              .isInterrupted()) {
+                    System.out.println(Thread.currentThread() + " is working");
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        System.out.println(Thread.currentThread() + " interrupted");
+                        return;
+                    }
+                }
+            }
+        });
+        t.start();
+        t.join(4000);
+        t.interrupt();
     }
 }
 
@@ -120,6 +144,7 @@ class ProducerConsumer {
 
     static class Producer implements Runnable {
         volatile boolean isReady;
+        AtomicInteger i = new AtomicInteger(0);
 
         @Override
         public void run() {
@@ -130,7 +155,9 @@ class ProducerConsumer {
                 e.printStackTrace();
             }
             synchronized (this) {
-                System.out.println(" Producer " + this + " is ready");
+                i.set(ThreadLocalRandom.current()
+                                       .nextInt());
+                System.out.println(" Producer " + this + " i=" + i.get());
                 isReady = true;
                 notifyAll();
             }
@@ -156,7 +183,7 @@ class ProducerConsumer {
                         e.printStackTrace();
                     }
                 }
-                System.out.println(Thread.currentThread() + " done");
+                System.out.println(Thread.currentThread() + " i=" + p.i.get());
             }
         }
     }

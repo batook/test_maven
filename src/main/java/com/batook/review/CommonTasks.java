@@ -1,12 +1,16 @@
 package com.batook.review;
 
 import java.util.*;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.ForkJoinTask;
+import java.util.concurrent.RecursiveTask;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 enum Environment {
     PROD("http://prod"),
@@ -14,7 +18,7 @@ enum Environment {
     UAT("http://uat"),
     DEV("http://dev");
 
-    private static final Map<String, Environment> lookup = new HashMap<>();
+    private static Map<String, Environment> lookup = new HashMap<>();
 
     static {
         for (Environment e : Environment.values())
@@ -49,11 +53,17 @@ public class CommonTasks {
         int[] unsortedBig = new Random().ints(-100, 100)
                                         .limit(1000)
                                         .toArray();
+        System.out.println(IntStream.of(unsorted)
+                                    .boxed()
+                                    .collect(Collectors.toList()));
         // Разность коллекций
         listDiff();
-        //Fibo
+
+        //Fibonacci
         assertEquals(55, f1(10));
         assertEquals(55, f2(10));
+        assertEquals(55, f3(10));
+
         //Sum
         assertEquals(Arrays.stream(unsorted)
                            .sum(), IntStream.of(unsorted)
@@ -62,8 +72,24 @@ public class CommonTasks {
         assertEquals(100, IntStream.of(unsorted)
                                    .max()
                                    .getAsInt());
+        //Random
+        new Random().ints()
+                    .limit(100)
+                    .sum();
+        new Random().ints(-10, 100)
+                    .limit(100)
+                    .sum();
+        ThreadLocalRandom.current()
+                         .ints()
+                         .limit(100)
+                         .sum();
+        ThreadLocalRandom.current()
+                         .nextInt();
+        IntStream.generate(() -> (int) (Math.random() * 100))
+                 .limit(100)
+                 .sum();
 
-        //Revers
+        //Reverse
         reverseArray(chr);
 
         //Strings
@@ -71,11 +97,31 @@ public class CommonTasks {
 
         //Numbers
         numberMix();
+
+        //Lambdas
+        lambdaMix();
+
+        //Collections
+        collectionsMix();
+
+        //Palindrome
+        assertTrue(isPalindrome("Was it a cat I saw?".replaceAll("\\W+", "")));
     }
 
-    public static int f1(int x) {
+    public static boolean isPalindrome(String s) {
+        if (s.length() == 1) return true;
+        if (s.substring(0, 1)
+             .equalsIgnoreCase(s.substring(s.length() - 1))) {
+            if (s.length() == 2) return true;
+            return isPalindrome(s.substring(1, s.length() - 1));
+        } else {
+            return false;
+        }
+    }
+
+    public static long f1(int x) {
         if (x == 1 || x == 2) return 1;
-        int f1 = 1, f2 = 1, res = 1;
+        long f1 = 1, f2 = 1, res = 1;
         for (int i = 3; i <= x; i++) {
             res = f1 + f2;
             f1 = f2;
@@ -89,6 +135,28 @@ public class CommonTasks {
         return f2(x - 1) + f2(x - 2);
     }
 
+    public static int f3(int x) {
+        ForkJoinPool pool = new ForkJoinPool(4);
+        class Fibo extends RecursiveTask<Integer> {
+            final int n;
+
+            Fibo(int n) {
+                this.n = n;
+            }
+
+            @Override
+            protected Integer compute() {
+                if (n == 1 || n == 2) return 1;
+                Fibo f1 = new Fibo(n - 1);
+                f1.fork();
+                Fibo f2 = new Fibo(n - 2);
+                return f2.compute() + f1.join();
+            }
+        }
+        ForkJoinTask<Integer> task = new Fibo(x);
+        return pool.invoke(task);
+    }
+
     public static void listDiff() {
         // Разность коллекций
         List<Integer> a = new ArrayList(Arrays.asList(1, 2, 3, 4, 5));
@@ -97,22 +165,18 @@ public class CommonTasks {
         i.retainAll(b); //[3, 4, 5]
         a.addAll(b); //[1, 2, 3, 4, 5, 3, 4, 5, 6, 7]
         a.removeAll(i); //[1, 2, 6, 7]
-        Set<Integer> s = Stream.concat(a.stream(), b.stream())
-                               .filter(e -> !i.contains(e))
-                               .collect(Collectors.toSet());
-        assertArrayEquals(a.toArray(), s.toArray());
     }
 
     public static void reverseArray(char[] ch) {
         char[] t = ch.clone();
-        String s = "";
         for (int i = 0; i < t.length / 2; i++) {
-            t[i] ^= t[t.length - 1 - i];
-            t[t.length - 1 - i] ^= t[i];
-            t[i] ^= t[t.length - 1 - i];
+            t[i] ^= t[(t.length - 1) - i];
+            t[(t.length - 1) - i] ^= t[i];
+            t[i] ^= t[(t.length - 1) - i];
         }
         assertEquals("!abar eneb enE", new String(t));
 
+        String s = "";
         t = ch.clone();
         for (int i = t.length - 1; i >= 0; i--)
             s += t[i];
@@ -135,19 +199,23 @@ public class CommonTasks {
         Map<String, Long> map = list.stream()
                                     .collect(Collectors.groupingBy(e -> e, Collectors.counting()));
         System.out.println(map);
+        //
         map.clear();
         for (String e : list) {
             long i = map.get(e) == null ? 1 : map.get(e) + 1;
             map.put(e, i);
         }
         System.out.println(map);
+        //
         map.clear();
         Set<String> set = new HashSet<>(list);
         for (String e : set)
             map.put(e, (long) Collections.frequency(list, e));
         System.out.println(map);
+        //
         Collections.sort(list);
         System.out.println(list.subList(0, 10));
+        //
         map.clear();
         map = list.stream()
                   .collect(Collectors.toMap(s -> s, s -> (long) s.length(), (i1, i2) -> i2));
@@ -180,10 +248,111 @@ public class CommonTasks {
                 t = dub2[i];
             }
         assertEquals("[1, 2, 3, 4, 5]", dubFree.toString());
+        //Duplicates list
+        List<Integer> list = new ArrayList<>(Arrays.asList(6, 5, 5, 4, 3, 2, 2, 1, 1));
+        list.stream()
+            .collect(Collectors.groupingBy(i -> i, Collectors.counting()))
+            .entrySet()
+            .stream()
+            .filter(i -> i.getValue() > 1)
+            .map(i -> i.getKey())
+            .forEach(System.out::println);
+        //DeDuplicate
+        System.out.println(list.stream()
+                               .collect(Collectors.groupingBy(i -> i, Collectors.counting()))
+                               .keySet());
+        Set<Integer> set = new HashSet<>(list);
+        System.out.println(set);
     }
 
     public static void lambdaMix() {
+        IntStream.of(1, 2, 3)
+                 .sum();
+        IntStream.generate(() -> (int) Math.random() * 100)
+                 .limit(10)
+                 .sum();
+        new Random().ints()
+                    .limit(10)
+                    .sum();
+        IntStream.range(1, 10)
+                 .sum();
+        IntStream.concat(IntStream.of(1, 3, 5), IntStream.of(2, 4))
+                 .toArray();
+        Stream.concat(Stream.of(1, 3, 5), Stream.of(2, 4, 5))
+              .sorted()
+              .collect(Collectors.toSet());
+        IntStream.of(5, 6, 7)
+                 .flatMap(i -> IntStream.range(0, i)) //012340123450123456
+                 .boxed()
+                 .collect(Collectors.toSet());
+        Map<Integer, String> m1 = Stream.of("AA,BB,C,D,EE,FFF".split(","))
+                                        .collect(Collectors.toMap(s -> s.length(), s -> s, (s1, s2) -> s1 + "|" + s2));
+        System.out.println(m1);
+        Map<Integer, List<String>> m2 = Stream.of("AA,BB,C,D,EE,FFF".split(","))
+                                              .collect(Collectors.groupingBy(s -> s.length()));
+        System.out.println(m2);
+        Map<Integer, List<String>> m3 = Stream.of("AA,BB,C,D,EE,FFF".split(","))
+                                              .collect(Collectors.groupingBy(s -> s.length(), Collectors.mapping(s -> s.toLowerCase(), Collectors.toList())));
+        System.out.println(m3);
+        Map<String, Integer> m4 = Stream.of("AA,BB,C,D,EE,FFF".split(","))
+                                        .collect(Collectors.groupingBy(s -> s, Collectors.summingInt(s -> s.length())));
+        System.out.println(m4);
 
+        Stream.of("AA,BB,C,D,EE,FFF".split(","))
+              .collect(Collectors.summingInt(s -> s.length())); //11
+    }
+
+    public static void collectionsMix() {
+        Integer[] array = {1, 2, 3, 4, 5};
+        ArrayList<Integer> list = new ArrayList<>(Arrays.asList(array));
+        Collections.reverse(list);
+        list.removeIf(i -> i > 10);
+        list.replaceAll(i -> i + 10);
+        Collections.addAll(list, array);
+        Collections.max(list);
+        LinkedList<Integer> linkedList = new LinkedList<>(list);
+        linkedList.iterator();
+        linkedList.descendingIterator();
+        //
+        TreeSet<Integer> treeSet = new TreeSet<>(list);
+        treeSet.headSet(5);
+        treeSet.tailSet(5);
+        treeSet.subSet(Integer.valueOf(5), Integer.valueOf(15));
+        TreeSet<Integer> reverseTree = new TreeSet<>((i1, i2) -> i2.compareTo(i1));
+        System.out.println(treeSet);
+        reverseTree.addAll(treeSet);
+        System.out.println(reverseTree);
+        //
+        HashMap<String, Double> planets = new HashMap<>();
+        planets.put("Mercury", new Double(2439.7));
+        planets.put("Earth", new Double(6371));
+        planets.put("Saturn", new Double(58232));
+        planets.put("Neptune", new Double(24622));
+        planets.put("Venus", new Double(6051.8));
+        planets.entrySet();
+        planets.keySet();
+        planets.values();
+        for (Map.Entry e : planets.entrySet()) {
+            e.getKey();
+            e.getValue();
+        }
+        Iterator<Map.Entry<String, Double>> iterator = planets.entrySet()
+                                                              .iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<String, Double> e = iterator.next();
+            e.getKey();
+            e.getValue();
+        }
+        Set<String> keys = planets.keySet();
+        Collection<Double> values = planets.values();
+        //
+        TreeMap<String, Double> treeMap = new TreeMap<>(planets);
+        System.out.println(treeMap);
+        //sort by value
+        TreeMap<String, Double> reverseMap = new TreeMap<>((s1, s2) -> treeMap.get(s1)
+                                                                              .compareTo(treeMap.get(s2)));
+        reverseMap.putAll(treeMap);
+        System.out.println(reverseMap);
     }
 }
 

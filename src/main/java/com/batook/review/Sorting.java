@@ -1,6 +1,7 @@
 package com.batook.review;
 
 import java.util.Arrays;
+import java.util.Random;
 
 public class Sorting {
     static final int[] unsorted = {100, -90, 32, 39, 21, 45, 23, 3, -100, 3};
@@ -9,6 +10,7 @@ public class Sorting {
         System.out.println("Unsorted " + Arrays.toString(unsorted));
         BubbleSortTest.run(unsorted);
         MergeSortTest.run(unsorted);
+        QuickSortTest.run(unsorted);
     }
 
     static class BubbleSortTest {
@@ -21,9 +23,12 @@ public class Sorting {
             for (int i = 0; i < a.length; i++)
                 for (int j = i + 1; j < a.length; j++)
                     if (a[i] > a[j]) {
-                        int tmp = a[j];
-                        a[j] = a[i];
-                        a[i] = tmp;
+                        int tmp = a[i];
+                        a[i] = a[j];
+                        a[j] = tmp;
+                        //   a[i]^=a[j];
+                        //   a[j]^=a[i];
+                        //   a[i]^=a[j];
                     }
             System.out.println("Sorted " + Arrays.toString(a));
         }
@@ -31,7 +36,10 @@ public class Sorting {
 
     static class MergeSortTest {
         public static void main(String[] args) {
-            run(unsorted);
+            int[] unsortedBig = new Random().ints(-10, 100)
+                                            .limit(100)
+                                            .toArray();
+            run(unsortedBig);
         }
 
         public static void run(int[] unsorted) {
@@ -53,16 +61,24 @@ public class Sorting {
         }
 
         private void merge(int[] result, int[] left, int[] right) {
-            int idxL = 0;
-            int idxR = 0;
-            for (int i = 0; i < result.length; i++)
-                if (idxR >= right.length || (idxL < left.length && left[idxL] <= right[idxR])) {
-                    result[i] = left[idxL];
-                    idxL++;
+            int i = 0;
+            int j = 0;
+            int k = 0;
+            //Копируем в массив result меньшее значение,
+            while (i < left.length && j < right.length) {
+                if (left[i] < right[j]) {
+                    result[k++] = left[i++];
                 } else {
-                    result[i] = right[idxR];
-                    idxR++;
+                    result[k++] = right[j++];
                 }
+            }
+            //Если какой-то массив прошли не до конца, то копируем оставшиеся элементы
+            while (i < left.length) {
+                result[k++] = left[i++];
+            }
+            while (j < right.length) {
+                result[k++] = right[j++];
+            }
         }
     }
 
@@ -77,31 +93,54 @@ public class Sorting {
             System.out.println("Sorted " + Arrays.toString(a));
         }
 
-        private static void sort(int[] result, int lo, int hi) {
-            if (lo < hi) {
-                int left = lo;
-                int right = hi;
-                //Get the pivot element from the middle of the list
-                int pivot = result[(lo + hi) / 2];
-                while (left <= right) {
-                    //Check until all values on left side array are lower than pivot
-                    while (result[left] < pivot) left++;
-                    //Check until all values on left side array are greater than pivot
-                    while (pivot < result[right]) right--;
-                    //Now compare values from both side of lists to see if they need swapping
-                    //After swapping move the iterator on both lists
-                    if (left <= right) {
-                        int tmp = result[left];
-                        result[left] = result[right];
-                        result[right] = tmp;
-                        left++;
-                        right--;
-                    }
-                }
+        /*
+        1.Choose a pivot value. We take the value of the middle element as pivot value, but it can be any value, which is in range of
+        sorted values, even if it doesn't present in the array.
+        2.Partition. Rearrange elements in such a way, that all elements which are lesser than the pivot go to the left part of the
+        array and all elements greater than the pivot, go to the right part of the array. Values equal to the pivot can stay in any part of the array.
+        Notice, that array may be divided in non-equal parts.
+        3.Sort both parts. Apply quicksort algorithm recursively to the left and the right parts.
+        */
+        private static void sort(int[] result, int left, int right) {
+            if (left < right) {
+                int i = partition(result, left, right);
                 //Do same operation as above recursively to sort two sub arrays
-                if (lo < right) sort(result, lo, right);
-                if (left < hi) sort(result, left, hi);
+                if (left < i - 1) sort(result, left, i - 1);
+                if (i < right) sort(result, i, right);
             }
+        }
+
+        /*
+        On the partition step algorithm divides the array into two parts and every element a from the left part is less or equal than every element b from the right part.
+        There are two indices i and j and at the very beginning of the partition algorithm i points to the first element in the array and j points to the last one.
+        Then algorithm moves i forward, until an element with value greater or equal to the pivot is found.
+        Index j is moved backward, until an element with value lesser or equal to the pivot is found.
+        If i ≤ j then they are swapped and i steps to the next position (i + 1), j steps to the previous one (j - 1).
+        Algorithm stops, when i becomes greater than j.
+        After partition, all values before i-th element are less or equal than the pivot
+        and all values after j-th element are greater or equal to the pivot.
+        */
+        private static int partition(int[] result, int left, int right) {
+            int i = left;
+            int j = right;
+            //Get the pivot element from the middle of the list
+            int pivot = result[left + (right - left) / 2];
+            while (i <= j) {
+                //Check until all values on left side array are lower than pivot
+                while (result[i] < pivot) i++;
+                //Check until all values on left side array are greater than pivot
+                while (result[j] > pivot) j--;
+                //Now compare values from both side of lists to see if they need swapping
+                //After swapping move the iterator on both lists
+                if (i <= j) {
+                    int tmp = result[i];
+                    result[i] = result[j];
+                    result[j] = tmp;
+                    i++;
+                    j--;
+                }
+            }
+            return i;
         }
     }
 }
