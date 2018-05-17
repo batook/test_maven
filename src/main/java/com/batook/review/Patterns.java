@@ -24,6 +24,7 @@ class SingletonTest {
     }
 }
 
+//GUI
 class ObserverTest {
     public static void main(String[] args) {
         Observer observer = new Observer();
@@ -132,7 +133,6 @@ class DecoratorTest {
 //AOP
 class ProxyTest {
     public static void main(String[] args) {
-        System.out.println("***Proxy Pattern Demo***\n");
         Proxy px = new Proxy();
         px.doSomeWork();
     }
@@ -166,48 +166,46 @@ class ProxyTest {
 //SQL connection or Oracle connection
 class FactoryMethodTest {
     public static void main(String[] args) throws Exception {
-        IAnimalFactory animalFactory = new ConcreteFactory();
-        //
-        IAnimal DuckType = animalFactory.GetAnimalType("Duck");
-        DuckType.Speak();
-        //
-        IAnimal TigerType = animalFactory.GetAnimalType("Tiger");
-        TigerType.Speak();
+        IConnectionFactory connFactory = new ConnectionFactory();
+        connFactory.GetConnection("Oracle")
+                   .connect();
+        connFactory.GetConnection("Mongo")
+                   .connect();
     }
 
-    interface IAnimal {
-        void Speak();
+    interface IConnection {
+        void connect();
     }
 
-    abstract static class IAnimalFactory {
-        public abstract IAnimal GetAnimalType(String type) throws Exception;
+    interface IConnectionFactory {
+        IConnection GetConnection(String type) throws Exception;
     }
 
-    static class ConcreteFactory extends IAnimalFactory {
+    static class Oracle implements IConnection {
         @Override
-        public IAnimal GetAnimalType(String type) throws Exception {
+        public void connect() {
+            System.out.println("Oracle connected");
+        }
+    }
+
+    static class Mongo implements IConnection {
+        @Override
+        public void connect() {
+            System.out.println("Mongo connected");
+        }
+    }
+
+    static class ConnectionFactory implements IConnectionFactory {
+        @Override
+        public IConnection GetConnection(String type) throws Exception {
             switch (type) {
-                case "Duck":
-                    return new Duck();
-                case "Tiger":
-                    return new Tiger();
+                case "Oracle":
+                    return new Oracle();
+                case "Mongo":
+                    return new Mongo();
                 default:
-                    throw new Exception("Animal type : " + type + " cannot be instantiated");
+                    throw new Exception("Connection type : " + type + " cannot be instantiated");
             }
-        }
-    }
-
-    static class Duck implements IAnimal {
-        @Override
-        public void Speak() {
-            System.out.println("Duck says Pack-pack");
-        }
-    }
-
-    static class Tiger implements IAnimal {
-        @Override
-        public void Speak() {
-            System.out.println("Tiger says: Halum..Halum");
         }
     }
 }

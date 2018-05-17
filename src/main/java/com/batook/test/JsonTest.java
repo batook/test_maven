@@ -1,11 +1,11 @@
 package com.batook.test;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -14,33 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-public class JsonTest {
-}
-
-@JsonAutoDetect
-class Cat {
-    public String name;
-    public int age;
-    public int weight;
-
-    public static void main(String[] args) throws IOException {
-        Cat cat = new Cat();
-        cat.name = "Vaska";
-        cat.age = 2;
-        cat.weight = 4;
-
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.writeValue(new File("cat.json"), cat);
-
-        Cat cat1 = mapper.readValue(new File("cat.json"), Cat.class);
-
-        System.out.println(cat1.name);
-        System.out.println(cat1.age);
-        System.out.println(cat1.weight);
-    }
-}
-
 
 class Record {
     private String name;
@@ -219,7 +192,8 @@ class GsonTest {
 
     public static void main(String[] args) {
         DataObject objToWrite = new DataObject();
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().setPrettyPrinting()
+                                     .create();
         String string = gson.toJson(objToWrite);
         try (FileWriter fileWriter = new FileWriter(FILENAME)) {
             fileWriter.write(string);
@@ -235,5 +209,54 @@ class GsonTest {
             Logger.getLogger(GsonTest.class.getName())
                   .log(Level.SEVERE, null, ex);
         }
+    }
+}
+
+class Item {
+    String name;
+    float price;
+    private List<String> list = new ArrayList<String>() {
+        {
+            add("List item 1");
+            add("List item 2");
+            add("List item 3");
+        }
+    };
+
+    public Item(String name, float price) {
+        this.name = name;
+        this.price = price;
+    }
+
+    public static void main(String[] args) {
+        Map<Integer, Item> mapItems = new HashMap<>();
+        mapItems.put(1, new Item("Samsung", 51200.6f));
+        mapItems.put(2, new Item("Lg", 5400.6f));
+        mapItems.put(3, new Item("Alcatel", 4500.6f));
+
+        String jsonStr = new Gson().toJson(mapItems);
+        //String jsonStr = new Gson().toJson(mapItems, HashMap.class);
+        System.out.println(jsonStr);
+
+        List<Item> listItems = new ArrayList<>();
+        listItems.add(new Item("Samsung", 51200.6f));
+        listItems.add(new Item("Lg", 5400.6f));
+        listItems.add(new Item("Alcatel", 4500.6f));
+
+        String jsonStr2 = new Gson().toJson(listItems);
+        System.out.println(jsonStr2);
+
+        Item[] arrItems = new Item[3];
+        arrItems[0] = new Item("Samsung", 51200.6f);
+        arrItems[1] = new Item("Lg", 5400.6f);
+        arrItems[2] = new Item("Alcatel", 4500.6f);
+
+        String jsonStr3 = new Gson().toJson(arrItems);
+        System.out.println(jsonStr3);
+    }
+
+    @Override
+    public String toString() {
+        return "GoodsItem{" + "name='" + name + '\'' + ", price=" + price + '}';
     }
 }
