@@ -626,18 +626,33 @@ class TT {
 
 class Dummy {
     public static void main(String[] args) {
-        // Разность коллекций
-        List a = new ArrayList(Arrays.asList(1, 2, 3, 4, 5));
-        List b = new ArrayList(Arrays.asList(3, 4, 5, 6, 7));
-        List i = new ArrayList(a);
-        i.retainAll(b); //[3, 4, 5]
-        System.out.println(i);
-        a.addAll(b); //[1, 2, 3, 4, 5, 3, 4, 5, 6, 7]
-        System.out.println(a);
-        a.removeAll(i);
-        System.out.println(a); //[1, 2, 6, 7]
-        System.out.println(Stream.concat(a.stream(), b.stream())
-                                 .filter(e -> !i.contains(e))
-                                 .collect(Collectors.toSet()));
+        int[] a = {9, 8, 7, 6, 5, 4, 3, 2, 1};
+        sort(a, 0, a.length - 1);
+        System.out.println(Arrays.toString(a));
+    }
+
+    static void sort(int[] a, int left, int right) {
+        if (left < right) {
+            int i = part(a, left, right);
+            if (left < i - 1) sort(a, left, i - 1);
+            if (i < right) sort(a, i, right);
+        }
+    }
+
+    static int part(int[] r, int left, int right) {
+        int i = left, j = right;
+        int pivot = r[left + (right - left) / 2];
+        while (i <= j) {
+            while (r[i] < pivot) i++;
+            while (r[j] > pivot) j--;
+            if (i <= j) {
+                int tmp = r[i];
+                r[i] = r[j];
+                r[j] = tmp;
+                i++;
+                j--;
+            }
+        }
+        return i;
     }
 }

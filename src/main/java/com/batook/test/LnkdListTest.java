@@ -2,22 +2,41 @@ package com.batook.test;
 
 public class LnkdListTest {
     public static void main(String[] args) {
-        LnkdList linkedList = new LnkdList(new Node("0"));
+        LnkdList linkedList = new LnkdList();
         for (int i = 1; i <= 10; i++)
-            linkedList.add(new Node(Integer.toString(i)));
+            linkedList.addNode(new Node(Integer.toString(i)));
         linkedList.iterate();
         //
-        Node current, middle;
-        current = linkedList.head;
-        middle = current;
-        int pos = 0;
+        Node current, result;
+        current = linkedList.header;
+        result = linkedList.header;
+        int i = 0;
         while (current.next != null) {
-            pos++;
+            i++;
+            if (i % 2 == 0) result = result.next;
             current = current.next;
-            if (pos % 2 == 0) middle = middle.next;
         }
-        System.out.println("Middle=" + middle);
-        linkedList.reverse();
+        System.out.println("Middle=" + result);
+        //
+        current = linkedList.header;
+        result = linkedList.header;
+        i = 0;
+        while (current != null) {
+            i++;
+            current = current.next;
+            if (i > 3) result = result.next;
+        }
+        System.out.println("3rd element from end is " + result);
+        //
+        Node fast, slow;
+        fast = linkedList.header;
+        slow = linkedList.header;
+        while (fast != null && fast.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+        System.out.println("Middle=" + slow);
+        linkedList.reverseOrder();
         linkedList.iterate();
     }
 }
@@ -36,46 +55,40 @@ class Node {
 }
 
 class LnkdList {
-    Node head;
-    Node tail;
+    Node header;
+    Node current;
 
     public LnkdList() {
-        this(new Node("head"));
+        header = new Node("header");
+        current = header;
     }
 
-    public LnkdList(Node node) {
-        head = node;
-        tail = head;
-    }
-
-    public void add(Node node) {
-        tail.next = node;
-        tail = node;
+    public void addNode(Node node) {
+        current.next = node; //set current.next to new node e.g. header.next = "1"
+        current = node;      //replace current node by new node e.g. header -> "1" and "1".next is null
     }
 
     public void iterate() {
-        Node current = this.head;
+        Node current = this.header;
         System.out.print(current);
         while (current.next != null) {
             System.out.print(" -> " + current.next);
-            //System.out.print("[" + current + " -> " + current.next + "]");
             current = current.next;
         }
         System.out.println();
     }
 
-    public void reverse() {
-        Node current = this.head;
+    public void reverseOrder() {
+        Node curr = this.header;
         Node prev = null;
-        Node next;
         // run through the list and set first.next=null, next.next=previous
-        while (current != null) {
-            next = current.next;
-            current.next = prev;
-            prev = current;
-            current = next;
+        while (curr != null) {
+            Node next = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = next;
         }
-        this.head = prev;
+        this.header = prev;
     }
 }
 

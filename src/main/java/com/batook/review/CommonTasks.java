@@ -303,6 +303,44 @@ public class CommonTasks {
     }
 
     public static void collectionsMix() {
+
+        String[] sArray = new String[]{"Array 1", "Array 2", "Array 3"};
+        List<String> lList = new ArrayList<>(Arrays.asList(sArray));
+
+        System.out.println("#1 iterator");
+        Iterator<String> iter = lList.iterator();
+        while (iter.hasNext()) {
+            System.out.println(iter.next());
+        }
+
+        System.out.println("#2 for");
+        for (int i = 0; i < lList.size(); i++) {
+            System.out.println(lList.get(i));
+        }
+
+        System.out.println("#3 for advance");
+        for (String temp : lList) {
+            System.out.println(temp);
+        }
+
+        System.out.println("#4 while");
+        int j = 0;
+        while (j < lList.size()) {
+            System.out.println(lList.get(j));
+            j++;
+        }
+        System.out.println("remove");
+        Iterator<String> itr = lList.iterator();
+        while (itr.hasNext()) {
+            itr.next();
+            itr.remove();
+        }
+        assertEquals(0, lList.size());
+        //
+        int[] intArray = {1, 2, 3, 4, 5};
+        IntStream.of(intArray)
+                 .boxed()
+                 .collect(Collectors.toList());
         Integer[] array = {1, 2, 3, 4, 5};
         ArrayList<Integer> list = new ArrayList<>(Arrays.asList(array));
         Collections.reverse(list);
@@ -353,6 +391,26 @@ public class CommonTasks {
                                                                               .compareTo(treeMap.get(s2)));
         reverseMap.putAll(treeMap);
         System.out.println(reverseMap);
+        //sort by value
+        List<Map.Entry<String, Double>> planetList = new ArrayList<>(planets.entrySet());
+        Collections.sort(planetList, new Comparator<Map.Entry<String, Double>>() {
+            @Override
+            public int compare(Map.Entry<String, Double> e1, Map.Entry<String, Double> e2) {
+                return e1.getValue()
+                         .compareTo(e2.getValue());
+            }
+        });
+        System.out.println(planetList);
+        //N-longest
+        List<String> list2 = new ArrayList<>(Arrays.asList("Yuri", "Ron", "Interview", "Longest", "List", "Contain"));
+        System.out.println(list2.stream()
+                                .collect(Collectors.groupingBy(String::length))
+                                .entrySet()
+                                .stream()
+                                .filter(k -> k.getKey() == 4)
+                                .flatMap(entry -> entry.getValue()
+                                                       .stream())
+                                .collect(Collectors.toList()));
     }
 }
 

@@ -383,7 +383,7 @@ class XsdValidator {
             SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
             // Загрузить схему из XSD
             Schema schema = factory.newSchema(new File(xsdPath));
-            // Создать валидатор (проверялбщик)
+            // Создать валидатор
             Validator validator = schema.newValidator();
             // Запусить проверку - если будет исключение, значит есть ошибки.
             // Если нет - все заполнено правильно
@@ -437,7 +437,7 @@ class XslConverter {
         // Открыть файлы в виде потоков
         InputStream xml = new FileInputStream(xmlFile);
         InputStream xsl = new FileInputStream(xslFile);
-        // Сщоздать источник для транформации из потоков
+        // Создать источник для транформации из потоков
         StreamSource xmlSource = new StreamSource(xml);
         StreamSource stylesource = new StreamSource(xsl);
 

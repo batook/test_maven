@@ -1,8 +1,26 @@
 package com.batook.review;
 
 
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
+
+class CallableVsRunnable {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
+        ExecutorService s = Executors.newSingleThreadExecutor();
+        Future f1 = s.submit(() -> {
+            Thread.sleep(10);
+            return 1;
+        });
+        Future f2 = s.submit(() -> {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        System.out.println(f1.get() + " " + f2.get());
+    }
+}
 
 class Deadlock {
     public static void main(String[] args) {
