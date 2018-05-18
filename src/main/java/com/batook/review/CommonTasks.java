@@ -230,6 +230,7 @@ public class CommonTasks {
         int realSum = IntStream.of(numbers)
                                .sum();
         assertEquals(10, sum - realSum);
+
         //get Duplicates
         int[] dub = {6, 5, 4, 3, 2, 2, 1};
         sum = IntStream.rangeClosed(1, 6)
@@ -237,6 +238,7 @@ public class CommonTasks {
         realSum = IntStream.of(dub)
                            .sum();
         assertEquals(4, dub[realSum - sum]);
+
         //remove Duplicates
         int[] dub2 = {6, 5, 5, 4, 3, 2, 2, 1, 1};
         List<Integer> dubFree = new ArrayList<>();
@@ -248,6 +250,7 @@ public class CommonTasks {
                 t = dub2[i];
             }
         assertEquals("[1, 2, 3, 4, 5]", dubFree.toString());
+
         //Duplicates list
         List<Integer> list = new ArrayList<>(Arrays.asList(6, 5, 5, 4, 3, 2, 2, 1, 1));
         list.stream()
@@ -257,6 +260,7 @@ public class CommonTasks {
             .filter(i -> i.getValue() > 1)
             .map(i -> i.getKey())
             .forEach(System.out::println);
+
         //DeDuplicate
         System.out.println(list.stream()
                                .collect(Collectors.groupingBy(i -> i, Collectors.counting()))

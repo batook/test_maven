@@ -31,12 +31,7 @@ class ReadWriteLockTest {
         @Override
         public void run() {
             readLock.lock();
-            try {
-                Thread.sleep(100);
-                System.out.println(" Read " + list);
-            } catch (InterruptedException ie) {
-                ie.printStackTrace();
-            }
+            System.out.println(" Read " + list);
             readLock.unlock();
         }
     }
@@ -47,14 +42,9 @@ class ReadWriteLockTest {
         @Override
         public void run() {
             writeLock.lock();
-            try {
-                Thread.sleep(100);
-                int i = new Random().nextInt();
-                list.add(i);
-                System.out.println(" Write " + i);
-            } catch (InterruptedException ie) {
-                ie.printStackTrace();
-            }
+            int i = new Random().nextInt();
+            list.add(i);
+            System.out.println(" Write " + i);
             writeLock.unlock();
         }
     }
@@ -121,6 +111,9 @@ class ReentrantLockTest {
             lock.lock();
             if (lock.isHeldByCurrentThread()) System.out.println("Lock is aquired by " + Thread.currentThread());
             try {
+                lock.lock();
+                System.out.println("Reentrant");
+                lock.unlock();
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -129,7 +122,7 @@ class ReentrantLockTest {
         };
         service.execute(r);
         service.execute(r);
-        service.awaitTermination(5, TimeUnit.SECONDS);
+        service.awaitTermination(2, TimeUnit.SECONDS);
         service.shutdown();
     }
 }
@@ -193,7 +186,7 @@ class CyclicBarrierTest {
         CyclicBarrier barrier = new CyclicBarrier(2, () -> System.out.println("barrier passed"));
         ExecutorService service = Executors.newFixedThreadPool(2);
         for (int i = 0; i < 8; i++) {
-            service.submit(new Worker(barrier));
+            service.execute(new Worker(barrier));
         }
         service.shutdown();
     }
@@ -222,8 +215,8 @@ class CyclicBarrierTest {
 class CallableTest {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         ExecutorService service = Executors.newSingleThreadExecutor();
-        Future<Integer> result = service.submit(() -> IntStream.range(1, 100)
-                                                               .sum());
+        Future result = service.submit(() -> IntStream.range(1, 100)
+                                                      .sum());
         System.out.println(result.get());
         service.shutdown();
     }

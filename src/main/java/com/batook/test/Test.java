@@ -626,33 +626,8 @@ class TT {
 
 class Dummy {
     public static void main(String[] args) {
-        int[] a = {9, 8, 7, 6, 5, 4, 3, 2, 1};
-        sort(a, 0, a.length - 1);
-        System.out.println(Arrays.toString(a));
+
     }
 
-    static void sort(int[] a, int left, int right) {
-        if (left < right) {
-            int i = part(a, left, right);
-            if (left < i - 1) sort(a, left, i - 1);
-            if (i < right) sort(a, i, right);
-        }
-    }
-
-    static int part(int[] r, int left, int right) {
-        int i = left, j = right;
-        int pivot = r[left + (right - left) / 2];
-        while (i <= j) {
-            while (r[i] < pivot) i++;
-            while (r[j] > pivot) j--;
-            if (i <= j) {
-                int tmp = r[i];
-                r[i] = r[j];
-                r[j] = tmp;
-                i++;
-                j--;
-            }
-        }
-        return i;
-    }
 }
+

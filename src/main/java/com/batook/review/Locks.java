@@ -16,41 +16,23 @@ class CASLock {
     }
 }
 
-class MyLock {
-    private boolean isLocked = false;
-
-    public synchronized void lock() throws InterruptedException {
-        while (isLocked) {
-            wait();
-        }
-        isLocked = true;
-    }
-
-    public synchronized void unlock() {
-        isLocked = false;
-        notify();
-    }
-}
-
 class MyReentrantLock {
     boolean isLocked = false;
     Thread lockedBy = null;
     int lockedCount = 0;
 
     public synchronized void lock() throws InterruptedException {
-        Thread callingThread = Thread.currentThread();
-        while (isLocked && lockedBy != callingThread) {
+        while (isLocked && lockedBy != Thread.currentThread()) {
             wait();
         }
         isLocked = true;
         lockedCount++;
-        lockedBy = callingThread;
+        lockedBy = Thread.currentThread();
     }
 
     public synchronized void unlock() {
         if (Thread.currentThread() == this.lockedBy) {
             lockedCount--;
-
             if (lockedCount == 0) {
                 isLocked = false;
                 notify();
@@ -96,7 +78,7 @@ class MyBlockingQueue {
         this.limit = limit;
     }
 
-    public synchronized void enqueue(Object item) throws InterruptedException {
+    public synchronized void put(Object item) throws InterruptedException {
         while (this.queue.size() == this.limit) {
             wait();
         }
@@ -107,7 +89,7 @@ class MyBlockingQueue {
     }
 
 
-    public synchronized Object dequeue() throws InterruptedException {
+    public synchronized Object take() throws InterruptedException {
         while (this.queue.size() == 0) {
             wait();
         }

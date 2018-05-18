@@ -59,8 +59,8 @@ public class javaIO {
         int lengthRead;
         while ((lengthRead = input.read(buffer)) > 0) {
             output.write(buffer, 0, lengthRead);
-            output.flush();
         }
+        output.flush();
         input.close();
         output.close();
     }
@@ -80,7 +80,6 @@ public class javaIO {
     static void inputOutputStreamReaderWriter() throws IOException {
         Reader input = new InputStreamReader(new FileInputStream("testIN.txt"));
         Writer output = new OutputStreamWriter(new FileOutputStream("testOUT.txt"));
-
         int data = input.read();
         while (data != -1) {
             char ch = (char) data;

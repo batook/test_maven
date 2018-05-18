@@ -17,7 +17,6 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
-import javax.xml.validation.Validator;
 import java.io.*;
 
 class DomReader {
@@ -52,7 +51,7 @@ class DomReader {
 }
 
 class DomWriter {
-    public static void main(String[] args) throws ParserConfigurationException, IOException, SAXException {
+    public static void main(String[] args) throws ParserConfigurationException, IOException, TransformerException {
         // Создается построитель документа
         DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance()
                                                                 .newDocumentBuilder();
@@ -61,12 +60,9 @@ class DomWriter {
         // создаем корневой элемент
         Element root = document.createElement("BookCatalogue");
         document.appendChild(root);
-        // <Book>
         Element book = document.createElement("Book");
-        // <Title>
         Element title = document.createElement("Title");
         title.setTextContent("Incredible book about Java");
-        // <Cost>
         Element cost = document.createElement("Cost");
         cost.setTextContent("499");
         cost.setAttribute("currency", "RUB");
@@ -77,18 +73,15 @@ class DomWriter {
         writeDocument(document);
     }
 
-    private static void writeDocument(Document document) throws TransformerFactoryConfigurationError {
-        try {
-            Transformer tr = TransformerFactory.newInstance()
-                                               .newTransformer();
-            DOMSource source = new DOMSource(document);
-            StreamResult result = new StreamResult(new FileOutputStream("other1.xml"));
-            tr.transform(source, result);
-        } catch (TransformerException | IOException e) {
-            e.printStackTrace(System.out);
-        }
+    private static void writeDocument(Document document) throws TransformerFactoryConfigurationError, TransformerException, FileNotFoundException {
+        Transformer tr = TransformerFactory.newInstance()
+                                           .newTransformer();
+        DOMSource source = new DOMSource(document);
+        StreamResult result = new StreamResult(new FileOutputStream("other1.xml"));
+        tr.transform(source, result);
     }
 }
+
 
 class SaxReader {
     public static void main(String args[]) throws ParserConfigurationException, SAXException, IOException {
@@ -140,6 +133,7 @@ class StaxReader {
                 System.out.println("   " + reader.getText());
             }
         }
+        reader.close();
     }
 }
 
@@ -151,25 +145,20 @@ class StaxWriter {
         writer.writeStartDocument("1.0");
         writer.writeStartElement("BookCatalogue");
         for (int i = 0; i < 5; i++) {
-            // Book
             writer.writeStartElement("Book");
-            // Title
             writer.writeStartElement("Title");
             writer.writeCharacters("Book #" + i);
             writer.writeEndElement();
-            // Cost
             writer.writeStartElement("Cost");
             writer.writeAttribute("currency", "USD");
             writer.writeCharacters("10");
             writer.writeEndElement();
-            // Закрываем тэг Book
             writer.writeEndElement();
         }
-        // Закрываем корневой элемент
         writer.writeEndElement();
-        // Закрываем XML-документ
         writer.writeEndDocument();
         writer.flush();
+        writer.close();
     }
 }
 
@@ -184,24 +173,20 @@ class XsdValidator {
         Schema schema = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
                                      .newSchema(new File(xsdPath));
         // Создать валидатор
-        Validator validator = schema.newValidator();
-        // Запусить проверку
-        validator.validate(new StreamSource(new File(xmlPath)));
+        schema.newValidator()
+              .validate(new StreamSource(new File(xmlPath)));
         return true;
     }
 }
 
 class XslConverter {
     public static void main(String[] arg) throws Exception {
-        XslConverter c = new XslConverter();
-        final String xml = "BookCatalogue.xml";
-        final String xsl = "BookCatalogue.xsl";
-        String result = c.xmlToString(xml, xsl);
-        System.out.println(result);
-        c.xmlToFile(xml, xsl);
+        String xml = "BookCatalogue.xml";
+        String xsl = "BookCatalogue.xsl";
+        xmlToFile(xml, xsl);
     }
 
-    public String xmlToString(String xmlFile, String xslFile) throws Exception {
+    public static String xmlToString(String xmlFile, String xslFile) throws Exception {
         // Создать источник для транcформации из потоков
         StreamSource xmlSource = new StreamSource(new FileInputStream(xmlFile));
         StreamSource xslSource = new StreamSource(new FileInputStream(xslFile));
@@ -218,7 +203,7 @@ class XslConverter {
         return bos.toString();
     }
 
-    public void xmlToFile(String xmlFile, String xslFile) throws Exception {
+    public static void xmlToFile(String xmlFile, String xslFile) throws Exception {
         // Создать источник для транформации из потоков
         StreamSource xmlSource = new StreamSource(new FileInputStream(xmlFile));
         StreamSource xslSource = new StreamSource(new FileInputStream(xslFile));

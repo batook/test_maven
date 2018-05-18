@@ -19,6 +19,7 @@ class CallableVsRunnable {
             }
         });
         System.out.println(f1.get() + " " + f2.get());
+        s.shutdown();
     }
 }
 
@@ -166,13 +167,13 @@ class ProducerConsumer {
 
         @Override
         public void run() {
-            try {
-                System.out.println(" Producer is working");
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
             synchronized (this) {
+                try {
+                    System.out.println(" Producer is working");
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 i.set(ThreadLocalRandom.current()
                                        .nextInt());
                 System.out.println(" Producer " + this + " i=" + i.get());
@@ -203,6 +204,120 @@ class ProducerConsumer {
                 }
                 System.out.println(Thread.currentThread() + " i=" + p.i.get());
             }
+        }
+    }
+}
+
+class ProducerConsumer1Test {
+    public static void main(String args[]) throws InterruptedException {
+        //Creating shared object
+        BlockingQueue queue = new ArrayBlockingQueue(8);
+        new Thread(new Consumer(queue)).start();
+        new Thread(new Producer(queue)).start();
+    }
+
+    static class Producer implements Runnable {
+        BlockingQueue queue;
+
+        public Producer(BlockingQueue queue) {
+            this.queue = queue;
+        }
+
+        public void run() {
+            try {
+                Thread.sleep(1000);
+                queue.put(1);
+                Thread.sleep(1000);
+                queue.put(2);
+                Thread.sleep(1000);
+                queue.put(3);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    static class Consumer implements Runnable {
+        BlockingQueue queue;
+
+        public Consumer(BlockingQueue queue) {
+            this.queue = queue;
+        }
+
+        public void run() {
+            System.out.println("consumer is waiting...");
+            try {
+                System.out.println("consume " + queue.take());
+                System.out.println("consume " + queue.take());
+                System.out.println("consume " + queue.take());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+
+class ProducerConsumer2Test {
+    public static void main(String[] args) {
+        Shared s = new Shared();
+        new Producer(s).start();
+        new Consumer(s).start();
+    }
+
+    static class Shared {
+        private char ch;
+        private volatile boolean writeable = true;
+
+        synchronized char take() {
+            while (writeable) try {
+                wait();
+            } catch (InterruptedException ie) {
+            }
+            writeable = true;
+            notify();
+            System.out.println(ch + " consumed by consumer.");
+            return ch;
+        }
+
+        synchronized void put(char c) {
+            while (!writeable) try {
+                wait();
+            } catch (InterruptedException ie) {
+            }
+            this.ch = c;
+            writeable = false;
+            notify();
+            System.out.println(ch + " produced by producer.");
+        }
+    }
+
+    static class Producer extends Thread {
+        private final Shared s;
+
+        Producer(Shared s) {
+            this.s = s;
+        }
+
+        @Override
+        public void run() {
+            s.put('A');
+            s.put('B');
+            s.put('C');
+        }
+    }
+
+    static class Consumer extends Thread {
+        private final Shared s;
+
+        Consumer(Shared s) {
+            this.s = s;
+        }
+
+        @Override
+        public void run() {
+            s.take();
+            s.take();
+            s.take();
         }
     }
 }

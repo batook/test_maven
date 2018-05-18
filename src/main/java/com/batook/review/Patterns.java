@@ -3,15 +3,12 @@ package com.batook.review;
 import java.util.ArrayList;
 
 
+enum EasySingleton {
+    INSTANCE;
+}
+
 class SingletonTest {
     private SingletonTest() {
-    }
-
-    public static void main(String[] args) {
-        System.out.println(SingletonTest.getInstance()
-                                        .toString());
-        System.out.println(SingletonTest.getInstance()
-                                        .toString());
     }
 
     public static SingletonTest getInstance() {
@@ -25,6 +22,8 @@ class SingletonTest {
 }
 
 //GUI
+//Определяет зависимость типа «один ко многим» между объектами.
+//при изменении состояния одного объекта все зависящие от него оповещаются об этом событии.
 class ObserverTest {
     public static void main(String[] args) {
         Observer observer = new Observer();
@@ -54,24 +53,25 @@ class ObserverTest {
             observers.remove(o);
         }
 
-        public void setVal(int val) {
-            this.val = val;
-            notifyObservers();
-        }
-
         private void notifyObservers() {
             for (Observer o : observers)
                 o.update(this, val);
+        }
+
+        public void setVal(int val) {
+            this.val = val;
+            notifyObservers();
         }
     }
 }
 
 //GUI
+//расширение функциональности объекта без определения подклассов.
 class DecoratorTest {
     public static void main(String[] args) {
-        Component c = new Coffe().setComponent(new Milk())
-                                 .setComponent(new Sugar())
-                                 .setComponent(new Sugar());
+        Component c = new Coffe().addComponent(new Milk())
+                                 .addComponent(new Sugar())
+                                 .addComponent(new Sugar());
         System.out.println(c.getDescription() + " " + c.getComponent());
 
         Component c2 = new Sugar(new Sugar(new Milk(new Coffe())));
@@ -90,7 +90,7 @@ class DecoratorTest {
             return this;
         }
 
-        public Component setComponent(Component component) {
+        public Component addComponent(Component component) {
             component.parent = this;
             return component;
         }
@@ -131,54 +131,52 @@ class DecoratorTest {
 }
 
 //AOP
+// объект, который контролирует доступ к другому объекту, перехватывая все вызовы
 class ProxyTest {
     public static void main(String[] args) {
         Proxy px = new Proxy();
         px.doSomeWork();
     }
 
-    static abstract class Subject {
-        public abstract void doSomeWork();
+    interface IWork {
+        void doSomeWork();
     }
 
-    public static class ConcreteSubject extends Subject {
+    public static class Subject implements IWork {
         @Override
         public void doSomeWork() {
             System.out.println(" I am from concrete subject");
         }
     }
 
-    public static class Proxy extends Subject {
-        ConcreteSubject cs;
+    public static class Proxy implements IWork {
+        Subject subj;
 
         @Override
         public void doSomeWork() {
             System.out.println("Proxy call happening now");
             //Lazy initialization
-            if (cs == null) {
-                cs = new ConcreteSubject();
+            if (subj == null) {
+                subj = new Subject();
             }
-            cs.doSomeWork();
+            subj.doSomeWork();
         }
     }
 }
 
 //SQL connection or Oracle connection
+//The main difference is that Abstract Factory creates factory while Factory pattern creates objects.
+//Представляет интерфейс для создания объекта, но оставляет подклассам решение о том, какой класс создать.
 class FactoryMethodTest {
     public static void main(String[] args) throws Exception {
-        IConnectionFactory connFactory = new ConnectionFactory();
-        connFactory.GetConnection("Oracle")
-                   .connect();
-        connFactory.GetConnection("Mongo")
-                   .connect();
+        ConnectionFactory.GetConnection("Oracle")
+                         .connect();
+        ConnectionFactory.GetConnection("Mongo")
+                         .connect();
     }
 
     interface IConnection {
         void connect();
-    }
-
-    interface IConnectionFactory {
-        IConnection GetConnection(String type) throws Exception;
     }
 
     static class Oracle implements IConnection {
@@ -195,9 +193,8 @@ class FactoryMethodTest {
         }
     }
 
-    static class ConnectionFactory implements IConnectionFactory {
-        @Override
-        public IConnection GetConnection(String type) throws Exception {
+    static class ConnectionFactory {
+        public static IConnection GetConnection(String type) throws Exception {
             switch (type) {
                 case "Oracle":
                     return new Oracle();
@@ -209,3 +206,4 @@ class FactoryMethodTest {
         }
     }
 }
+
