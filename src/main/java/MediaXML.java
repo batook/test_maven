@@ -1,3 +1,6 @@
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -856,11 +859,13 @@ class MediaData {
     OracleDAO dao = OracleDAO.getInstance();
     Connection conn = dao.getConnection();
 
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws SQLException, IOException {
         MediaData m = new MediaData();
         MediaXML mediaXML = new MediaXML();
-        List<Item> list = m.getItems();
+        //List<Item> list = m.getItems();
         m.dao.disconnect();
+        //JsonTransform.Items2Json(list);
+        List<Item> list = JsonTransform.Json2Items();
         long startTime = System.nanoTime();
         new MediaDOM().createXML(list, "testMedia.xml");
         double estimatedTime = (double) (System.nanoTime() - startTime) / 1_000_000_000;
@@ -979,5 +984,23 @@ class MediaData {
         double estimatedTime = (double) (System.nanoTime() - startTime) / 1_000_000_000;
         System.out.println("getItems :" + new DecimalFormat("#.##########").format(estimatedTime));
         return items;
+    }
+}
+
+class JsonTransform {
+    static void Items2Json(List<Item> itemList) throws IOException {
+        Gson gson = new GsonBuilder().setPrettyPrinting()
+                                     .create();
+        FileWriter writer = new FileWriter("media.json");
+        gson.toJson(itemList, writer);
+        writer.flush();
+        writer.close();
+    }
+
+    static List<Item> Json2Items() throws IOException {
+        Gson gson = new Gson();
+        FileReader reader = new FileReader("media.json");
+        return gson.fromJson(reader, new TypeToken<List<Item>>() {
+        }.getType());
     }
 }

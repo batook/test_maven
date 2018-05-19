@@ -249,6 +249,5 @@ class BuilderTest {
                 return new Coffe(this);
             }
         }
-
     }
 }
