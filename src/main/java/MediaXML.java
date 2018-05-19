@@ -1000,7 +1000,9 @@ class JsonTransform {
     static List<Item> Json2Items() throws IOException {
         Gson gson = new Gson();
         FileReader reader = new FileReader("media.json");
-        return gson.fromJson(reader, new TypeToken<List<Item>>() {
+        List<Item> list = gson.fromJson(reader, new TypeToken<List<Item>>() {
         }.getType());
+        reader.close();
+        return list;
     }
 }

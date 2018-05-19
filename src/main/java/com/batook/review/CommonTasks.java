@@ -194,6 +194,9 @@ public class CommonTasks {
     }
 
     public static void stringMix() {
+        //Remove spaces
+        "Was it a cat I saw?".replaceAll("\\W+", "");
+        //
         String text = "se f g a d f s s f d s ft gh f ws w f v x s g h d h j j k f sd j e wed a d f a r b k c d ";
         char[] chars = text.toCharArray();
         text = String.valueOf(chars);
@@ -295,7 +298,7 @@ public class CommonTasks {
                  .flatMap(i -> IntStream.range(0, i)) //012340123450123456
                  .boxed()
                  .collect(Collectors.toSet());
-        Map<Integer, String> m1 = Stream.of("AA,BB,C,D,EE,FFF".split(","))
+        Map<Integer, String> m1 = Arrays.stream("AA,BB,C,D,EE,FFF".split(","))
                                         .collect(Collectors.toMap(s -> s.length(), s -> s, (s1, s2) -> s1 + "|" + s2));
         System.out.println(m1);
         Map<Integer, List<String>> m2 = Stream.of("AA,BB,C,D,EE,FFF".split(","))
