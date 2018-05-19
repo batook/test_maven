@@ -207,3 +207,48 @@ class FactoryMethodTest {
     }
 }
 
+//предоставляет способ создания сложного объекта.
+class BuilderTest {
+    public static void main(String args[]) {
+        Coffe milkCoffe = new Coffe.Builder().sugar(1)
+                                             .milk(0.5)
+                                             .build();
+        System.out.println(milkCoffe);
+        System.out.println(new Coffe.Builder().build());
+    }
+
+    static class Coffe {
+        private final double sugar;
+        private final double milk;
+
+        private Coffe(Builder builder) {
+            this.sugar = builder.sugar;
+            this.milk = builder.milk;
+        }
+
+        @Override
+        public String toString() {
+            return "Coffe{" + "sugar=" + sugar + ", milk=" + milk + "}";
+        }
+
+        public static class Builder {
+            private double sugar;
+            private double milk;
+
+            public Builder sugar(double spoon) {
+                this.sugar = spoon;
+                return this;
+            }
+
+            public Builder milk(double cup) {
+                this.milk = cup;
+                return this;
+            }
+
+            public Coffe build() {
+                return new Coffe(this);
+            }
+        }
+
+    }
+}
