@@ -9,6 +9,7 @@ import java.util.concurrent.RecursiveTask;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 import static org.junit.Assert.assertEquals;
@@ -110,6 +111,7 @@ public class CommonTasks {
         assertTrue(isPalindrome("Was it a cat I saw?".replaceAll("\\W+", "")));
     }
 
+    //Palindrome
     public static boolean isPalindrome(String s) {
         if (s.length() == 1) return true;
         if (s.substring(0, 1)
@@ -121,6 +123,7 @@ public class CommonTasks {
         }
     }
 
+    //Fibonacci
     public static long f1(int x) {
         if (x == 1 || x == 2) return 1;
         long f1 = 1, f2 = 1, res = 1;
@@ -157,6 +160,16 @@ public class CommonTasks {
         }
         ForkJoinTask<Integer> task = new Fibo(x);
         return pool.invoke(task);
+    }
+
+    // Factorial
+    static long factorialRecursive(long n) {
+        return n == 1 ? 1 : n * factorialRecursive(n - 1);
+    }
+
+    static long factorialStreams(long n) {
+        return LongStream.rangeClosed(1, n)
+                         .reduce(1, (long a, long b) -> a * b);
     }
 
     public static void listDiff() {

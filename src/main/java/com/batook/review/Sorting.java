@@ -3,6 +3,10 @@ package com.batook.review;
 import java.util.Arrays;
 import java.util.Random;
 
+//- Recursion can be slower due to the overhead of maintaining a stack and usually takes up more memory
+//- Recursion is not stack-friendly. It may cause StackOverflowException when processing big data sets
+//+ Recursion adds clarity to the code as it makes it shorter in comparison to the iterative approach
+
 public class Sorting {
     static final int[] unsorted = {100, -90, 32, 39, 21, 45, 23, 3, -100, 3};
 
@@ -141,6 +145,48 @@ public class Sorting {
                 }
             }
             return i;
+        }
+    }
+}
+
+class BinarySearch {
+    public static void main(String[] args) {
+        final int[] unsorted = {100, -90, 32, 39, 21, 45, 23, 3, -100, 3};
+        Arrays.sort(unsorted);
+        System.out.println(Arrays.toString(unsorted));
+        System.out.println(search(unsorted, 45));
+    }
+
+    public static int search(int[] sortedArray, int key) {
+        int index = -1;
+        int low = 0, high = sortedArray.length - 1;
+
+        while (low <= high) {
+            int mid = (low + high) / 2;
+            if (sortedArray[mid] < key) {
+                low = mid + 1;
+            } else if (sortedArray[mid] > key) {
+                high = mid - 1;
+            } else if (sortedArray[mid] == key) {
+                index = mid;
+                break;
+            }
+        }
+        return index;
+    }
+
+    public int searchRecursively(int[] sortedArray, int key, int low, int high) {
+        int middle = (low + high) / 2;
+
+        if (high < low) {
+            return -1;
+        }
+        if (key == sortedArray[middle]) {
+            return middle;
+        } else if (key < sortedArray[middle]) {
+            return searchRecursively(sortedArray, key, low, middle - 1);
+        } else {
+            return searchRecursively(sortedArray, key, middle + 1, high);
         }
     }
 }
