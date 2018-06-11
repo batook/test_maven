@@ -9,17 +9,17 @@ public class TestTest {
 
     @BeforeClass
     public static void bc() {
-        System.out.println("0");
+        System.out.println("BeforeClass");
     }
 
     @Before
     public void init() {
-        System.out.println("1");
+        System.out.println("Before");
     }
 
     @After
     public void close() {
-        System.out.println("2");
+        System.out.println("After");
     }
 
     @Test
