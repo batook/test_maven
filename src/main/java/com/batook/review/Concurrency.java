@@ -2,7 +2,6 @@ package com.batook.review;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 import java.util.concurrent.*;
 import java.util.concurrent.locks.*;
@@ -256,8 +255,8 @@ class MergeSortTask extends RecursiveAction {
     }
 
     public static void main(String[] args) {
-        final int[] unsorted = new Random().ints(-10, 100)
-                                           .limit(1_00)
+        final int[] unsorted = new Random().ints(-10000, 10000)
+                                           .limit(50_000_000)
                                            .toArray();
         ForkJoinPool pool = new ForkJoinPool();
         MergeSortTask task = new MergeSortTask(unsorted.clone());
@@ -282,7 +281,7 @@ class MergeSortTask extends RecursiveAction {
             System.arraycopy(tmp, left.length, right, 0, right.length);
             invokeAll(new MergeSortTask(left), new MergeSortTask(right));
             merge(tmp, left, right);
-            System.out.println(Thread.currentThread() + " " + Arrays.toString(tmp));
+            //System.out.println(Thread.currentThread() + " " + Arrays.toString(tmp));
         }
     }
 
