@@ -255,8 +255,10 @@ class MergeSortTask extends RecursiveAction {
     }
 
     public static void main(String[] args) {
+        System.out.println(Runtime.getRuntime()
+                                  .maxMemory() / 1024 / 1024);
         final int[] unsorted = new Random().ints(-10000, 10000)
-                                           .limit(50_000_000)
+                                           .limit(100_000_000)
                                            .toArray();
         ForkJoinPool pool = new ForkJoinPool();
         MergeSortTask task = new MergeSortTask(unsorted.clone());

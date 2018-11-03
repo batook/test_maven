@@ -1,7 +1,6 @@
 package com.batook.review;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.util.*;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.ForkJoinTask;
@@ -241,9 +240,8 @@ public class CommonTasks {
     }
 
     public static void numberMix() {
-        System.out.println(new BigDecimal(0.1));
-        System.out.println(new BigDecimal(0.1, MathContext.DECIMAL64));
         System.out.println(new BigDecimal("0.1"));
+        System.out.println(BigDecimal.valueOf(0.1));
 
         //Missing N
         int[] numbers = {1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12};
