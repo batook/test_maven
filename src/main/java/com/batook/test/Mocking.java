@@ -1,5 +1,6 @@
 package com.batook.test;
 
+import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -11,6 +12,7 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class Mocking {
+    Logger log = Logger.getLogger(Mocking.class);
 
     @Mock
     private A injectA;
@@ -23,9 +25,9 @@ public class Mocking {
         A mockA = mock(A.class);
         when(injectA.getName()).thenReturn("injectA");
         core.invoke();
-        System.out.println(">" + core.getName());
-        System.out.println(">" + injectA.getName());
-        System.out.println(">" + mockA.getName());
+        log.info(">" + core.getName());
+        log.info(">" + injectA.getName());
+        log.info(">" + mockA.getName());
         core2.invoke();
     }
 
