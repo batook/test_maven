@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<REPORT MediaStation="1">
+    <ITEMS>
+        <ITEM ID="1211103090">
+            <BARCODES>
+                <BARCODE>3348542204355</BARCODE>
+            </BARCODES>
+            <TITLE>PS2 Crash Tag Team Racing Platinum</TITLE>
+            <COVER_PATH LENGTH="480054">ИГРА_ДЛЯ_КОНСОЛИ/Игры для Sony PlayStation 2/1103090/COVER.JPG</COVER_PATH>
+            <VIDEO_PATH></VIDEO_PATH>
+            <DESCRIPTION LENGTH="860">ИГРА_ДЛЯ_КОНСОЛИ/Игры для Sony PlayStation 2/1103090/description.txt</DESCRIPTION>
+            <TYPE>ИГРА</TYPE>
+            <GENRE>Игры для Sony PlayStation 2</GENRE>
+            <IS_HIT>0</IS_HIT>
+        </ITEM>
+    </ITEMS>
+</REPORT>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="REPORT" type="REPORTType"/>
+    <xs:complexType name="TRACKType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="NAME"/>
+            <xs:element type="xs:string" name="PATH"/>
+        </xs:sequence>
+        <xs:attribute type="xs:string" name="NUMBER" use="optional"/>
+        <xs:attribute type="xs:string" name="LENGTH" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="BARCODESType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="BARCODE" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="DISKType">
+        <xs:sequence>
+            <xs:element type="TRACKType" name="TRACK" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute type="xs:string" name="NUMBER" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="COVER_PATHType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="LENGTH" use="optional"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="ITEMType">
+        <xs:sequence>
+            <xs:element type="BARCODESType" name="BARCODES"/>
+            <xs:element type="xs:string" name="TITLE"/>
+            <xs:element type="COVER_PATHType" name="COVER_PATH"/>
+            <xs:element name="VIDEO_PATH">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element type="DESCRIPTIONType" name="DESCRIPTION"/>
+            <xs:element name="TYPE">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="ИГРА"/>
+                        <xs:enumeration value="МУЗЫКА"/>
+                        <xs:enumeration value="КИНО"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element type="xs:string" name="GENRE"/>
+            <xs:element type="xs:string" name="IS_HIT"/>
+            <xs:element type="DISKType" name="DISK" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute type="xs:string" name="ID" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="ITEMSType">
+        <xs:sequence>
+            <xs:element type="ITEMType" name="ITEM" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="REPORTType">
+        <xs:sequence>
+            <xs:element type="ITEMSType" name="ITEMS"/>
+        </xs:sequence>
+        <xs:attribute type="xs:string" name="MediaStation"/>
+    </xs:complexType>
+    <xs:complexType name="DESCRIPTIONType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="LENGTH" use="optional"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+</xs:schema>
+
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+    <xsl:template match="/">
+        <html>
+            <body>
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Barcode</th>
+                            <th>Title</th>
+                            <th>Path</th>
+                        </tr>
+                    </thead>
+                    <xsl:for-each select="REPORT/ITEMS/ITEM">
+                        <tr>
+                            <td>
+                                <xsl:value-of select="@ID"/>
+                            </td>
+                            <xsl:call-template name="BARCODE"/>
+                            <td>
+                                <xsl:value-of select="TITLE"/>
+                            </td>
+                            <td>
+                                <xsl:value-of select="COVER_PATH"/>
+                            </td>
+                        </tr>
+                    </xsl:for-each>
+                </table>
+            </body>
+        </html>
+    </xsl:template>
+    <xsl:template name="BARCODE">
+        <td>
+            <xsl:value-of select="BARCODES/BARCODE"/>
+        </td>
+    </xsl:template>
+</xsl:stylesheet>
+
