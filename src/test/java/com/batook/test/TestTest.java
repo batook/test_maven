@@ -34,7 +34,7 @@ public class TestTest {
     @Test
     public void test() {
         logger.info("test");
-        new com.batook.test.Test(null);
+        com.batook.test.Test.main(null);
         com.batook.test.Test.deadlock();
         com.batook.test.Test.fibonacci2(1);
         com.batook.test.Test.fibonacci2(2);
@@ -63,5 +63,15 @@ public class TestTest {
     public void testEnum() {
         com.batook.test.TestEnum.main(null);
         assertTrue(true);
+    }
+
+    @Test
+    public void tesClasses() {
+        DecoratorTest t = new DecoratorTest();
+        DecoratorTest.main(null);
+        SingletonTest.main(null);
+        TT.main(null);
+        new TT().testReduceCollect();
+        TestLambda.main(null);
     }
 }
