@@ -13,6 +13,10 @@ import java.util.stream.Stream;
 public class Test {
     String id;
 
+    public Test(String id) {
+        this.id = id;
+    }
+
     public static void main(String[] args) {
         ThreadProducer p = new ThreadProducer();
         new Thread(new ThreadConsumer(p)).start();
@@ -295,7 +299,8 @@ public class Test {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
         return ((Test) obj).id.equals(this.id);
     }
 }
