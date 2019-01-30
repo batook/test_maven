@@ -15,20 +15,25 @@ public class Mocking {
     Logger log = Logger.getLogger(Mocking.class);
 
     @Mock
-    private A injectA;
+    private A mock;
     @InjectMocks
     private Core core;
 
     @Test
     public void test() {
-        Core core2 = new Core();
+        Core mockCore = mock(Core.class);
         A mockA = mock(A.class);
-        when(injectA.getName()).thenReturn("injectA");
+        when(mock.getName()).thenReturn("mockGetName");
+        when(mockA.getName()).thenReturn("mockAGetName");
+        //when(core.getName()).thenReturn("doesnt work");
+        when(mockCore.getName()).thenReturn("its working");
         core.invoke();
         log.info(">" + core.getName());
-        log.info(">" + injectA.getName());
+        log.info(">" + mockCore.getName());
+        log.info(">" + mock.getName());
         log.info(">" + mockA.getName());
-        core2.invoke();
+        System.out.printf("mockCore.invoke()");
+        mockCore.invoke();
     }
 
 }
@@ -38,6 +43,7 @@ class Core {
     private C c = new C();
 
     public void invoke() {
+        System.out.printf(">>>> invoke");
         C localC = new C();
         System.out.println(this + localC.getName());
         System.out.println(this + c.getName());
