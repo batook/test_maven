@@ -217,6 +217,14 @@ public class CommonTasks {
                                     .collect(Collectors.groupingBy(e -> e, Collectors.counting()));
         System.out.println(map);
         //
+        Map<String, Integer> m = new HashMap<>();
+        list.forEach(e -> m.merge(e, 1, Integer::sum));
+        System.out.println(">>> " + m);
+        //
+        m.clear();
+        list.forEach(e -> m.put(e, m.getOrDefault(e, 0) + 1));
+        System.out.println(">>> " + m);
+        //
         map.clear();
         for (String e : list) {
             long i = map.get(e) == null ? 1 : map.get(e) + 1;
