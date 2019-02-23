@@ -203,6 +203,12 @@ public class CommonTasks {
         s = "";
         while (!stack.isEmpty()) s += stack.pop();
         assertEquals("!abar eneb enE", s);
+
+        LinkedList<String> str = new LinkedList<>();
+        Arrays.asList("Ene bene raba".split(""))
+              .forEach(str::push);
+        System.out.println(str.stream()
+                              .collect(Collectors.joining()));
     }
 
     public static void stringMix() {
